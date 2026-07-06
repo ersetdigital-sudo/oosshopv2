@@ -1,0 +1,142 @@
+[
+  {
+    "slug": "jasa-instal-elementor-pro",
+    "name": "Jasa Instal Elementor Pro",
+    "plugin": "Elementor Pro",
+    "category": "Page Builder",
+    "price": 35000,
+    "description": "Elementor Pro adalah page builder WordPress paling populer di dunia. Kami instal versi original lengkap dengan aktivasi lisensi resmi, Theme Builder, Popup Builder, dan akses penuh ke semua widget Pro.",
+    "benefits": ["Lisensi original teraktivasi resmi", "Update otomatis langsung dari Elementor", "Theme Builder & Popup Builder aktif penuh"],
+    "bestSeller": true
+  },
+  {
+    "slug": "jasa-instal-astra-pro",
+    "name": "Jasa Instal Astra Pro",
+    "plugin": "Astra Pro",
+    "category": "Page Builder",
+    "price": 30000,
+    "description": "Astra Pro adalah tema WordPress ringan dan cepat yang cocok dipadukan dengan page builder apa pun. Kami instal beserta Astra Pro Addon dan starter template pilihan Anda.",
+    "benefits": ["Tema ringan, skor kecepatan tinggi", "Ratusan starter template premium", "Kompatibel dengan Elementor & WooCommerce"],
+    "bestSeller": false
+  },
+  {
+    "slug": "jasa-instal-essential-addons",
+    "name": "Jasa Instal Essential Addons",
+    "plugin": "Essential Addons Pro",
+    "category": "Page Builder",
+    "price": 25000,
+    "description": "Essential Addons for Elementor menambahkan 100+ widget premium untuk memperkaya desain Elementor Anda — mulai dari post grid, pricing table, sampai form styler.",
+    "benefits": ["100+ widget tambahan untuk Elementor", "Aktivasi lisensi Pro resmi", "Ringan dan modular, tidak memberatkan situs"],
+    "bestSeller": false
+  },
+  {
+    "slug": "jasa-instal-templately",
+    "name": "Jasa Instal Templately",
+    "plugin": "Templately Pro",
+    "category": "Page Builder",
+    "price": 25000,
+    "description": "Templately menyediakan ribuan template siap pakai untuk Elementor dan Gutenberg. Kami instal, aktivasi, dan bantu import template pertama Anda.",
+    "benefits": ["Ribuan template Elementor & Gutenberg", "Cloud storage untuk simpan desain Anda", "Bantuan import template pertama"],
+    "bestSeller": false
+  },
+  {
+    "slug": "jasa-instal-crocoblock",
+    "name": "Jasa Instal Crocoblock",
+    "plugin": "Crocoblock (JetPlugins)",
+    "category": "Dynamic Content",
+    "price": 50000,
+    "description": "Crocoblock adalah paket lengkap JetPlugins untuk membangun website dinamis dengan Elementor — termasuk JetEngine, JetSmartFilters, JetElements, dan lainnya.",
+    "benefits": ["Semua JetPlugins dengan lisensi resmi", "Konfigurasi awal sesuai jenis website", "Cocok untuk listing, direktori, dan marketplace"],
+    "bestSeller": true
+  },
+  {
+    "slug": "jasa-instal-jetengine",
+    "name": "Jasa Instal JetEngine",
+    "plugin": "JetEngine",
+    "category": "Dynamic Content",
+    "price": 35000,
+    "description": "JetEngine memungkinkan Anda membuat custom post type, custom field, dan listing dinamis tanpa coding.",
+    "benefits": ["Custom post type & field tanpa coding", "Listing grid dinamis siap pakai", "Setup struktur data awal termasuk"],
+    "bestSeller": false
+  },
+  {
+    "slug": "jasa-instal-wp-rocket",
+    "name": "Jasa Instal WP Rocket",
+    "plugin": "WP Rocket",
+    "category": "Cache & Performa",
+    "price": 40000,
+    "description": "WP Rocket adalah plugin caching premium terbaik untuk WordPress. Kami instal dan konfigurasi lengkap: page caching, lazy load, minify CSS/JS, dan database optimization.",
+    "benefits": ["Konfigurasi disesuaikan dengan hosting Anda", "Peningkatan skor PageSpeed yang terukur", "Termasuk pengecekan sebelum & sesudah"],
+    "bestSeller": true
+  },
+  {
+    "slug": "jasa-instal-litespeed-cache",
+    "name": "Jasa Instal LiteSpeed Cache",
+    "plugin": "LiteSpeed Cache",
+    "category": "Cache & Performa",
+    "price": 30000,
+    "description": "Untuk hosting berbasis LiteSpeed, LSCache adalah pilihan optimasi paling efektif. Kami konfigurasi server-level caching, image optimization, dan CDN QUIC.cloud.",
+    "benefits": ["Server-level caching maksimal", "Setup image optimization & QUIC.cloud CDN", "Konfigurasi aman tanpa konflik plugin"],
+    "bestSeller": false
+  },
+  {
+    "slug": "jasa-instal-perfmatters",
+    "name": "Jasa Instal Perfmatters",
+    "plugin": "Perfmatters",
+    "category": "Cache & Performa",
+    "price": 30000,
+    "description": "Perfmatters membersihkan script yang tidak perlu di setiap halaman untuk hasil Core Web Vitals terbaik.",
+    "benefits": ["Script manager dikonfigurasi per halaman", "Mengurangi ukuran halaman secara signifikan", "Pasangan ideal untuk WP Rocket / LSCache"],
+    "bestSeller": false
+  },
+  {
+    "slug": "jasa-instal-imagify",
+    "name": "Jasa Instal Imagify",
+    "plugin": "Imagify",
+    "category": "Cache & Performa",
+    "price": 25000,
+    "description": "Imagify mengompres gambar secara otomatis tanpa menurunkan kualitas visual, termasuk konversi ke format WebP.",
+    "benefits": ["Kompresi otomatis semua gambar baru", "Konversi WebP untuk loading lebih cepat", "Optimasi massal media library termasuk"],
+    "bestSeller": false
+  },
+  {
+    "slug": "jasa-instal-rank-math-pro",
+    "name": "Jasa Instal Rank Math Pro",
+    "plugin": "Rank Math Pro",
+    "category": "SEO",
+    "price": 35000,
+    "description": "Rank Math Pro adalah plugin SEO WordPress terlengkap. Kami instal, aktivasi lisensi, dan setup awal: schema markup, sitemap, Google Search Console.",
+    "benefits": ["Setup Search Console & Analytics termasuk", "Schema markup otomatis teraktivasi", "Migrasi aman dari Yoast / plugin lain"],
+    "bestSeller": true
+  },
+  {
+    "slug": "jasa-instal-seopress-pro",
+    "name": "Jasa Instal SEOPress Pro",
+    "plugin": "SEOPress Pro",
+    "category": "SEO",
+    "price": 30000,
+    "description": "SEOPress Pro adalah alternatif SEO ringan tanpa iklan dengan fitur lengkap: schema, redirect, broken link checker, dan WooCommerce SEO.",
+    "benefits": ["Ringan, tanpa iklan di dashboard", "Fitur WooCommerce SEO lengkap", "Konfigurasi awal oleh teknisi berpengalaman"],
+    "bestSeller": false
+  },
+  {
+    "slug": "jasa-instal-fluent-forms-pro",
+    "name": "Jasa Instal Fluent Forms Pro",
+    "plugin": "Fluent Forms Pro",
+    "category": "Form & Email",
+    "price": 30000,
+    "description": "Fluent Forms Pro adalah form builder tercepat untuk WordPress dengan fitur conversational form, payment form, dan integrasi luas.",
+    "benefits": ["Form builder tercepat, tidak memberatkan situs", "Payment form & conditional logic", "Pembuatan form pertama termasuk"],
+    "bestSeller": false
+  },
+  {
+    "slug": "jasa-instal-fluentcrm",
+    "name": "Jasa Instal FluentCRM",
+    "plugin": "FluentCRM Pro",
+    "category": "Form & Email",
+    "price": 45000,
+    "description": "FluentCRM adalah email marketing & CRM self-hosted di WordPress. Kelola kontak, automasi email, dan campaign tanpa biaya bulanan.",
+    "benefits": ["Email automation tanpa biaya per subscriber", "Setup SMTP agar email masuk inbox", "Integrasi dengan Fluent Forms & WooCommerce"],
+    "bestSeller": false
+  }
+]

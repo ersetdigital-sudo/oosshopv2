@@ -1430,98 +1430,13 @@ export function getWebsiteService(slug: string) {
   return websiteServices.find((s) => s.slug === slug)
 }
 
-export const faqs: { question: string; answer: string }[] = [
-  {
-    question: 'Apa itu jasa instal plugin WordPress premium?',
-    answer:
-      'Jasa instal plugin WordPress premium adalah layanan pemasangan, aktivasi lisensi, dan konfigurasi plugin berbayar (seperti Elementor Pro, WP Rocket, atau Rank Math Pro) di website Anda. Anda tidak perlu membeli lisensi tahunan penuh sendiri — teknisi OOS SHOP memasang plugin original dan memastikan semuanya berjalan dengan benar.',
-  },
-  {
-    question: 'Apakah plugin yang diinstal original atau nulled?',
-    answer:
-      'Semua plugin yang kami instal 100% original dengan aktivasi lisensi resmi. Kami tidak pernah menggunakan plugin nulled, crack, atau GPL tidak resmi. Plugin nulled berisiko menyisipkan malware, backdoor, dan membuat website Anda tidak bisa menerima update keamanan.',
-  },
-  {
-    question: 'Apa bahaya menggunakan plugin nulled?',
-    answer:
-      'Plugin nulled sering disusupi malware, backdoor, dan kode pencuri data. Risikonya: website diretas, data pelanggan bocor, ranking Google anjlok karena blacklist, dan Anda tidak mendapat update keamanan. Biaya memperbaiki website yang diretas jauh lebih mahal daripada menggunakan lisensi original.',
-  },
-  {
-    question: 'Apakah saya mendapat update plugin setelah instalasi?',
-    answer:
-      'Ya. Karena lisensi diaktivasi secara resmi, plugin akan menerima update otomatis langsung dari developer selama masa aktif lisensi. Anda juga bisa meminta bantuan kami jika ada kendala saat update.',
-  },
-  {
-    question: 'Berapa lama proses instalasi?',
-    answer:
-      'Umumnya 1–24 jam setelah pembayaran dikonfirmasi dan akses website kami terima. Untuk konfigurasi kompleks seperti WP Rocket atau Crocoblock, maksimal 1–2 hari kerja termasuk pengujian.',
-  },
-  {
-    question: 'Data akses apa saja yang dibutuhkan?',
-    answer:
-      'Kami hanya membutuhkan akses admin WordPress (wp-admin). Untuk konfigurasi performa tertentu, akses cPanel/hosting bisa membantu tetapi tidak wajib. Anda disarankan membuat user admin sementara yang bisa dihapus setelah pekerjaan selesai.',
-  },
-  {
-    question: 'Apakah aman memberikan akses website ke OOS SHOP?',
-    answer:
-      'Aman. Kami bekerja dengan prosedur standar: user admin sementara, tanpa mengubah konten Anda, dan seluruh kredensial dihapus dari sisi kami setelah pekerjaan selesai. Anda dapat mengganti password setelah instalasi selesai.',
-  },
-  {
-    question: 'Apakah instalasi bisa merusak website saya?',
-    answer:
-      'Tidak. Sebelum instalasi kami melakukan backup, dan setiap plugin diuji kompatibilitasnya dengan tema serta plugin yang sudah terpasang. Jika terjadi konflik, kami kembalikan website ke kondisi semula tanpa biaya tambahan.',
-  },
-  {
-    question: 'Bagaimana cara memesan jasa instal plugin?',
-    answer:
-      'Prosesnya 4 langkah: (1) pilih plugin yang Anda butuhkan, (2) lakukan pembayaran, (3) kirim akses website Anda, (4) tim kami menginstal, mengonfigurasi, dan menguji sampai selesai. Anda menerima laporan hasil pekerjaan.',
-  },
-  {
-    question: 'Metode pembayaran apa saja yang diterima?',
-    answer:
-      'Kami menerima transfer bank (BCA, Mandiri, BRI, BNI), e-wallet (GoPay, OVO, DANA, ShopeePay), dan QRIS. Pembayaran dilakukan di awal sebelum pekerjaan dimulai.',
-  },
-  {
-    question: 'Apakah ada garansi?',
-    answer:
-      'Ya. Semua layanan bergaransi: jika plugin tidak berfungsi karena kesalahan instalasi kami, kami perbaiki gratis. Jika kami tidak dapat menyelesaikan instalasi sama sekali, dana Anda kembali 100%.',
-  },
-  {
-    question: 'Apakah harga sudah termasuk lisensi plugin?',
-    answer:
-      'Ya, harga jasa sudah termasuk penggunaan lisensi original selama masa aktif yang disepakati. Detail durasi lisensi setiap plugin dijelaskan saat Anda melakukan pemesanan.',
-  },
-  {
-    question: 'Apa bedanya membeli lisensi sendiri dengan menggunakan OOS SHOP?',
-    answer:
-      'Membeli langsung berarti membayar harga internasional penuh (umumnya $49–$599/tahun), memasang sendiri, dan mengonfigurasi sendiri. Dengan OOS SHOP, Anda membayar lebih hemat dalam Rupiah, plugin dipasang dan dikonfigurasi oleh teknisi berpengalaman, plus dukungan purna jual dalam Bahasa Indonesia.',
-  },
-  {
-    question: 'Apakah OOS SHOP juga menerima konfigurasi lanjutan?',
-    answer:
-      'Ya. Selain instalasi standar, kami melayani konfigurasi lanjutan seperti optimasi kecepatan menyeluruh, setup schema SEO, migrasi dari plugin lain, dan pembuatan struktur dynamic content dengan JetEngine/Crocoblock.',
-  },
-  {
-    question: 'Apakah melayani website WooCommerce?',
-    answer:
-      'Ya. Sebagian besar klien kami adalah pemilik toko online WooCommerce. Semua plugin yang kami tangani (Elementor Pro, WP Rocket, Rank Math Pro, dan lainnya) kompatibel dan kami konfigurasikan khusus untuk WooCommerce.',
-  },
-  {
-    question: 'Apakah OOS SHOP juga membuat website dari nol?',
-    answer:
-      'Ya. Selain jasa instal plugin, kami menyediakan layanan pembuatan website lengkap: company profile, toko online WooCommerce, hingga website custom dengan dynamic content — sudah termasuk plugin premium original di dalam paketnya.',
-  },
-  {
-    question: 'Bagaimana dukungan setelah instalasi selesai?',
-    answer:
-      'Setiap pemesanan mendapat dukungan purna jual selama 30 hari untuk pertanyaan seputar plugin yang kami instal. Dukungan dilakukan melalui WhatsApp atau email dalam Bahasa Indonesia.',
-  },
-]
+export { default as faqs } from '@/public/data/faq.json'
+
+import summaryData from '@/public/data/summary.json'
 
 export const siteConfig = {
-  name: 'OOS SHOP',
-  url: 'https://oosshop.com',
-  description:
-    'Jasa instal plugin WordPress premium original — Elementor Pro, WP Rocket, Rank Math Pro, dan lainnya. Instalasi resmi, konfigurasi profesional, garansi uang kembali.',
-  whatsapp: 'https://wa.me/6281234567890',
+  name: summaryData.name,
+  url: summaryData.url,
+  description: summaryData.description,
+  whatsapp: summaryData.contact.whatsappUrl,
 }
