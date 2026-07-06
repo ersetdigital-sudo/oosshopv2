@@ -5,6 +5,7 @@ import Link from 'next/link'
 import {
   LayoutDashboard,
   ShoppingBag,
+  Package,
   Settings,
   LogOut,
   ArrowLeft,
@@ -12,13 +13,18 @@ import {
   X,
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { ThemeToggle } from '@/components/theme-toggle'
 import type { Session } from '@supabase/supabase-js'
 
 const navItems = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { label: 'Produk', href: '/admin/produk', icon: Package },
   { label: 'Pesanan', href: '/admin/orders', icon: ShoppingBag },
   { label: 'Setting', href: '/admin/settings', icon: Settings },
 ]
+
+// Bottom nav shows only the 4 most important items on mobile
+const mobileNavItems = navItems
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
@@ -71,7 +77,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (!session) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="relative flex min-h-screen items-center justify-center bg-background px-4">
+        <div className="absolute right-4 top-4">
+          <ThemeToggle />
+        </div>
         <div className="w-full max-w-sm">
           <div className="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">
             <div className="mb-8 flex items-center justify-center gap-2.5">
@@ -226,11 +235,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   {navItems.find((item) => item.href === pathname)?.label || 'Admin'}
                 </h1>
               </div>
-              <div className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1.5">
-                <div className="size-1.5 animate-pulse rounded-full bg-green-500" />
-                <span className="hidden text-[11px] font-medium text-muted-foreground sm:inline">
-                  Online
-                </span>
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1.5">
+                  <div className="size-1.5 animate-pulse rounded-full bg-green-500" />
+                  <span className="hidden text-[11px] font-medium text-muted-foreground sm:inline">
+                    Online
+                  </span>
+                </div>
+                <ThemeToggle />
               </div>
             </div>
           </header>
@@ -241,8 +253,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Mobile bottom nav */}
       <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-card/95 backdrop-blur-xl lg:hidden">
-        <div className="flex items-center justify-around px-2 py-2">
-          {navItems.map((item) => {
+        <div className="flex items-center justify-around px-1 py-2">
+          {mobileNavItems.map((item) => {
             const isActive = pathname === item.href
             const Icon = item.icon
             return (

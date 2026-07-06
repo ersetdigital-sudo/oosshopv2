@@ -1,10 +1,28 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Plus, Pencil, Trash2, RefreshCw, Package } from 'lucide-react'
+import {
+  Package,
+  ShoppingBag,
+  Clock,
+  Wallet,
+  TrendingUp,
+  ArrowRight,
+  Star,
+  Eye,
+} from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import type { Product } from '@/lib/products'
+
+type Order = {
+  id: string
+  invoice_number: string
+  customer_name: string
+  total_price: number
+  status: 'pending' | 'processing' | 'done' | 'cancelled'
+  created_at: string
+}
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat('id-ID', {
@@ -14,362 +32,246 @@ function formatPrice(price: number) {
   }).format(price)
 }
 
-function generateSlug(name: string) {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '')
-}
-
-type FormData = {
-  name: string
-  description: string
-  price: string
-  original_price: string
-  category: string
-  badge: string
-  is_featured: boolean
-}
-
-export default function AdminPage() {
-  const [products, setProducts] = useState<Product[]>([])
-  const [showForm, setShowForm] = useState(false)
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    description: '',
-    price: '',
-    original_price: '',
-    category: 'Plugin',
-    badge: '',
-    is_featured: false,
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
   })
-  const [imageFile, setImageFile] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [submitting, setSubmitting] = useState(false)
-  const [stats, setStats] = useState({ totalOrders: 0, pendingOrders: 0, revenue: 0 })
+}
+
+const statusConfig: Record<Order['status'], { label: string; color: string }> = {
+  pending: { label: 'Menunggu', color: 'bg-amber-500/10 text-amber-500 border-amber-500/20' },
+  processing: { label: 'Diproses', color: 'bg-blue-500/10 text-blue-500 border-blue-500/20' },
+  done: { label: 'Selesai', color: 'bg-green-500/10 text-green-500 border-green-500/20' },
+  cancelled: { label: 'Dibatalkan', color: 'bg-red-500/10 text-red-500 border-red-500/20' },
+}
+
+export default function AdminDashboardPage() {
+  const [products, setProducts] = useState<Product[]>([])
+  const [orders, setOrders] = useState<Order[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchProducts()
-    fetchStats()
+    fetchData()
   }, [])
 
-  async function fetchProducts() {
-    const { data } = await supabase.from('products').select('*').order('created_at', { ascending: false })
-    setProducts((data as Product[]) || [])
+  async function fetchData() {
+    setLoading(true)
+    const [{ data: productsData }, { data: ordersData }] = await Promise.all([
+      supabase.from('products').select('*'),
+      supabase.from('orders').select('*').order('created_at', { ascending: false }),
+    ])
+    setProducts((productsData as Product[]) || [])
+    setOrders((ordersData as Order[]) || [])
+    setLoading(false)
   }
 
-  async function fetchStats() {
-    const { data: orders } = await supabase.from('orders').select('status, total_price')
-    if (orders) {
-      const pending = orders.filter((o) => o.status === 'pending').length
-      const done = orders.filter((o) => o.status === 'done')
-      const revenue = done.reduce((sum, o) => sum + (o.total_price || 0), 0)
-      setStats({ totalOrders: orders.length, pendingOrders: pending, revenue })
+  const stats = useMemo(() => {
+    const pending = orders.filter((o) => o.status === 'pending').length
+    const done = orders.filter((o) => o.status === 'done')
+    const revenue = done.reduce((sum, o) => sum + (o.total_price || 0), 0)
+
+    // Revenue this week vs before, for a simple trend indicator
+    const now = Date.now()
+    const weekMs = 7 * 24 * 60 * 60 * 1000
+    const thisWeekRevenue = done
+      .filter((o) => now - new Date(o.created_at).getTime() < weekMs)
+      .reduce((sum, o) => sum + (o.total_price || 0), 0)
+
+    return {
+      totalProducts: products.length,
+      pendingOrders: pending,
+      totalOrders: orders.length,
+      revenue,
+      thisWeekRevenue,
     }
-  }
+  }, [products, orders])
 
-  function openEditForm(product: Product) {
-    setEditingProduct(product)
-    setFormData({
-      name: product.name || '',
-      description: product.description || '',
-      price: String(product.price || ''),
-      original_price: product.original_price ? String(product.original_price) : '',
-      category: product.category || 'Plugin',
-      badge: product.badge || '',
-      is_featured: product.is_featured || false,
-    })
-    setImageFile(null)
-    setImagePreview(product.image_url || null)
-    setShowForm(true)
-  }
+  const recentOrders = orders.slice(0, 5)
+  const topProducts = useMemo(
+    () => [...products].sort((a, b) => (b.total_sold || 0) - (a.total_sold || 0)).slice(0, 5),
+    [products],
+  )
 
-  async function compressImage(file: File, maxWidth = 800, quality = 0.7): Promise<Blob> {
-    return new Promise((resolve) => {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const img = new window.Image()
-        img.onload = () => {
-          const canvas = document.createElement('canvas')
-          let width = img.width
-          let height = img.height
-          if (width > maxWidth) {
-            height = Math.round((height * maxWidth) / width)
-            width = maxWidth
-          }
-          canvas.width = width
-          canvas.height = height
-          const ctx = canvas.getContext('2d')
-          ctx?.drawImage(img, 0, 0, width, height)
-          canvas.toBlob((blob) => resolve(blob as Blob), 'image/webp', quality)
-        }
-        img.src = e.target?.result as string
-      }
-      reader.readAsDataURL(file)
-    })
-  }
+  const statCards = [
+    {
+      label: 'Total Produk',
+      value: stats.totalProducts,
+      icon: Package,
+      color: 'text-primary bg-primary/10',
+      href: '/admin/produk',
+    },
+    {
+      label: 'Pesanan Pending',
+      value: stats.pendingOrders,
+      icon: Clock,
+      color: 'text-amber-500 bg-amber-500/10',
+      href: '/admin/orders',
+    },
+    {
+      label: 'Total Pesanan',
+      value: stats.totalOrders,
+      icon: ShoppingBag,
+      color: 'text-blue-500 bg-blue-500/10',
+      href: '/admin/orders',
+    },
+    {
+      label: 'Revenue',
+      value: formatPrice(stats.revenue),
+      icon: Wallet,
+      color: 'text-emerald-500 bg-emerald-500/10',
+      href: '/admin/orders',
+    },
+  ]
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setSubmitting(true)
-    let image_url: string | null = editingProduct?.image_url || null
-
-    if (!imagePreview && !imageFile) {
-      image_url = null
-    } else if (imageFile) {
-      const compressedBlob = await compressImage(imageFile, 800, 0.7)
-      const fileName = `${Date.now()}.webp`
-      const { error: uploadError } = await supabase.storage
-        .from('product-images')
-        .upload(fileName, compressedBlob, { contentType: 'image/webp' })
-      if (!uploadError) {
-        const { data } = supabase.storage.from('product-images').getPublicUrl(fileName)
-        image_url = data.publicUrl
-      }
-    }
-
-    const productData = {
-      name: formData.name,
-      description: formData.description,
-      price: Number(formData.price),
-      original_price: formData.original_price ? Number(formData.original_price) : null,
-      category: formData.category,
-      badge: formData.badge || null,
-      is_featured: formData.is_featured,
-      image_url,
-      slug: generateSlug(formData.name),
-    }
-
-    if (editingProduct) {
-      await supabase.from('products').update(productData).eq('id', editingProduct.id)
-    }
-    setShowForm(false)
-    setSubmitting(false)
-    fetchProducts()
-  }
-
-  async function handleDelete(id: string) {
-    if (!confirm('Yakin ingin menghapus produk ini?')) return
-    await supabase.from('products').delete().eq('id', id)
-    fetchProducts()
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-[1400px] space-y-4 sm:space-y-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-24 animate-pulse rounded-2xl border border-border bg-card" />
+          ))}
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="mx-auto max-w-[1400px] space-y-4 sm:space-y-6">
-      {/* Quick Stats */}
-      <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:grid-cols-4">
-        <div className="rounded-xl border border-border bg-card p-3 sm:rounded-2xl sm:p-5">
-          <p className="mb-1 text-[10px] text-muted-foreground sm:text-sm">Produk</p>
-          <p className="text-xl font-bold sm:text-2xl">{products.length}</p>
-        </div>
-        <div className="rounded-xl border border-border bg-card p-3 sm:rounded-2xl sm:p-5">
-          <p className="mb-1 text-[10px] text-muted-foreground sm:text-sm">Pending</p>
-          <p className="text-xl font-bold text-amber-500 sm:text-2xl">{stats.pendingOrders}</p>
-        </div>
-        <div className="rounded-xl border border-border bg-card p-3 sm:rounded-2xl sm:p-5">
-          <p className="mb-1 text-[10px] text-muted-foreground sm:text-sm">Total Order</p>
-          <p className="text-xl font-bold text-green-500 sm:text-2xl">{stats.totalOrders}</p>
-        </div>
-        <div className="rounded-xl border border-border bg-card p-3 sm:rounded-2xl sm:p-5">
-          <p className="mb-1 text-[10px] text-muted-foreground sm:text-sm">Revenue</p>
-          <p className="text-sm font-bold text-emerald-500 sm:text-lg">{formatPrice(stats.revenue)}</p>
-        </div>
+    <div className="mx-auto max-w-[1400px] space-y-5 sm:space-y-6">
+      <div>
+        <h2 className="text-xl font-bold sm:text-2xl">Dashboard</h2>
+        <p className="mt-0.5 text-sm text-muted-foreground">Ringkasan performa toko kamu</p>
       </div>
 
-      {/* Header */}
-      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-        <div>
-          <h2 className="text-xl font-bold">Kelola Produk</h2>
-          <p className="mt-0.5 text-sm text-muted-foreground">{products.length} produk terdaftar</p>
+      {/* Stat Cards */}
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+        {statCards.map((card) => {
+          const Icon = card.icon
+          return (
+            <Link
+              key={card.label}
+              href={card.href}
+              className="group rounded-2xl border border-border bg-card p-4 transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md sm:p-5"
+            >
+              <div className={`mb-3 flex size-9 items-center justify-center rounded-xl sm:size-10 ${card.color}`}>
+                <Icon className="size-4 sm:size-5" aria-hidden />
+              </div>
+              <p className="text-[11px] text-muted-foreground sm:text-sm">{card.label}</p>
+              <p className="mt-1 truncate text-lg font-bold sm:text-2xl">{card.value}</p>
+            </Link>
+          )
+        })}
+      </div>
+
+      {/* Revenue trend banner */}
+      <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <TrendingUp className="size-5" aria-hidden />
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground">Revenue 7 hari terakhir</p>
+            <p className="text-lg font-bold">{formatPrice(stats.thisWeekRevenue)}</p>
+          </div>
         </div>
         <Link
-          href="/admin/produk/tambah"
-          className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
+          href="/admin/orders"
+          className="flex items-center justify-center gap-1.5 rounded-xl border border-border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-muted"
         >
-          <Plus className="size-4" aria-hidden />
-          Tambah Produk
+          Lihat Semua Pesanan
+          <ArrowRight className="size-4" aria-hidden />
         </Link>
       </div>
 
-      {/* Products List */}
-      {products.length === 0 ? (
-        <div className="rounded-2xl border border-border bg-card p-12 text-center">
-          <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-2xl bg-muted">
-            <Package className="size-8 text-muted-foreground" aria-hidden />
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        {/* Recent Orders */}
+        <div className="rounded-2xl border border-border bg-card p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-sm font-semibold">Pesanan Terbaru</h3>
+            <Link href="/admin/orders" className="text-xs font-medium text-primary hover:underline">
+              Lihat semua
+            </Link>
           </div>
-          <p className="text-sm text-muted-foreground">
-            Belum ada produk. Klik &quot;Tambah Produk&quot; untuk mulai.
-          </p>
-        </div>
-      ) : (
-        <div className="overflow-hidden rounded-2xl border border-border bg-card">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-border text-xs text-muted-foreground">
-                <th className="p-4 font-medium">Produk</th>
-                <th className="p-4 font-medium">Kategori</th>
-                <th className="p-4 font-medium">Harga</th>
-                <th className="p-4 font-medium">Terjual</th>
-                <th className="p-4 font-medium">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((p) => (
-                <tr key={p.id} className="border-b border-border last:border-0">
-                  <td className="flex items-center gap-3 p-4">
-                    {p.image_url && (
-                      <Image
-                        src={p.image_url}
-                        alt={p.name}
-                        width={40}
-                        height={40}
-                        className="size-10 rounded-lg object-cover"
-                      />
-                    )}
-                    <span className="font-medium">{p.name}</span>
-                  </td>
-                  <td className="p-4 text-muted-foreground">{p.category}</td>
-                  <td className="p-4 font-medium">{formatPrice(p.price)}</td>
-                  <td className="p-4 text-muted-foreground">{p.total_sold || 0}</td>
-                  <td className="p-4">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => openEditForm(p)}
-                        className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground"
-                      >
-                        <Pencil className="size-4" aria-hidden />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(p.id)}
-                        className="rounded-lg p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                      >
-                        <Trash2 className="size-4" aria-hidden />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+          {recentOrders.length === 0 ? (
+            <p className="py-8 text-center text-sm text-muted-foreground">Belum ada pesanan.</p>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {recentOrders.map((order) => (
+                <div key={order.id} className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium">{order.customer_name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {order.invoice_number} · {formatDate(order.created_at)}
+                    </p>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    <span className="text-sm font-semibold">{formatPrice(order.total_price)}</span>
+                    <span
+                      className={`whitespace-nowrap rounded-full border px-2 py-0.5 text-[10px] font-medium ${statusConfig[order.status].color}`}
+                    >
+                      {statusConfig[order.status].label}
+                    </span>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          )}
         </div>
-      )}
 
-      {/* Edit Modal */}
-      {showForm && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-border bg-card p-6">
-            <h3 className="mb-4 text-lg font-semibold">Edit Produk</h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-                  Nama Produk
-                </label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                  className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-                  Deskripsi
-                </label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={3}
-                  className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-                    Harga
-                  </label>
-                  <input
-                    type="number"
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    required
-                    className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-                    Harga Asli
-                  </label>
-                  <input
-                    type="number"
-                    value={formData.original_price}
-                    onChange={(e) => setFormData({ ...formData, original_price: e.target.value })}
-                    className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-                  Gambar
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0]
-                    if (file) {
-                      setImageFile(file)
-                      setImagePreview(URL.createObjectURL(file))
-                    }
-                  }}
-                  className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary"
-                />
-                {imagePreview && (
-                  <Image
-                    src={imagePreview}
-                    alt="Preview"
-                    width={80}
-                    height={80}
-                    className="mt-2 rounded-lg object-cover"
-                  />
-                )}
-              </div>
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
-                  checked={formData.is_featured}
-                  onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
-                  className="size-4 rounded border-border"
-                />
-                Tampilkan di homepage (featured)
-              </label>
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => setShowForm(false)}
-                  className="flex-1 rounded-xl border border-border py-2.5 text-sm font-medium hover:bg-muted"
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-                >
-                  {submitting ? (
-                    <RefreshCw className="size-4 animate-spin" aria-hidden />
-                  ) : (
-                    'Simpan'
-                  )}
-                </button>
-              </div>
-            </form>
+        {/* Top Products */}
+        <div className="rounded-2xl border border-border bg-card p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-sm font-semibold">Produk Terlaris</h3>
+            <Link href="/admin/produk" className="text-xs font-medium text-primary hover:underline">
+              Kelola produk
+            </Link>
           </div>
+          {topProducts.length === 0 ? (
+            <p className="py-8 text-center text-sm text-muted-foreground">Belum ada produk.</p>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {topProducts.map((p, i) => (
+                <div key={p.id} className="flex items-center gap-3">
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold text-muted-foreground">
+                    {i + 1}
+                  </span>
+                  {p.image_url ? (
+                    <Image
+                      src={p.image_url}
+                      alt={p.name}
+                      width={36}
+                      height={36}
+                      className="size-9 shrink-0 rounded-lg object-cover"
+                    />
+                  ) : (
+                    <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted">
+                      <Package className="size-4 text-muted-foreground" aria-hidden />
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium">{p.name}</p>
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-0.5">
+                        <ShoppingBag className="size-3" aria-hidden />
+                        {p.total_sold || 0} terjual
+                      </span>
+                      <span className="flex items-center gap-0.5">
+                        <Eye className="size-3" aria-hidden />
+                        {p.views || 0}
+                      </span>
+                    </div>
+                  </div>
+                  {p.is_featured && (
+                    <Star className="size-3.5 shrink-0 fill-amber-400 text-amber-400" aria-hidden />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   )
 }

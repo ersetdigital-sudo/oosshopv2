@@ -166,7 +166,7 @@ export default function TambahProdukPage() {
       return
     }
 
-    router.push('/admin')
+    router.push('/admin/produk')
   }
 
   return (
@@ -184,7 +184,7 @@ export default function TambahProdukPage() {
       )}
 
       <div className="mb-8 flex items-center gap-4">
-        <Link href="/admin" className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground">
+        <Link href="/admin/produk" className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground">
           <ArrowLeft className="size-5" aria-hidden />
         </Link>
         <div>
