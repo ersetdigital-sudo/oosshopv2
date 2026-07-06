@@ -16,6 +16,7 @@ import {
   X,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { ThemeSwitch } from '@/components/ui/theme-switch'
 import { websiteServices, siteConfig } from '@/lib/data'
 
 const navLinks = [
@@ -146,6 +147,7 @@ export function SiteHeader() {
 
         {/* Right actions */}
         <div className="flex items-center gap-1 sm:gap-2">
+          <ThemeSwitch />
           <Link
             href="/katalog"
             className="flex size-9 items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted"

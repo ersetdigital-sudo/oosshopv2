@@ -3,7 +3,7 @@ import { faqs } from '@/lib/data'
 
 export function FaqSection() {
   return (
-    <section id="faq" className="scroll-mt-20 border-y border-border bg-[#131318]">
+    <section id="faq" className="scroll-mt-20 border-y border-border bg-muted/50">
       <div className="mx-auto max-w-3xl px-4 py-16 md:px-6 md:py-24">
         <div className="text-center">
           <h2 className="text-balance text-3xl font-bold tracking-tight md:text-4xl">
