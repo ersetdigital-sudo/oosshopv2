@@ -57,6 +57,89 @@ type Order = {
   created_at: string
 }
 
+type Review = {
+  id: string
+  product_id: string
+  order_id: string
+  customer_name: string
+  customer_phone: string
+  rating: number
+  comment: string | null
+}
+
+// --- StarRating ---
+function StarRating({ rating, onRate, interactive = false, size = 'size-5' }: { rating: number; onRate?: (r: number) => void; interactive?: boolean; size?: string }) {
+  return (
+    <div className="flex items-center gap-0.5">
+      {[1, 2, 3, 4, 5].map(star => (
+        <button
+          key={star}
+          type="button"
+          disabled={!interactive}
+          onClick={() => interactive && onRate?.(star)}
+          className={`${interactive ? 'cursor-pointer hover:scale-110' : 'cursor-default'} transition-transform`}
+        >
+          <svg className={`${size} ${star <= rating ? 'text-amber-400' : 'text-muted-foreground/30'}`} fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+        </button>
+      ))}
+    </div>
+  )
+}
+
+// --- ReviewForm ---
+function ReviewForm({ item, orderId, customerName, customerPhone, onSubmitted }: { item: OrderItem; orderId: string; customerName: string; customerPhone: string; onSubmitted: () => void }) {
+  const [rating, setRating] = useState(0)
+  const [comment, setComment] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (rating === 0) return alert('Pilih rating dulu!')
+    setSubmitting(true)
+
+    const { error } = await supabase.from('reviews').insert({
+      product_id: item.id,
+      order_id: orderId,
+      customer_name: customerName,
+      customer_phone: customerPhone,
+      rating,
+      comment: comment.trim() || null,
+    })
+
+    if (error) {
+      alert('Gagal mengirim ulasan: ' + error.message)
+    } else {
+      onSubmitted()
+    }
+    setSubmitting(false)
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="mt-2 rounded-lg border border-border bg-accent/30 p-3">
+      <p className="text-xs font-medium text-muted-foreground mb-2">
+        Beri ulasan untuk <span className="text-foreground">{item.name}</span>
+      </p>
+      <StarRating rating={rating} onRate={setRating} interactive size="size-6" />
+      <textarea
+        value={comment}
+        onChange={e => setComment(e.target.value)}
+        placeholder="Tulis ulasan (opsional)..."
+        rows={2}
+        className="mt-2 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
+      />
+      <button
+        type="submit"
+        disabled={submitting || rating === 0}
+        className="mt-2 rounded-lg bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+      >
+        {submitting ? 'Mengirim...' : 'Kirim Ulasan'}
+      </button>
+    </form>
+  )
+}
+
 const statusConfig = {
   pending: { label: 'Menunggu Pembayaran', icon: Clock, color: 'bg-amber-100 text-amber-700 border-amber-200' },
   processing: { label: 'Sedang Diproses', icon: RefreshCw, color: 'bg-blue-100 text-blue-700 border-blue-200' },
@@ -72,6 +155,8 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('all')
   const [noOrdersFound, setNoOrdersFound] = useState(false)
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [reviewFormOpen, setReviewFormOpen] = useState<string | null>(null)
 
   useEffect(() => {
     async function checkSession() {
@@ -131,6 +216,26 @@ export default function DashboardPage() {
     } else {
       setOrders([])
     }
+
+    // Fetch existing reviews by this customer
+    const { data: reviewData } = await supabase
+      .from('reviews')
+      .select('*')
+      .eq('customer_phone', phoneNumber)
+    setReviews(reviewData || [])
+  }
+
+  function hasReviewed(orderId: string, productId?: string) {
+    return reviews.some(r => r.order_id === orderId && r.product_id === productId)
+  }
+
+  function getReview(orderId: string, productId?: string) {
+    return reviews.find(r => r.order_id === orderId && r.product_id === productId)
+  }
+
+  function handleReviewSubmitted() {
+    supabase.from('reviews').select('*').eq('customer_phone', phone).then(({ data }) => setReviews(data || []))
+    setReviewFormOpen(null)
   }
 
   async function handleLogin(e: React.FormEvent) {
@@ -363,6 +468,61 @@ export default function DashboardPage() {
                     <div className={`h-1.5 flex-1 rounded-full ${order.status === 'processing' || order.status === 'done' ? 'bg-green-500' : 'bg-muted'}`} />
                     <div className={`h-1.5 flex-1 rounded-full ${order.status === 'done' ? 'bg-green-500' : 'bg-muted'}`} />
                   </div>
+                  <div className="flex items-center justify-between mt-1">
+                    <span className="text-[10px] text-muted-foreground">Dipesan</span>
+                    <span className="text-[10px] text-muted-foreground">Diproses</span>
+                    <span className="text-[10px] text-muted-foreground">Selesai</span>
+                  </div>
+
+                  {/* Review section for completed orders */}
+                  {order.status === 'done' && (
+                    <div className="mt-3 border-t border-border pt-3">
+                      <p className="text-xs font-medium text-muted-foreground mb-2">Ulasan Produk</p>
+                      <div className="space-y-2">
+                        {(order.items || []).map((item, i) => {
+                          const reviewed = hasReviewed(order.id, item.id)
+                          const existingReview = getReview(order.id, item.id)
+                          const formKey = `${order.id}-${item.id}`
+
+                          return (
+                            <div key={i} className="rounded-lg bg-accent/40 p-2.5 sm:p-3">
+                              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                                <span className="text-sm text-foreground/80">{item.name}</span>
+                                {reviewed ? (
+                                  <div className="flex items-center gap-2">
+                                    <StarRating rating={existingReview?.rating ?? 0} size="size-4" />
+                                    <span className="text-xs text-green-600 font-medium">Sudah diulas</span>
+                                  </div>
+                                ) : (
+                                  <button
+                                    onClick={() => setReviewFormOpen(reviewFormOpen === formKey ? null : formKey)}
+                                    className="inline-flex items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-medium text-amber-700 hover:bg-amber-100 transition-all"
+                                  >
+                                    <svg className="size-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                    Beri Ulasan
+                                  </button>
+                                )}
+                              </div>
+                              {existingReview?.comment && (
+                                <p className="mt-1.5 text-xs italic text-muted-foreground">&ldquo;{existingReview.comment}&rdquo;</p>
+                              )}
+                              {!reviewed && reviewFormOpen === formKey && (
+                                <ReviewForm
+                                  item={item}
+                                  orderId={order.id}
+                                  customerName={customerName}
+                                  customerPhone={phone}
+                                  onSubmitted={handleReviewSubmitted}
+                                />
+                              )}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )
             })}
