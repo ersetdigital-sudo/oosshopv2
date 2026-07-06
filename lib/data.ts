@@ -321,95 +321,150 @@ export const websiteServices: WebsiteService[] = [
     slug: 'jasa-pembuatan-company-profile',
     icon: 'Building2',
     menuLabel: 'Website Company Profile',
-    menuDescription: 'Website profesional untuk kredibilitas bisnis & instansi',
-    seoTitle: 'Jasa Pembuatan Website Company Profile Profesional | OOS SHOP',
+    menuDescription: 'Jasa pembuatan website company profile profesional untuk bisnis & instansi',
+    seoTitle: 'Jasa Pembuatan Website Company Profile Profesional 2025 | OOS SHOP',
     seoDescription:
-      'Jasa pembuatan website company profile profesional untuk perusahaan, UMKM, dan instansi. Desain modern, mobile responsive, SEO friendly, dan mudah dikelola sendiri. Konsultasi gratis via WhatsApp.',
+      'Jasa pembuatan website company profile profesional untuk perusahaan, UMKM, dan instansi di Indonesia. Desain modern, mobile responsive, SEO friendly, loading cepat, dan mudah dikelola sendiri. Harga mulai terjangkau, gratis konsultasi via WhatsApp.',
     keywords: [
       'jasa pembuatan website company profile',
-      'jasa bikin website perusahaan',
+      'jasa bikin website company profile',
+      'jasa pembuatan company profile',
+      'jasa buat website company profile profesional',
       'website company profile murah',
       'jasa website profil perusahaan',
-      'buat website company profile profesional',
+      'buat website company profile',
+      'jasa pembuatan website perusahaan',
+      'website company profile indonesia',
+      'jasa desain website company profile',
+      'harga pembuatan website company profile',
+      'jasa web company profile terbaik',
     ],
-    heroBadge: 'Website Company Profile',
-    heroHeading: 'Jasa Pembuatan Website Company Profile Profesional',
+    heroBadge: 'Jasa Pembuatan Website Company Profile',
+    heroHeading: 'Jasa Pembuatan Website Company Profile Profesional untuk Bisnis Anda',
     heroSubheading:
-      'Bangun kredibilitas bisnis Anda dengan website company profile yang modern, cepat, dan mudah ditemukan di Google. Cocok untuk perusahaan, UMKM, hingga instansi.',
+      'Bangun kredibilitas bisnis Anda dengan jasa pembuatan website company profile yang modern, cepat, SEO friendly, dan mudah ditemukan di Google. Cocok untuk perusahaan, UMKM, startup, hingga instansi pemerintah di seluruh Indonesia. Hasil profesional, harga terjangkau.',
     shortAnswer:
-      'Website company profile adalah website resmi yang menampilkan profil, layanan, portofolio, dan kontak sebuah bisnis atau instansi. OOS SHOP membuatkan website company profile dengan desain modern yang mobile responsive, SEO friendly, cepat diakses, dan dilengkapi dashboard agar mudah Anda kelola sendiri tanpa keahlian teknis.',
-    priceNote: 'Harga terjangkau, disesuaikan kebutuhan',
-    timelineNote: 'Pengerjaan cepat, revisi hingga sesuai',
+      'Jasa pembuatan website company profile adalah layanan profesional untuk membuat website resmi perusahaan yang menampilkan profil bisnis, layanan, portofolio, testimoni, dan kontak secara lengkap. OOS SHOP menyediakan jasa pembuatan website company profile dengan desain modern, mobile responsive, SEO friendly, loading cepat di bawah 3 detik, dan dilengkapi dashboard CMS agar Anda mudah mengelola konten sendiri tanpa keahlian teknis. Website company profile dari kami dibangun dengan teknologi terkini, dioptimasi untuk mesin pencari Google, dan dirancang untuk meningkatkan kepercayaan calon klien terhadap bisnis Anda.',
+    priceNote: 'Mulai dari Rp 1.500.000 — disesuaikan kebutuhan',
+    timelineNote: '5–14 hari kerja, revisi hingga puas',
     benefits: [
       {
         title: 'Desain Modern & Kredibel',
         description:
-          'Tampilan profesional yang membangun kepercayaan calon klien sejak kunjungan pertama.',
+          'Website company profile dengan desain premium yang membangun kepercayaan calon klien sejak kunjungan pertama. Tampilan elegan sesuai identitas brand Anda.',
       },
       {
-        title: 'Mobile Responsive',
+        title: '100% Mobile Responsive',
         description:
-          'Tampil sempurna di HP, tablet, dan desktop karena mayoritas pengunjung datang dari mobile.',
+          'Tampil sempurna di semua perangkat — smartphone, tablet, dan desktop. Penting karena 70%+ pengunjung website di Indonesia mengakses lewat HP.',
       },
       {
-        title: 'SEO Friendly',
+        title: 'SEO Friendly & Cepat',
         description:
-          'Struktur dan meta yang benar agar bisnis Anda mudah ditemukan saat dicari di Google.',
+          'Struktur HTML semantik, meta tag teroptimasi, schema markup, sitemap, dan loading di bawah 3 detik agar website company profile Anda mudah ranking di halaman 1 Google.',
       },
       {
-        title: 'Mudah Dikelola Sendiri',
+        title: 'Dashboard Mudah Dikelola',
         description:
-          'Dilengkapi dashboard sederhana untuk update konten, artikel, dan portofolio kapan saja.',
+          'Dilengkapi CMS (Content Management System) intuitif untuk update konten, berita, portofolio, dan galeri kapan saja tanpa perlu developer.',
+      },
+      {
+        title: 'SSL & Keamanan Terjamin',
+        description:
+          'Sertifikat SSL gratis, backup rutin, dan proteksi keamanan dasar agar website company profile Anda aman dari serangan.',
+      },
+      {
+        title: 'Integrasi WhatsApp & Google Maps',
+        description:
+          'Tombol WhatsApp floating dan embed Google Maps untuk memudahkan calon klien menghubungi dan menemukan lokasi bisnis Anda.',
       },
     ],
     useCases: [
-      'Perusahaan yang ingin tampil profesional dan dipercaya calon klien',
-      'UMKM yang ingin memperluas jangkauan lewat kehadiran online',
-      'Instansi, sekolah, atau organisasi yang membutuhkan situs resmi',
-      'Profesional dan agensi yang ingin memamerkan portofolio dan layanan',
+      'Perusahaan (PT/CV) yang ingin website company profile profesional agar dipercaya calon klien dan mitra bisnis',
+      'UMKM dan startup yang butuh kehadiran online resmi untuk memperluas jangkauan pasar',
+      'Instansi pemerintah, sekolah, universitas, dan yayasan yang memerlukan situs resmi informatif',
+      'Kantor hukum, konsultan, akuntan, dan profesional yang ingin menampilkan keahlian dan portofolio',
+      'Developer properti dan kontraktor yang butuh company profile digital untuk tender dan presentasi',
+      'Klinik, rumah sakit, dan fasilitas kesehatan yang ingin tampil kredibel dan mudah ditemukan pasien',
+      'Perusahaan manufaktur dan ekspor yang butuh website company profile bilingual (Indonesia & Inggris)',
     ],
     process: [
       {
         step: '1',
-        title: 'Konsultasi Kebutuhan',
-        description: 'Kami diskusikan tujuan, konten, dan referensi desain website Anda via WhatsApp.',
+        title: 'Konsultasi & Analisis Kebutuhan',
+        description: 'Kami diskusikan tujuan website company profile Anda, konten yang dibutuhkan, referensi desain, dan target audiens melalui WhatsApp atau video call. Gratis tanpa biaya.',
       },
       {
         step: '2',
-        title: 'Desain & Pengembangan',
-        description: 'Tim kami merancang dan membangun website sesuai identitas brand Anda.',
+        title: 'Perencanaan Struktur & Wireframe',
+        description: 'Tim kami merancang sitemap dan wireframe halaman: beranda, tentang kami, layanan, portofolio, blog, dan kontak. Anda review sebelum masuk tahap desain.',
       },
       {
         step: '3',
-        title: 'Revisi & Penyempurnaan',
-        description: 'Anda review hasilnya, kami sempurnakan hingga sesuai harapan.',
+        title: 'Desain Visual & Pengembangan',
+        description: 'Desain UI/UX modern sesuai brand identity Anda, lalu dikembangkan menjadi website company profile yang responsif, cepat, dan SEO friendly.',
       },
       {
         step: '4',
-        title: 'Online & Serah Terima',
-        description: 'Website dionlinekan, plus panduan singkat cara mengelolanya sendiri.',
+        title: 'Revisi & Quality Assurance',
+        description: 'Anda review hasilnya, kami revisi hingga sesuai harapan. QA mencakup pengecekan responsive, kecepatan, SEO on-page, dan fungsionalitas di semua browser.',
+      },
+      {
+        step: '5',
+        title: 'Online, Serah Terima & Pelatihan',
+        description: 'Website company profile dionlinekan di domain Anda. Kami berikan panduan penggunaan dashboard, pelatihan singkat, dan dukungan teknis 30 hari.',
       },
     ],
     faqs: [
       {
-        question: 'Berapa biaya pembuatan website company profile?',
+        question: 'Berapa biaya jasa pembuatan website company profile di OOS SHOP?',
         answer:
-          'Biaya menyesuaikan jumlah halaman dan fitur yang Anda butuhkan. Kami menawarkan harga terjangkau dengan hasil profesional. Hubungi kami via WhatsApp untuk penawaran sesuai kebutuhan Anda.',
+          'Biaya jasa pembuatan website company profile di OOS SHOP mulai dari Rp 1.500.000, menyesuaikan jumlah halaman, fitur, dan kompleksitas desain. Kami menawarkan beberapa paket dengan harga transparan. Hubungi kami via WhatsApp untuk mendapatkan penawaran detail sesuai kebutuhan bisnis Anda.',
       },
       {
-        question: 'Apakah saya bisa mengelola website sendiri setelah jadi?',
+        question: 'Berapa lama waktu pengerjaan website company profile?',
         answer:
-          'Bisa. Kami membangun website di atas dashboard yang mudah digunakan dan memberi panduan singkat, sehingga Anda dapat memperbarui konten, artikel, dan portofolio tanpa keahlian teknis.',
+          'Waktu pengerjaan website company profile umumnya 5 hingga 14 hari kerja tergantung jumlah halaman dan kelengkapan materi dari klien. Untuk proyek yang lebih kompleks dengan fitur custom, bisa memakan waktu 2–4 minggu. Kami selalu mengkomunikasikan timeline secara transparan di awal proyek.',
+      },
+      {
+        question: 'Apakah website company profile bisa dikelola sendiri setelah selesai?',
+        answer:
+          'Bisa. Semua website company profile yang kami buat dilengkapi dashboard CMS (Content Management System) yang intuitif. Anda dapat menambah berita, mengubah teks, mengupload foto portofolio, dan mengelola konten lainnya secara mandiri. Kami juga memberikan panduan dan pelatihan singkat saat serah terima.',
       },
       {
         question: 'Apakah sudah termasuk domain dan hosting?',
         answer:
-          'Kami bantu pengadaan dan konfigurasi domain serta hosting sesuai kebutuhan. Detailnya kami jelaskan saat konsultasi agar Anda mendapat solusi paling hemat.',
+          'Kami membantu pengadaan dan konfigurasi domain (.com, .co.id, .id) serta hosting yang sesuai kebutuhan website company profile Anda. Biaya domain dan hosting terpisah dari biaya pembuatan, namun kami rekomendasikan solusi paling hemat dan stabil. Semua dikonfigurasi hingga website online.',
       },
       {
-        question: 'Apakah website sudah mobile friendly dan SEO friendly?',
+        question: 'Apakah website company profile sudah mobile friendly dan SEO friendly?',
         answer:
-          'Ya. Semua website kami mobile responsive dan dibangun dengan struktur SEO friendly sehingga tampil baik di semua perangkat dan siap ditemukan di Google.',
+          'Ya. Semua website company profile buatan OOS SHOP 100% mobile responsive dan dibangun dengan struktur SEO friendly: HTML semantik, meta tag teroptimasi, schema markup, loading cepat, dan sitemap XML. Website Anda siap terindeks dan bersaing di halaman pencarian Google.',
+      },
+      {
+        question: 'Apa saja halaman yang ada di website company profile?',
+        answer:
+          'Website company profile umumnya terdiri dari halaman Beranda, Tentang Kami (profil perusahaan, visi misi, tim), Layanan/Produk, Portofolio/Proyek, Blog/Berita, dan Kontak (formulir, WhatsApp, Google Maps). Struktur halaman dapat disesuaikan dengan kebutuhan bisnis Anda.',
+      },
+      {
+        question: 'Apakah bisa request desain custom sesuai brand perusahaan?',
+        answer:
+          'Tentu. Kami membuat desain website company profile custom sesuai brand identity perusahaan Anda — mulai dari warna, tipografi, gaya visual, hingga tone komunikasi. Tidak menggunakan template pasaran, sehingga website Anda unik dan mencerminkan profesionalisme bisnis.',
+      },
+      {
+        question: 'Apakah ada garansi dan support setelah website jadi?',
+        answer:
+          'Ya. Kami memberikan garansi bug fix selama 30 hari setelah serah terima dan dukungan teknis via WhatsApp. Jika ada kendala teknis atau perubahan minor, tim kami siap membantu. Untuk maintenance jangka panjang, tersedia paket bulanan opsional.',
+      },
+      {
+        question: 'Teknologi apa yang digunakan untuk membuat website company profile?',
+        answer:
+          'Kami menggunakan teknologi modern seperti Next.js, React, dan Tailwind CSS untuk performa optimal, atau WordPress dengan tema premium untuk kemudahan pengelolaan — disesuaikan dengan kebutuhan dan preferensi klien. Semua teknologi yang kami gunakan mendukung SEO, kecepatan, dan keamanan.',
+      },
+      {
+        question: 'Apakah website company profile bisa diakses dari luar negeri?',
+        answer:
+          'Bisa. Website company profile yang kami buat di-hosting pada server dengan CDN global sehingga dapat diakses dengan cepat dari mana saja di dunia. Cocok untuk perusahaan yang memiliki klien atau mitra internasional.',
       },
     ],
   },

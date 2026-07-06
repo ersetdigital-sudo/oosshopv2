@@ -4,12 +4,21 @@ import { notFound } from 'next/navigation'
 import {
   ArrowRight,
   Building2,
+  CalendarDays,
   CheckCircle2,
   ChevronRight,
+  GraduationCap,
+  HeartPulse,
+  Hotel,
+  House,
+  LayoutDashboard,
   MessageCircle,
   MousePointerClick,
+  Package,
+  Plane,
   ShoppingCart,
   Sparkles,
+  Users,
 } from 'lucide-react'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
@@ -21,6 +30,15 @@ const icons: Record<string, typeof Building2> = {
   Building2,
   MousePointerClick,
   ShoppingCart,
+  GraduationCap,
+  Plane,
+  HeartPulse,
+  CalendarDays,
+  Hotel,
+  House,
+  LayoutDashboard,
+  Package,
+  Users,
 }
 
 export function generateStaticParams() {
@@ -64,16 +82,17 @@ export default async function ServicePage({
   if (!service) notFound()
 
   const Icon = icons[service.icon] ?? Building2
-  const waHref = `${siteConfig.whatsapp}?text=${encodeURIComponent(`Halo, saya tertarik dengan ${service.menuLabel}`)}`
+  const waHref = `${siteConfig.whatsapp}?text=${encodeURIComponent(`Halo, saya tertarik dengan layanan ${service.menuLabel}. Bisa konsultasi gratis?`)}`
 
   return (
     <>
       <ServiceJsonLd service={service} />
       <SiteHeader />
       <main>
-        {/* Hero */}
+        {/* ═══ Hero Section ═══ */}
         <section className="border-b border-border bg-accent/30">
           <div className="mx-auto max-w-6xl px-4 py-10 md:px-6 md:py-16">
+            {/* Breadcrumb */}
             <nav aria-label="Breadcrumb">
               <ol className="flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
                 <li>
@@ -100,13 +119,18 @@ export default async function ServicePage({
                   <Sparkles className="size-3.5" aria-hidden />
                   {service.heroBadge}
                 </span>
+
+                {/* H1 — Primary keyword in heading */}
                 <h1 className="mt-4 text-balance text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
                   {service.heroHeading}
                 </h1>
+
+                {/* Supporting paragraph with secondary keywords */}
                 <p className="mt-4 text-pretty leading-relaxed text-muted-foreground md:text-lg">
                   {service.heroSubheading}
                 </p>
 
+                {/* CTA buttons */}
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                   <Button
                     size="lg"
@@ -116,7 +140,7 @@ export default async function ServicePage({
                     }
                   >
                     <MessageCircle className="size-4" aria-hidden />
-                    Konsultasi Gratis
+                    Konsultasi Gratis via WhatsApp
                   </Button>
                   <Button
                     size="lg"
@@ -128,6 +152,22 @@ export default async function ServicePage({
                     <ArrowRight className="size-4" aria-hidden />
                   </Button>
                 </div>
+
+                {/* Trust signals */}
+                <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
+                  <span className="flex items-center gap-1.5">
+                    <CheckCircle2 className="size-4 text-primary" aria-hidden />
+                    1.200+ website dibuat
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <CheckCircle2 className="size-4 text-primary" aria-hidden />
+                    Garansi 30 hari
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <CheckCircle2 className="size-4 text-primary" aria-hidden />
+                    Revisi hingga puas
+                  </span>
+                </div>
               </div>
 
               <span className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm md:size-20">
@@ -137,11 +177,11 @@ export default async function ServicePage({
           </div>
         </section>
 
-        {/* AEO: Jawaban ringkas */}
-        <section className="mx-auto max-w-3xl px-4 py-12 md:px-6 md:py-16">
+        {/* ═══ AEO Section — Direct answer for AI Overview ═══ */}
+        <section className="mx-auto max-w-3xl px-4 py-12 md:px-6 md:py-16" id="apa-itu">
           <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
             <h2 className="text-xl font-semibold tracking-tight md:text-2xl">
-              Apa itu {service.menuLabel}?
+              Apa Itu {service.menuLabel}?
             </h2>
             <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
               {service.shortAnswer}
@@ -155,7 +195,7 @@ export default async function ServicePage({
               </div>
               <div className="rounded-xl bg-accent/50 p-4">
                 <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                  Pengerjaan
+                  Waktu Pengerjaan
                 </dt>
                 <dd className="mt-1 text-sm font-semibold text-foreground">
                   {service.timelineNote}
@@ -165,19 +205,19 @@ export default async function ServicePage({
           </div>
         </section>
 
-        {/* Benefits */}
-        <section className="border-y border-border bg-muted/30">
+        {/* ═══ Benefits / Keunggulan ═══ */}
+        <section className="border-y border-border bg-muted/30" id="keunggulan">
           <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
-                Kenapa Memilih Layanan Kami
+                Keunggulan {service.menuLabel} dari OOS SHOP
               </h2>
               <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
                 Dibangun dengan standar profesional agar website Anda tidak hanya tampil bagus,
-                tetapi juga bekerja untuk pertumbuhan bisnis.
+                tetapi juga bekerja untuk pertumbuhan bisnis dan ranking Google.
               </p>
             </div>
-            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {service.benefits.map((benefit) => (
                 <div
                   key={benefit.title}
@@ -196,15 +236,16 @@ export default async function ServicePage({
           </div>
         </section>
 
-        {/* GEO: Use cases + Process */}
-        <section className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
+        {/* ═══ Use Cases + Process (GEO content) ═══ */}
+        <section className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20" id="proses">
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
+            {/* Use Cases */}
             <div>
               <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
-                Cocok Untuk Kebutuhan Ini
+                Siapa yang Cocok Menggunakan Layanan Ini?
               </h2>
               <p className="mt-3 leading-relaxed text-muted-foreground">
-                Beberapa contoh penggunaan {service.menuLabel.toLowerCase()} yang paling sering kami
+                Beberapa contoh kebutuhan {service.menuLabel.toLowerCase()} yang paling sering kami
                 kerjakan untuk klien di seluruh Indonesia.
               </p>
               <ul className="mt-6 flex flex-col gap-3">
@@ -220,12 +261,14 @@ export default async function ServicePage({
               </ul>
             </div>
 
+            {/* Process / Cara Kerja */}
             <div>
               <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
-                Cara Kerja Kami
+                Cara Kerja Jasa Pembuatan {service.menuLabel}
               </h2>
               <p className="mt-3 leading-relaxed text-muted-foreground">
-                Proses yang jelas dan transparan dari konsultasi hingga website Anda online.
+                Proses yang jelas dan transparan dari konsultasi hingga website Anda online dan siap
+                menghasilkan.
               </p>
               <ol className="mt-6 flex flex-col gap-4">
                 {service.process.map((item) => (
@@ -246,15 +289,49 @@ export default async function ServicePage({
           </div>
         </section>
 
-        {/* FAQ */}
-        <section className="border-t border-border bg-muted/30">
+        {/* ═══ Social Proof / Trust Section ═══ */}
+        <section className="border-y border-border bg-accent/20">
+          <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
+                Dipercaya 1.200+ Pemilik Website di Indonesia
+              </h2>
+              <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
+                Kami telah membantu ribuan bisnis, UMKM, dan instansi memiliki website company
+                profile yang profesional dan menghasilkan.
+              </p>
+            </div>
+            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="rounded-2xl border border-border bg-card p-5 text-center">
+                <p className="text-3xl font-bold text-primary">1.200+</p>
+                <p className="mt-1 text-sm text-muted-foreground">Website Dikerjakan</p>
+              </div>
+              <div className="rounded-2xl border border-border bg-card p-5 text-center">
+                <p className="text-3xl font-bold text-primary">4.9/5</p>
+                <p className="mt-1 text-sm text-muted-foreground">Rating Kepuasan</p>
+              </div>
+              <div className="rounded-2xl border border-border bg-card p-5 text-center">
+                <p className="text-3xl font-bold text-primary">30 Hari</p>
+                <p className="mt-1 text-sm text-muted-foreground">Garansi Support</p>
+              </div>
+              <div className="rounded-2xl border border-border bg-card p-5 text-center">
+                <p className="text-3xl font-bold text-primary">5–14 Hari</p>
+                <p className="mt-1 text-sm text-muted-foreground">Waktu Pengerjaan</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══ FAQ Section — keyword-rich for featured snippets ═══ */}
+        <section className="border-b border-border bg-muted/30" id="faq">
           <div className="mx-auto max-w-3xl px-4 py-14 md:px-6 md:py-20">
             <div className="text-center">
               <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
-                Pertanyaan yang Sering Diajukan
+                Pertanyaan Seputar Jasa Pembuatan {service.menuLabel}
               </h2>
               <p className="mt-3 leading-relaxed text-muted-foreground">
-                Seputar {service.menuLabel.toLowerCase()} di OOS SHOP.
+                Jawaban lengkap untuk pertanyaan yang sering diajukan tentang layanan jasa pembuatan{' '}
+                {service.menuLabel.toLowerCase()} di OOS SHOP.
               </p>
             </div>
             <div className="mt-8 flex flex-col gap-3">
@@ -263,21 +340,23 @@ export default async function ServicePage({
                   key={faq.question}
                   className="group rounded-2xl border border-border bg-card p-5 [&_summary::-webkit-details-marker]:hidden"
                 >
-                  <summary className="flex cursor-pointer items-center justify-between gap-3 text-sm font-medium text-foreground">
-                    {faq.question}
+                  <summary className="flex cursor-pointer items-center justify-between gap-3 font-medium text-foreground">
+                    <span className="text-sm md:text-base">{faq.question}</span>
                     <ChevronRight
                       className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-90"
                       aria-hidden
                     />
                   </summary>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{faq.answer}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">
+                    {faq.answer}
+                  </p>
                 </details>
               ))}
             </div>
           </div>
         </section>
 
-        {/* CTA */}
+        {/* ═══ Final CTA ═══ */}
         <section className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
           <div className="rounded-3xl border border-primary/30 bg-accent/40 p-8 text-center md:p-12">
             <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
@@ -285,7 +364,7 @@ export default async function ServicePage({
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-muted-foreground">
               Konsultasikan kebutuhan Anda secara gratis. Kami bantu rancang solusi terbaik sesuai
-              tujuan dan anggaran bisnis Anda.
+              tujuan dan anggaran bisnis Anda. Tanpa commitment, tanpa biaya konsultasi.
             </p>
             <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
               <Button
@@ -294,7 +373,7 @@ export default async function ServicePage({
                 render={<a href={waHref} target="_blank" rel="noopener noreferrer" />}
               >
                 <MessageCircle className="size-4" aria-hidden />
-                Konsultasi via WhatsApp
+                Konsultasi Gratis via WhatsApp
               </Button>
               <Button
                 size="lg"
