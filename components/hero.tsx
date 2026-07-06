@@ -47,7 +47,7 @@ export function Hero() {
             <Button
               size="lg"
               variant="outline"
-              className="bg-transparent px-8"
+              className="bg-[#25D366] hover:bg-[#20BD5A] text-white border-[#25D366] px-8"
               nativeButton={false}
               render={<a href={siteConfig.whatsapp} target="_blank" rel="noopener noreferrer" />}
             >

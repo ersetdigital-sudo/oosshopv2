@@ -16,7 +16,6 @@ import {
   X,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { ThemeToggle } from '@/components/theme-toggle'
 import { websiteServices, siteConfig } from '@/lib/data'
 
 const navLinks = [
@@ -147,7 +146,6 @@ export function SiteHeader() {
 
         {/* Right actions */}
         <div className="flex items-center gap-1 sm:gap-2">
-          <ThemeToggle />
           <Link
             href="/katalog"
             className="flex size-9 items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted"

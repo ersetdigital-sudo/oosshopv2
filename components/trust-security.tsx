@@ -41,17 +41,17 @@ const guarantees = [
 
 export function TrustSecurity() {
   return (
-    <section id="keamanan" className="scroll-mt-20 bg-foreground text-background">
+    <section id="keamanan" className="scroll-mt-20 bg-[#131318]">
       <div className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-background/20 px-3 py-1 text-xs font-medium text-background/80">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-xs font-medium text-muted-foreground">
             <ShieldCheck className="size-3.5" aria-hidden />
             Standar Keamanan OOS SHOP
           </span>
-          <h2 className="mt-4 text-balance text-3xl font-bold tracking-tight md:text-4xl">
+          <h2 className="mt-4 text-balance text-3xl font-bold tracking-tight text-white md:text-4xl">
             Original, Aman, dan Bergaransi — Bukan Nulled
           </h2>
-          <p className="mt-4 text-pretty leading-relaxed text-background/70">
+          <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">
             Banyak jasa murah menggunakan plugin nulled yang disusupi malware, mencuri data
             pelanggan, dan membuat website Anda di-blacklist Google. Di OOS SHOP, keamanan website
             Anda adalah prioritas — inilah standar kerja kami di setiap pemesanan.
@@ -61,12 +61,12 @@ export function TrustSecurity() {
         <div className="mt-14 grid gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
           {guarantees.map((item) => (
             <div key={item.title} className="flex items-start gap-4">
-              <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-background/10 text-primary-foreground ring-1 ring-background/15">
-                <item.icon className="size-6 text-background" aria-hidden />
+              <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#1A1A22] ring-1 ring-border">
+                <item.icon className="size-6 text-primary" aria-hidden />
               </span>
               <div>
-                <h3 className="text-base font-semibold tracking-tight">{item.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-background/70">
+                <h3 className="text-base font-semibold tracking-tight text-white">{item.title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                   {item.description}
                 </p>
               </div>

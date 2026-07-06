@@ -6,7 +6,7 @@ const serviceLinksCol2 = allServices.slice(7)
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border bg-background">
+    <footer className="border-t border-border bg-[#0B0B0F]">
       <div className="mx-auto max-w-6xl px-4 py-12 md:px-6 md:py-16">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-1">
