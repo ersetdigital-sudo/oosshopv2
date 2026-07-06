@@ -22,6 +22,7 @@ import {
   Package,
   Plane,
   ShieldCheck,
+  ShoppingBag,
   ShoppingCart,
   Users,
   X,
@@ -29,6 +30,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { useCart } from '@/lib/cart-context'
 import { websiteServices, siteConfig } from '@/lib/data'
 
 // Icon map for dynamic rendering
@@ -88,6 +90,7 @@ export function SiteHeader() {
   const [lainnyaOpen, setLainnyaOpen] = useState(false)
   const [desktopLayananOpen, setDesktopLayananOpen] = useState(false)
   const pathname = usePathname()
+  const { totalItems, openCart } = useCart()
 
   // Lock body scroll when any mobile drawer/sheet is open
   useEffect(() => {
@@ -208,13 +211,19 @@ export function SiteHeader() {
           {/* Right actions */}
           <div className="hidden items-center gap-2 lg:flex">
             <ThemeToggle />
-            <Link
-              href="/katalog"
-              className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              aria-label="Lihat katalog plugin"
+            <button
+              type="button"
+              onClick={openCart}
+              className="relative flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              aria-label="Buka keranjang"
             >
-              <ShoppingCart className="size-5" aria-hidden />
-            </Link>
+              <ShoppingBag className="size-5" aria-hidden />
+              {totalItems > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                  {totalItems}
+                </span>
+              )}
+            </button>
             <div className="mx-1 h-6 w-px bg-border" />
             <Button
               size="sm"
@@ -243,13 +252,19 @@ export function SiteHeader() {
           </Link>
           <div className="flex items-center gap-1">
             <ThemeToggle />
-            <Link
-              href="/katalog"
-              className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              aria-label="Lihat katalog"
+            <button
+              type="button"
+              onClick={openCart}
+              className="relative flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              aria-label="Buka keranjang"
             >
-              <ShoppingCart className="size-5" aria-hidden />
-            </Link>
+              <ShoppingBag className="size-5" aria-hidden />
+              {totalItems > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                  {totalItems}
+                </span>
+              )}
+            </button>
           </div>
         </div>
       </header>

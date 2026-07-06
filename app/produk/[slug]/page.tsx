@@ -18,6 +18,7 @@ import {
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { Button } from '@/components/ui/button'
+import { AddToCartButton } from '@/components/add-to-cart-button'
 import { siteConfig } from '@/lib/data'
 import { supabase } from '@/lib/supabase'
 import type { Product } from '@/lib/products'
@@ -279,6 +280,15 @@ export default async function ProdukPage({
                     <MessageCircle className="size-5" aria-hidden />
                     Pesan via WhatsApp
                   </Button>
+                  <AddToCartButton
+                    product={{
+                      id: product.id,
+                      name: product.name,
+                      price: activePrice,
+                      image_url: product.image_url,
+                      category: product.category,
+                    }}
+                  />
                   <Button
                     size="lg"
                     variant="outline"

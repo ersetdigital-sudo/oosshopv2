@@ -16,6 +16,7 @@ import {
   MousePointerClick,
   Package,
   Plane,
+  ShoppingBag,
   ShoppingCart,
   Sparkles,
   Users,
@@ -29,6 +30,7 @@ import { getWebsiteService, websiteServices, siteConfig } from '@/lib/data'
 const icons: Record<string, typeof Building2> = {
   Building2,
   MousePointerClick,
+  ShoppingBag,
   ShoppingCart,
   GraduationCap,
   Plane,

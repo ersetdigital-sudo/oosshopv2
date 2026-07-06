@@ -8,11 +8,13 @@ import {
   BadgeCheck,
   MessageCircle,
   Search,
+  ShoppingBag,
   SlidersHorizontal,
   Star,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { siteConfig } from '@/lib/data'
+import { useCart } from '@/lib/cart-context'
 import type { Product } from '@/lib/products'
 
 type SortOption = 'newest' | 'popular' | 'price-asc' | 'price-desc' | 'name-asc'
@@ -62,6 +64,7 @@ export function CatalogClient({
   const [query, setQuery] = useState('')
   const [activeCategory, setActiveCategory] = useState<string>('all')
   const [sort, setSort] = useState<SortOption>('newest')
+  const { addToCart } = useCart()
 
   const filtered = useMemo(() => {
     let items = [...products]
@@ -315,8 +318,24 @@ export function CatalogClient({
                         </span>
                       </div>
 
-                      {/* Buttons — like v1: Order + Detail */}
+                      {/* Buttons — Order + Add to Cart + Detail */}
                       <div className="mt-4 flex items-center gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="flex-none"
+                          onClick={() =>
+                            addToCart({
+                              id: product.id,
+                              name: product.name,
+                              price: activePrice,
+                              image_url: product.image_url,
+                              category: product.category,
+                            })
+                          }
+                        >
+                          <ShoppingBag className="size-4" aria-hidden />
+                        </Button>
                         <Button
                           size="sm"
                           className="flex-1"
@@ -339,7 +358,6 @@ export function CatalogClient({
                           render={<Link href={productHref} />}
                         >
                           Detail
-                          <ArrowRight className="size-4" aria-hidden />
                         </Button>
                       </div>
                     </div>
