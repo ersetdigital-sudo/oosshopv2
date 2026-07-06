@@ -56,9 +56,8 @@ const navLinks = [
   { href: '/katalog', label: 'Katalog' },
   { href: '/#faq', label: 'FAQ' },
   {
-    href: `${siteConfig.whatsapp}?text=${encodeURIComponent('Halo, saya ingin menanyakan status pesanan saya')}`,
+    href: '/dashboard',
     label: 'Pesanan Saya',
-    external: true,
   },
 ]
 
