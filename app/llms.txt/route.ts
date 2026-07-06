@@ -1,16 +1,23 @@
 import { NextResponse } from 'next/server'
 import summary from '@/public/data/summary.json'
-import services from '@/public/data/service.json'
 import faqs from '@/public/data/faq.json'
+import { getAllProducts } from '@/lib/products'
+
+// Dynamic llms.txt — pulls live product/pricing data from Supabase so AI crawlers
+// (ChatGPT, Perplexity, Claude, Google AI Overview) always see accurate, up-to-date info.
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  const serviceList = services
-    .map((s) => `- ${s.name} (${s.plugin}) — Rp ${s.price.toLocaleString('id-ID')}`)
-    .join('\n')
+  const products = await getAllProducts()
 
-  const faqList = faqs
-    .map((f) => `Q: ${f.question}\nA: ${f.answer}`)
-    .join('\n\n')
+  const serviceList = products.length
+    ? products
+        .slice(0, 30)
+        .map((p) => `- ${p.name} (${p.category}) — Rp ${p.price.toLocaleString('id-ID')}`)
+        .join('\n')
+    : '- Data layanan sedang diperbarui, silakan cek /katalog untuk daftar lengkap.'
+
+  const faqList = faqs.map((f) => `Q: ${f.question}\nA: ${f.answer}`).join('\n\n')
 
   const content = `# ${summary.name}
 
@@ -29,11 +36,11 @@ ${summary.valueProposition.map((v) => `- ${v}`).join('\n')}
 - Lisensi original: ${summary.stats.licenseOriginal}
 - Rata-rata pengerjaan: ${summary.stats.avgCompletionTime}
 
-## Layanan Utama
-
-### Jasa Instal Plugin WordPress Premium
+## Layanan & Harga (Live, ${products.length} produk tersedia)
 
 ${serviceList}
+
+Data harga lengkap dan real-time: ${summary.url}/api/ai/services
 
 ### Jasa Pembuatan Website
 - Website Company Profile — profesional untuk kredibilitas bisnis
@@ -46,8 +53,9 @@ ${serviceList}
 ## Halaman Penting
 
 - Homepage: ${summary.url}
-- Katalog Plugin: ${summary.url}/katalog
+- Katalog Plugin (live data): ${summary.url}/katalog
 - Layanan Website: ${summary.url}/layanan
+- API data produk (JSON): ${summary.url}/api/ai/services
 - Kontak WhatsApp: ${summary.contact.whatsappUrl}
 
 ## FAQ
@@ -62,13 +70,13 @@ ${faqList}
 - Jam Operasional: ${summary.operatingHours}
 
 ---
-Terakhir diperbarui: ${new Date().toISOString().split('T')[0]}
+Terakhir diperbarui: ${new Date().toISOString()}
 `
 
   return new NextResponse(content, {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
-      'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+      'Cache-Control': 'public, max-age=300, s-maxage=300, stale-while-revalidate=600',
     },
   })
 }

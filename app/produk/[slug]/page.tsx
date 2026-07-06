@@ -19,6 +19,7 @@ import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { Button } from '@/components/ui/button'
 import { AddToCartButton } from '@/components/add-to-cart-button'
+import { ProductJsonLd } from '@/components/product-json-ld'
 import { siteConfig } from '@/lib/data'
 import { supabase } from '@/lib/supabase'
 import type { Product } from '@/lib/products'
@@ -160,6 +161,12 @@ export default async function ProdukPage({
 
   return (
     <>
+      <ProductJsonLd
+        product={product}
+        activePrice={activePrice}
+        reviews={reviews}
+        avgRating={avgRating}
+      />
       <SiteHeader />
       <main className="pb-16">
         <div className="mx-auto max-w-6xl px-4 py-6 md:px-6">
