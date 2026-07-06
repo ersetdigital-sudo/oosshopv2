@@ -308,7 +308,7 @@ export default async function ProdukPage({
 
               {/* Features */}
               <div className="mt-8">
-                <h2 className="text-lg font-semibold">Yang Anda Dapatkan</h2>
+                <h2 className="text-lg font-semibold">Fitur Produk</h2>
                 <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {features.map((f) => (
                     <li
