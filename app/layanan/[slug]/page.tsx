@@ -16,22 +16,23 @@ import {
   MousePointerClick,
   Package,
   Plane,
-  ShoppingBag,
   ShoppingCart,
   Sparkles,
   Users,
+  Star,
 } from 'lucide-react'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { ServiceJsonLd } from '@/components/layanan/service-json-ld'
 import { Button } from '@/components/ui/button'
-import { getWebsiteService, websiteServices, siteConfig } from '@/lib/data'
+import { services, getService, getServiceSlugs } from '@/lib/services'
+import { generateServiceMetadata } from '@/lib/seo/generate-service-metadata'
 import { servicePricing } from '@/lib/pricing-data'
+import { siteConfig } from '@/lib/data'
 
 const icons: Record<string, typeof Building2> = {
   Building2,
   MousePointerClick,
-  ShoppingBag,
   ShoppingCart,
   GraduationCap,
   Plane,
@@ -45,7 +46,7 @@ const icons: Record<string, typeof Building2> = {
 }
 
 export function generateStaticParams() {
-  return websiteServices.map((s) => ({ slug: s.slug }))
+  return getServiceSlugs().map((slug) => ({ slug }))
 }
 
 export async function generateMetadata({
@@ -54,25 +55,9 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const service = getWebsiteService(slug)
-  if (!service) {
-    return { title: 'Layanan tidak ditemukan | OOS SHOP' }
-  }
-  const url = `${siteConfig.url}/layanan/${service.slug}`
-  return {
-    title: service.seoTitle,
-    description: service.seoDescription,
-    keywords: service.keywords,
-    alternates: { canonical: url },
-    openGraph: {
-      title: service.seoTitle,
-      description: service.seoDescription,
-      type: 'website',
-      locale: 'id_ID',
-      siteName: siteConfig.name,
-      url,
-    },
-  }
+  const service = getService(slug)
+  if (!service) return { title: 'Layanan tidak ditemukan | OOS SHOP' }
+  return generateServiceMetadata(service)
 }
 
 export default async function ServicePage({
@@ -81,12 +66,24 @@ export default async function ServicePage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const service = getWebsiteService(slug)
+  const service = getService(slug)
   if (!service) notFound()
 
-  const Icon = icons[service.icon] ?? Building2
+  const Icon = icons[service.hero.icon] ?? Building2
   const waHref = `${siteConfig.whatsapp}?text=${encodeURIComponent(`Halo, saya tertarik dengan layanan ${service.menuLabel}. Bisa konsultasi gratis?`)}`
   const packages = servicePricing[service.slug] || null
+
+  // Build TOC from available sections
+  const toc: { id: string; label: string }[] = [
+    { id: 'apa-itu', label: `Apa Itu ${service.menuLabel}` },
+  ]
+  if (service.whyChooseUs?.length) toc.push({ id: 'kenapa-kami', label: 'Kenapa Memilih Kami' })
+  if (service.features?.length) toc.push({ id: 'fitur', label: 'Fitur' })
+  toc.push({ id: 'keunggulan', label: 'Keunggulan' })
+  toc.push({ id: 'cocok-untuk', label: 'Cocok Untuk' })
+  toc.push({ id: 'proses', label: 'Proses Kerja' })
+  if (packages) toc.push({ id: 'harga', label: 'Harga' })
+  toc.push({ id: 'faq', label: 'FAQ' })
 
   return (
     <>
@@ -100,20 +97,14 @@ export default async function ServicePage({
             <nav aria-label="Breadcrumb">
               <ol className="flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
                 <li>
-                  <Link href="/" className="transition-colors hover:text-foreground">
-                    Beranda
-                  </Link>
+                  <Link href="/" className="transition-colors hover:text-foreground">Beranda</Link>
                 </li>
                 <ChevronRight className="size-4" aria-hidden />
                 <li>
-                  <Link href="/#layanan" className="transition-colors hover:text-foreground">
-                    Layanan
-                  </Link>
+                  <Link href="/#layanan" className="transition-colors hover:text-foreground">Layanan</Link>
                 </li>
                 <ChevronRight className="size-4" aria-hidden />
-                <li className="font-medium text-foreground" aria-current="page">
-                  {service.menuLabel}
-                </li>
+                <li className="font-medium text-foreground" aria-current="page">{service.menuLabel}</li>
               </ol>
             </nav>
 
@@ -121,43 +112,28 @@ export default async function ServicePage({
               <div className="max-w-2xl">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-primary">
                   <Sparkles className="size-3.5" aria-hidden />
-                  {service.heroBadge}
+                  {service.hero.badge}
                 </span>
 
-                {/* H1 — Primary keyword in heading */}
                 <h1 className="mt-4 text-balance text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
-                  {service.heroHeading}
+                  {service.hero.heading}
                 </h1>
 
-                {/* Supporting paragraph with secondary keywords */}
                 <p className="mt-4 text-pretty leading-relaxed text-muted-foreground md:text-lg">
-                  {service.heroSubheading}
+                  {service.hero.subheading}
                 </p>
 
-                {/* CTA buttons */}
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                  <Button
-                    size="lg"
-                    nativeButton={false}
-                    render={
-                      <a href={waHref} target="_blank" rel="noopener noreferrer" />
-                    }
-                  >
+                  <Button size="lg" nativeButton={false} render={<a href={waHref} target="_blank" rel="noopener noreferrer" />}>
                     <MessageCircle className="size-4" aria-hidden />
                     Konsultasi Gratis via WhatsApp
                   </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    nativeButton={false}
-                    render={<Link href="/katalog" />}
-                  >
+                  <Button size="lg" variant="outline" nativeButton={false} render={<Link href="/katalog" />}>
                     Lihat Katalog Plugin
                     <ArrowRight className="size-4" aria-hidden />
                   </Button>
                 </div>
 
-                {/* Trust signals */}
                 <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1.5">
                     <CheckCircle2 className="size-4 text-primary" aria-hidden />
@@ -181,67 +157,123 @@ export default async function ServicePage({
           </div>
         </section>
 
-        {/* ═══ AEO Section — Direct answer for AI Overview ═══ */}
+        {/* ═══ TOC (Table of Contents) ═══ */}
+        <nav className="mx-auto max-w-3xl px-4 py-6 md:px-6" aria-label="Daftar isi">
+          <details className="group rounded-xl border border-border bg-card p-4">
+            <summary className="flex cursor-pointer items-center gap-2 text-sm font-medium text-foreground [&::-webkit-details-marker]:hidden">
+              <ChevronRight className="size-4 text-muted-foreground transition-transform group-open:rotate-90" aria-hidden />
+              Daftar Isi
+            </summary>
+            <ol className="mt-3 flex flex-col gap-1.5 pl-6">
+              {toc.map((item) => (
+                <li key={item.id}>
+                  <a href={`#${item.id}`} className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </details>
+        </nav>
+
+        {/* ═══ AEO Section — "Apa Itu" ═══ */}
         <section className="mx-auto max-w-3xl px-4 py-12 md:px-6 md:py-16" id="apa-itu">
           <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
-            <h2 className="text-xl font-semibold tracking-tight md:text-2xl">
-              Apa Itu {service.menuLabel}?
-            </h2>
-            <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
-              {service.shortAnswer}
-            </p>
+            <h2 className="text-xl font-semibold tracking-tight md:text-2xl">{service.whatIs.title}</h2>
+            <div className="mt-3 space-y-3 text-pretty leading-relaxed text-muted-foreground">
+              {service.whatIs.answer.split('\n\n').map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))}
+            </div>
             <dl className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="rounded-xl bg-accent/50 p-4">
-                <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                  Biaya
-                </dt>
-                <dd className="mt-1 text-sm font-semibold text-foreground">{service.priceNote}</dd>
+                <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Biaya</dt>
+                <dd className="mt-1 text-sm font-semibold text-foreground">{service.whatIs.priceNote}</dd>
               </div>
               <div className="rounded-xl bg-accent/50 p-4">
-                <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                  Waktu Pengerjaan
-                </dt>
-                <dd className="mt-1 text-sm font-semibold text-foreground">
-                  {service.timelineNote}
-                </dd>
+                <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Waktu Pengerjaan</dt>
+                <dd className="mt-1 text-sm font-semibold text-foreground">{service.whatIs.timelineNote}</dd>
               </div>
             </dl>
           </div>
         </section>
 
-        {/* ═══ Benefits / Keunggulan ═══ */}
-        <section className="border-y border-border bg-muted/30" id="keunggulan">
+        {/* ═══ Kenapa Memilih Kami (optional) ═══ */}
+        {service.whyChooseUs && service.whyChooseUs.length > 0 && (
+          <section className="border-y border-border bg-muted/30" id="kenapa-kami">
+            <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
+              <div className="mx-auto max-w-2xl text-center">
+                <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
+                  Kenapa Memilih OOS SHOP untuk {service.menuLabel}?
+                </h2>
+                <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
+                  Pendekatan kami yang membedakan dari penyedia jasa lain.
+                </p>
+              </div>
+              <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {service.whyChooseUs.map((item) => (
+                  <div key={item.title} className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
+                    <span className="flex size-10 items-center justify-center rounded-xl bg-accent text-primary">
+                      <Star className="size-5" aria-hidden />
+                    </span>
+                    <h3 className="mt-4 text-base font-semibold tracking-tight">{item.title}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ═══ Fitur (optional) ═══ */}
+        {service.features && service.features.length > 0 && (
+          <section className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20" id="fitur">
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
+                Fitur {service.menuLabel} yang Anda Dapatkan
+              </h2>
+              <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
+                Semua yang Anda butuhkan untuk hasil profesional dan maksimal.
+              </p>
+            </div>
+            <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+              {service.features.map((feature) => (
+                <div key={feature} className="flex items-center gap-3 rounded-xl border border-border bg-card p-4">
+                  <CheckCircle2 className="size-4 shrink-0 text-primary" aria-hidden />
+                  <span className="text-sm font-medium text-foreground">{feature}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ═══ Keunggulan / Benefits ═══ */}
+        <section className={`border-y border-border ${service.features?.length ? 'bg-muted/30' : 'bg-muted/30'}`} id="keunggulan">
           <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
                 Keunggulan {service.menuLabel} dari OOS SHOP
               </h2>
               <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
-                Dibangun dengan standar profesional agar website Anda tidak hanya tampil bagus,
-                tetapi juga bekerja untuk pertumbuhan bisnis dan ranking Google.
+                Dibangun dengan standar profesional agar hasil tidak hanya tampil bagus, tetapi juga bekerja untuk pertumbuhan bisnis Anda.
               </p>
             </div>
             <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {service.benefits.map((benefit) => (
-                <div
-                  key={benefit.title}
-                  className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
-                >
+                <div key={benefit.title} className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
                   <span className="flex size-10 items-center justify-center rounded-xl bg-accent text-primary">
                     <CheckCircle2 className="size-5" aria-hidden />
                   </span>
                   <h3 className="mt-4 text-base font-semibold tracking-tight">{benefit.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                    {benefit.description}
-                  </p>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{benefit.description}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ═══ Use Cases + Process (GEO content) ═══ */}
-        <section className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20" id="proses">
+        {/* ═══ Cocok Untuk + Proses Kerja ═══ */}
+        <section className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20" id="cocok-untuk">
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
             {/* Use Cases */}
             <div>
@@ -249,15 +281,11 @@ export default async function ServicePage({
                 Siapa yang Cocok Menggunakan Layanan Ini?
               </h2>
               <p className="mt-3 leading-relaxed text-muted-foreground">
-                Beberapa contoh kebutuhan {service.menuLabel.toLowerCase()} yang paling sering kami
-                kerjakan untuk klien di seluruh Indonesia.
+                Beberapa contoh kebutuhan {service.menuLabel.toLowerCase()} yang paling sering kami kerjakan.
               </p>
               <ul className="mt-6 flex flex-col gap-3">
                 {service.useCases.map((useCase) => (
-                  <li
-                    key={useCase}
-                    className="flex items-start gap-3 rounded-xl border border-border bg-card p-4"
-                  >
+                  <li key={useCase} className="flex items-start gap-3 rounded-xl border border-border bg-card p-4">
                     <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden />
                     <span className="text-sm leading-relaxed text-foreground/90">{useCase}</span>
                   </li>
@@ -265,14 +293,13 @@ export default async function ServicePage({
               </ul>
             </div>
 
-            {/* Process / Cara Kerja */}
-            <div>
+            {/* Process */}
+            <div id="proses">
               <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
-                Cara Kerja Jasa Pembuatan {service.menuLabel}
+                Cara Kerja Jasa {service.menuLabel}
               </h2>
               <p className="mt-3 leading-relaxed text-muted-foreground">
-                Proses yang jelas dan transparan dari konsultasi hingga website Anda online dan siap
-                menghasilkan.
+                Proses yang jelas dan transparan dari konsultasi hingga selesai.
               </p>
               <ol className="mt-6 flex flex-col gap-4">
                 {service.process.map((item) => (
@@ -282,9 +309,7 @@ export default async function ServicePage({
                     </span>
                     <div>
                       <h3 className="text-base font-semibold tracking-tight">{item.title}</h3>
-                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                        {item.description}
-                      </p>
+                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
                     </div>
                   </li>
                 ))}
@@ -293,7 +318,7 @@ export default async function ServicePage({
           </div>
         </section>
 
-        {/* ═══ Social Proof / Trust Section ═══ */}
+        {/* ═══ Social Proof ═══ */}
         <section className="border-y border-border bg-accent/20">
           <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
             <div className="mx-auto max-w-2xl text-center">
@@ -301,8 +326,7 @@ export default async function ServicePage({
                 Dipercaya 1.200+ Pemilik Website di Indonesia
               </h2>
               <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
-                Kami telah membantu ribuan bisnis, UMKM, dan instansi memiliki website company
-                profile yang profesional dan menghasilkan.
+                Kami telah membantu ribuan bisnis, UMKM, dan instansi memiliki website profesional yang menghasilkan.
               </p>
             </div>
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -326,7 +350,7 @@ export default async function ServicePage({
           </div>
         </section>
 
-        {/* ═══ Pricing Section (only for services with packages) ═══ */}
+        {/* ═══ Pricing (optional) ═══ */}
         {packages && (
           <section className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20" id="harga">
             <div className="mx-auto max-w-2xl text-center">
@@ -339,14 +363,7 @@ export default async function ServicePage({
             </div>
             <div className="mt-10 grid gap-6 md:grid-cols-3">
               {packages.map((pkg) => (
-                <div
-                  key={pkg.name}
-                  className={`relative flex flex-col rounded-2xl border p-6 shadow-sm transition-all hover:shadow-md ${
-                    pkg.popular
-                      ? 'border-primary bg-card shadow-primary/10'
-                      : 'border-border bg-card'
-                  }`}
-                >
+                <div key={pkg.name} className={`relative flex flex-col rounded-2xl border p-6 shadow-sm transition-all hover:shadow-md ${pkg.popular ? 'border-primary bg-card shadow-primary/10' : 'border-border bg-card'}`}>
                   {pkg.popular && (
                     <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-xs font-bold text-primary-foreground">
                       PALING POPULER
@@ -355,7 +372,7 @@ export default async function ServicePage({
                   <h3 className="text-lg font-bold">{pkg.name}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">{pkg.description}</p>
                   <p className="mt-4 text-3xl font-bold text-primary">{pkg.price}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{pkg.renewal}</p>
+                  {pkg.renewal && <p className="mt-1 text-xs text-muted-foreground">{pkg.renewal}</p>}
                   <ul className="mt-5 flex flex-1 flex-col gap-2">
                     {pkg.features.map((feature) => (
                       <li key={feature} className="flex items-start gap-2 text-sm">
@@ -364,19 +381,7 @@ export default async function ServicePage({
                       </li>
                     ))}
                   </ul>
-                  <Button
-                    size="lg"
-                    className="mt-6 w-full"
-                    variant={pkg.popular ? 'default' : 'outline'}
-                    nativeButton={false}
-                    render={
-                      <a
-                        href={`${siteConfig.whatsapp}?text=${encodeURIComponent(`Halo, saya tertarik dengan ${pkg.name} untuk ${service.menuLabel}. Bisa info lebih lanjut?`)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      />
-                    }
-                  >
+                  <Button size="lg" className="mt-6 w-full" variant={pkg.popular ? 'default' : 'outline'} nativeButton={false} render={<a href={`${siteConfig.whatsapp}?text=${encodeURIComponent(`Halo, saya tertarik dengan ${pkg.name} untuk ${service.menuLabel}. Bisa info lebih lanjut?`)}`} target="_blank" rel="noopener noreferrer" />}>
                     <MessageCircle className="size-4" aria-hidden />
                     Pilih {pkg.name}
                   </Button>
@@ -386,39 +391,49 @@ export default async function ServicePage({
           </section>
         )}
 
-        {/* ═══ FAQ Section — keyword-rich for featured snippets ═══ */}
+        {/* ═══ FAQ ═══ */}
         <section className="border-b border-border bg-muted/30" id="faq">
           <div className="mx-auto max-w-3xl px-4 py-14 md:px-6 md:py-20">
             <div className="text-center">
               <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
-                Pertanyaan Seputar Jasa Pembuatan {service.menuLabel}
+                Pertanyaan Seputar {service.menuLabel}
               </h2>
               <p className="mt-3 leading-relaxed text-muted-foreground">
-                Jawaban lengkap untuk pertanyaan yang sering diajukan tentang layanan jasa pembuatan{' '}
-                {service.menuLabel.toLowerCase()} di OOS SHOP.
+                Jawaban lengkap untuk pertanyaan yang sering diajukan tentang layanan {service.menuLabel.toLowerCase()} di OOS SHOP.
               </p>
             </div>
             <div className="mt-8 flex flex-col gap-3">
-              {service.faqs.map((faq) => (
-                <details
-                  key={faq.question}
-                  className="group rounded-2xl border border-border bg-card p-5 [&_summary::-webkit-details-marker]:hidden"
-                >
+              {service.faq.map((item) => (
+                <details key={item.question} className="group rounded-2xl border border-border bg-card p-5 [&_summary::-webkit-details-marker]:hidden">
                   <summary className="flex cursor-pointer items-center justify-between gap-3 font-medium text-foreground">
-                    <span className="text-sm md:text-base">{faq.question}</span>
-                    <ChevronRight
-                      className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-90"
-                      aria-hidden
-                    />
+                    <span className="text-sm md:text-base">{item.question}</span>
+                    <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-90" aria-hidden />
                   </summary>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">
-                    {faq.answer}
-                  </p>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">{item.answer}</p>
                 </details>
               ))}
             </div>
           </div>
         </section>
+
+        {/* ═══ Related Services (optional) ═══ */}
+        {service.relatedServices && service.relatedServices.length > 0 && (
+          <section className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-16">
+            <h2 className="text-center text-xl font-bold tracking-tight md:text-2xl">Layanan Terkait</h2>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {service.relatedServices.map((relSlug) => {
+                const rel = services[relSlug]
+                if (!rel) return null
+                return (
+                  <Link key={relSlug} href={`/layanan/${relSlug}`} className="group rounded-xl border border-border bg-card p-5 transition-all hover:border-primary/30 hover:shadow-sm">
+                    <h3 className="text-sm font-semibold text-foreground group-hover:text-primary">{rel.menuLabel}</h3>
+                    <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{rel.menuDescription}</p>
+                  </Link>
+                )
+              })}
+            </div>
+          </section>
+        )}
 
         {/* ═══ Final CTA ═══ */}
         <section className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
@@ -427,29 +442,26 @@ export default async function ServicePage({
               Siap Membangun {service.menuLabel} Anda?
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-muted-foreground">
-              Konsultasikan kebutuhan Anda secara gratis. Kami bantu rancang solusi terbaik sesuai
-              tujuan dan anggaran bisnis Anda. Tanpa commitment, tanpa biaya konsultasi.
+              Konsultasikan kebutuhan Anda secara gratis. Kami bantu rancang solusi terbaik sesuai tujuan dan anggaran bisnis Anda. Tanpa commitment, tanpa biaya konsultasi.
             </p>
             <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-              <Button
-                size="lg"
-                nativeButton={false}
-                render={<a href={waHref} target="_blank" rel="noopener noreferrer" />}
-              >
+              <Button size="lg" nativeButton={false} render={<a href={waHref} target="_blank" rel="noopener noreferrer" />}>
                 <MessageCircle className="size-4" aria-hidden />
                 Konsultasi Gratis via WhatsApp
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                nativeButton={false}
-                render={<Link href="/#layanan" />}
-              >
+              <Button size="lg" variant="outline" nativeButton={false} render={<Link href="/#layanan" />}>
                 Lihat Layanan Lain
               </Button>
             </div>
           </div>
         </section>
+
+        {/* ═══ Last Updated ═══ */}
+        <div className="mx-auto max-w-6xl px-4 pb-8 text-right md:px-6">
+          <time dateTime={service.updatedAt} className="text-xs text-muted-foreground">
+            Terakhir diperbarui: {new Date(service.updatedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
+          </time>
+        </div>
       </main>
       <SiteFooter />
     </>
