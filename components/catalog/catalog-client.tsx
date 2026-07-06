@@ -1,82 +1,116 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import Image from 'next/image'
 import {
   ArrowRight,
   BadgeCheck,
-  Check,
-  Database,
-  Gauge,
-  LayoutTemplate,
-  Mail,
+  MessageCircle,
   Search,
   SlidersHorizontal,
   Star,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import {
-  catalogCategories,
-  catalogItems,
-  formatIDR,
-  siteConfig,
-  type CatalogItem,
-} from '@/lib/data'
+import { siteConfig } from '@/lib/data'
+import type { Product } from '@/lib/products'
 
-const categoryIcons: Record<string, typeof LayoutTemplate> = {
-  'page-builder': LayoutTemplate,
-  'dynamic-website': Database,
-  performa: Gauge,
-  seo: Search,
-  marketing: Mail,
-}
-
-type SortOption = 'popular' | 'price-asc' | 'price-desc' | 'name-asc'
+type SortOption = 'newest' | 'popular' | 'price-asc' | 'price-desc' | 'name-asc'
 
 const sortOptions: { value: SortOption; label: string }[] = [
-  { value: 'popular', label: 'Terpopuler' },
+  { value: 'newest', label: 'Terbaru' },
+  { value: 'popular', label: 'Terlaris' },
   { value: 'price-asc', label: 'Harga: Termurah' },
   { value: 'price-desc', label: 'Harga: Termahal' },
   { value: 'name-asc', label: 'Nama: A-Z' },
 ]
 
-export function CatalogClient() {
+function formatIDR(value: number): string {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+  }).format(value)
+}
+
+function getActivePrice(product: Product): number {
+  if (
+    product.flash_sale_price &&
+    product.flash_sale_end &&
+    new Date(product.flash_sale_end) >= new Date()
+  ) {
+    return product.flash_sale_price
+  }
+  return product.price
+}
+
+function isFlashSale(product: Product): boolean {
+  return !!(
+    product.flash_sale_price &&
+    product.flash_sale_end &&
+    new Date(product.flash_sale_end) >= new Date()
+  )
+}
+
+export function CatalogClient({
+  products,
+  categories,
+}: {
+  products: Product[]
+  categories: string[]
+}) {
   const [query, setQuery] = useState('')
   const [activeCategory, setActiveCategory] = useState<string>('all')
-  const [sort, setSort] = useState<SortOption>('popular')
+  const [sort, setSort] = useState<SortOption>('newest')
 
   const filtered = useMemo(() => {
-    let items: CatalogItem[] = catalogItems
+    let items = [...products]
 
+    // Category filter
     if (activeCategory !== 'all') {
-      items = items.filter((item) => item.categoryId === activeCategory)
+      items = items.filter((item) => item.category === activeCategory)
     }
 
+    // Search filter
     const q = query.trim().toLowerCase()
     if (q) {
       items = items.filter(
         (item) =>
           item.name.toLowerCase().includes(q) ||
-          item.plugin.toLowerCase().includes(q) ||
+          (item.description && item.description.toLowerCase().includes(q)) ||
           item.category.toLowerCase().includes(q),
       )
     }
 
-    const sorted = [...items]
+    // Sort
     switch (sort) {
       case 'price-asc':
-        sorted.sort((a, b) => a.price - b.price)
+        items.sort((a, b) => getActivePrice(a) - getActivePrice(b))
         break
       case 'price-desc':
-        sorted.sort((a, b) => b.price - a.price)
+        items.sort((a, b) => getActivePrice(b) - getActivePrice(a))
         break
       case 'name-asc':
-        sorted.sort((a, b) => a.plugin.localeCompare(b.plugin))
+        items.sort((a, b) => a.name.localeCompare(b.name))
         break
+      case 'popular':
+        items.sort((a, b) => b.total_sold - a.total_sold)
+        break
+      case 'newest':
       default:
-        sorted.sort((a, b) => Number(b.bestSeller) - Number(a.bestSeller))
+        // Already sorted by created_at desc from the query
+        break
     }
-    return sorted
-  }, [query, activeCategory, sort])
+    return items
+  }, [products, query, activeCategory, sort])
+
+  // Count per category
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {}
+    for (const p of products) {
+      counts[p.category] = (counts[p.category] || 0) + 1
+    }
+    return counts
+  }, [products])
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-6 md:py-12">
@@ -85,7 +119,7 @@ export function CatalogClient() {
         <aside className="lg:sticky lg:top-20 lg:h-fit" aria-label="Filter kategori">
           <div className="flex items-center gap-2 text-sm font-semibold">
             <SlidersHorizontal className="size-4 text-primary" aria-hidden />
-            Kategori Plugin
+            Kategori
           </div>
           <ul className="mt-4 flex flex-wrap gap-2 lg:flex-col">
             <li>
@@ -99,31 +133,31 @@ export function CatalogClient() {
                     : 'border-border bg-card text-muted-foreground hover:border-primary/30 hover:text-foreground'
                 }`}
               >
-                <span>Semua Plugin</span>
-                <span className="ml-2 text-xs">{catalogItems.length}</span>
+                <span>Semua Produk</span>
+                <span className="ml-2 text-xs">{products.length}</span>
               </button>
             </li>
-            {catalogCategories.map((cat) => (
-              <li key={cat.id}>
+            {categories.map((cat) => (
+              <li key={cat}>
                 <button
                   type="button"
-                  onClick={() => setActiveCategory(cat.id)}
-                  aria-pressed={activeCategory === cat.id}
+                  onClick={() => setActiveCategory(cat)}
+                  aria-pressed={activeCategory === cat}
                   className={`flex w-full items-center justify-between rounded-lg border px-3 py-2 text-left text-sm transition-colors ${
-                    activeCategory === cat.id
+                    activeCategory === cat
                       ? 'border-primary bg-accent font-medium text-primary'
                       : 'border-border bg-card text-muted-foreground hover:border-primary/30 hover:text-foreground'
                   }`}
                 >
-                  <span>{cat.label}</span>
-                  <span className="ml-2 text-xs">{cat.count}</span>
+                  <span>{cat}</span>
+                  <span className="ml-2 text-xs">{categoryCounts[cat] || 0}</span>
                 </button>
               </li>
             ))}
           </ul>
         </aside>
 
-        {/* Main */}
+        {/* Main content */}
         <div>
           {/* Toolbar */}
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -136,8 +170,8 @@ export function CatalogClient() {
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Cari plugin, mis. Elementor..."
-                aria-label="Cari plugin"
+                placeholder="Cari plugin atau theme..."
+                aria-label="Cari produk"
                 className="w-full rounded-lg border border-border bg-card py-2 pl-9 pr-3 text-sm outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
@@ -161,67 +195,112 @@ export function CatalogClient() {
           </div>
 
           <p className="mt-4 text-sm text-muted-foreground" aria-live="polite">
-            Menampilkan <span className="font-medium text-foreground">{filtered.length}</span> plugin
+            Menampilkan{' '}
+            <span className="font-medium text-foreground">{filtered.length}</span> produk
           </p>
 
           {/* Grid */}
           {filtered.length === 0 ? (
             <div className="mt-10 rounded-2xl border border-dashed border-border p-12 text-center">
               <p className="text-sm text-muted-foreground">
-                Plugin tidak ditemukan. Coba kata kunci lain atau hubungi kami untuk request plugin.
+                Produk tidak ditemukan. Coba kata kunci lain atau hubungi kami untuk request plugin.
               </p>
             </div>
           ) : (
             <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-              {filtered.map((item) => {
-                const Icon = categoryIcons[item.categoryId] ?? LayoutTemplate
+              {filtered.map((product) => {
+                const activePrice = getActivePrice(product)
+                const onSale = isFlashSale(product)
+                const waText = encodeURIComponent(
+                  `Halo, saya ingin memesan ${product.name} (${formatIDR(activePrice)})`,
+                )
+
                 return (
                   <article
-                    key={item.slug}
+                    key={product.id}
                     className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-lg"
                   >
-                    {/* Visual header */}
-                    <div className="relative flex h-36 items-center justify-center border-b border-border bg-accent/40">
-                      {item.bestSeller && (
+                    {/* Image / Visual header */}
+                    <div className="relative flex h-44 items-center justify-center border-b border-border bg-accent/40">
+                      {/* Badges */}
+                      {product.badge && (
                         <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-xs font-medium text-primary-foreground">
                           <Star className="size-3 fill-current" aria-hidden />
-                          Best Seller
+                          {product.badge}
                         </span>
                       )}
-                      <span className="absolute right-3 top-3 rounded-full border border-border bg-background px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
-                        {item.categoryLabel}
-                      </span>
-                      <div className="flex flex-col items-center gap-2">
-                        <span className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-105">
-                          <Icon className="size-7" aria-hidden />
+                      {onSale && (
+                        <span className="absolute right-3 top-3 rounded-full bg-red-500 px-2.5 py-1 text-xs font-bold text-white">
+                          FLASH SALE
                         </span>
-                        <span className="text-sm font-semibold text-foreground">{item.plugin}</span>
-                      </div>
+                      )}
+                      {!onSale && product.category && (
+                        <span className="absolute right-3 top-3 rounded-full border border-border bg-background px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                          {product.category}
+                        </span>
+                      )}
+
+                      {/* Product image */}
+                      {product.image_url ? (
+                        <Image
+                          src={product.image_url}
+                          alt={product.name}
+                          width={300}
+                          height={300}
+                          className="h-full w-full object-contain p-4"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center gap-2">
+                          <span className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                            <BadgeCheck className="size-7" aria-hidden />
+                          </span>
+                          <span className="text-sm font-semibold text-foreground">
+                            {product.name}
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     {/* Body */}
                     <div className="flex flex-1 flex-col p-5">
-                      <h2 className="text-base font-semibold tracking-tight">{item.name}</h2>
-                      <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-                        {item.description}
-                      </p>
+                      <h2 className="line-clamp-2 text-base font-semibold tracking-tight">
+                        {product.name}
+                      </h2>
+                      {product.description && (
+                        <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                          {product.description}
+                        </p>
+                      )}
 
-                      <ul className="mt-3 flex flex-col gap-1.5">
-                        {item.benefits.slice(0, 2).map((benefit) => (
-                          <li key={benefit} className="flex items-start gap-2 text-xs">
-                            <Check className="mt-0.5 size-3.5 shrink-0 text-primary" aria-hidden />
-                            <span className="text-muted-foreground">{benefit}</span>
-                          </li>
-                        ))}
-                      </ul>
+                      {/* Stats */}
+                      <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                        {product.total_sold > 0 && (
+                          <span className="flex items-center gap-1">
+                            <Star className="size-3 text-amber-500" aria-hidden />
+                            {product.total_sold} terjual
+                          </span>
+                        )}
+                        {product.version && <span>v{product.version}</span>}
+                      </div>
 
                       <div className="mt-4 flex-1" />
 
+                      {/* Price */}
                       <div className="flex items-end justify-between gap-2 border-t border-border pt-4">
                         <div>
-                          <span className="block text-xs text-muted-foreground">Mulai dari</span>
+                          {onSale && (
+                            <span className="block text-xs text-muted-foreground line-through">
+                              {formatIDR(product.price)}
+                            </span>
+                          )}
+                          {!onSale && product.original_price && (
+                            <span className="block text-xs text-muted-foreground line-through">
+                              {formatIDR(product.original_price)}
+                            </span>
+                          )}
                           <span className="text-lg font-bold text-primary">
-                            {formatIDR(item.price)}
+                            {formatIDR(activePrice)}
                           </span>
                         </div>
                         <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
@@ -230,23 +309,23 @@ export function CatalogClient() {
                         </span>
                       </div>
 
+                      {/* CTA */}
                       <Button
                         size="sm"
                         className="mt-4 w-full"
                         nativeButton={false}
                         render={
                           <a
-                            href={`${siteConfig.whatsapp}?text=${encodeURIComponent(
-                              `Halo, saya ingin memesan ${item.name} (${formatIDR(item.price)})`,
-                            )}`}
+                            href={`${siteConfig.whatsapp}?text=${waText}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           />
                         }
                       >
+                        <MessageCircle className="size-4" aria-hidden />
                         Pesan Sekarang
                         <ArrowRight
-                          className="ml-1 size-4 transition-transform group-hover:translate-x-0.5"
+                          className="ml-auto size-4 transition-transform group-hover:translate-x-0.5"
                           aria-hidden
                         />
                       </Button>

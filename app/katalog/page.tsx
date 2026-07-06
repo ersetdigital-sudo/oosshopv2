@@ -6,23 +6,27 @@ import { SiteFooter } from '@/components/site-footer'
 import { CatalogClient } from '@/components/catalog/catalog-client'
 import { CatalogJsonLd } from '@/components/catalog/catalog-json-ld'
 import { siteConfig } from '@/lib/data'
+import { getAllProducts, getCategories } from '@/lib/products'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Katalog Jasa Instal Plugin WordPress Premium Original | OOS SHOP',
+  title: 'Katalog 500+ Plugin & Theme WordPress Premium Original | OOS SHOP',
   description:
-    'Katalog lengkap jasa instal plugin WordPress premium original: Elementor Pro, WP Rocket, Rank Math Pro, Crocoblock, dan lainnya. Harga mulai Rp 25.000, aktivasi lisensi resmi, bergaransi.',
+    'Katalog lengkap plugin & theme WordPress premium original berlisensi resmi. Elementor Pro, WP Rocket, Rank Math Pro, Crocoblock, dan lainnya. Harga mulai Rp 25.000, aktivasi lisensi resmi, bergaransi.',
   keywords: [
     'katalog plugin wordpress premium',
     'harga jasa instal plugin wordpress',
     'jasa instal elementor pro',
     'jasa instal wp rocket',
     'plugin wordpress original murah',
+    'theme wordpress premium berlisensi',
   ],
   alternates: { canonical: `${siteConfig.url}/katalog` },
   openGraph: {
-    title: 'Katalog Jasa Instal Plugin WordPress Premium Original | OOS SHOP',
+    title: 'Katalog 500+ Plugin & Theme WordPress Premium Original | OOS SHOP',
     description:
-      'Pilih plugin WordPress premium original yang Anda butuhkan. Harga mulai Rp 25.000, lisensi resmi, konfigurasi profesional, bergaransi.',
+      'Plugin & theme WordPress premium original berlisensi resmi. Harga mulai Rp 25.000, instal cepat, bergaransi.',
     type: 'website',
     locale: 'id_ID',
     siteName: 'OOS SHOP',
@@ -36,7 +40,9 @@ const highlights = [
   { icon: ShieldCheck, label: 'Garansi uang kembali' },
 ]
 
-export default function KatalogPage() {
+export default async function KatalogPage() {
+  const [products, categories] = await Promise.all([getAllProducts(), getCategories()])
+
   return (
     <>
       <CatalogJsonLd />
@@ -60,12 +66,12 @@ export default function KatalogPage() {
             </nav>
 
             <h1 className="mt-5 max-w-3xl text-balance text-3xl font-bold tracking-tight md:text-4xl">
-              Katalog Jasa Instal Plugin WordPress Premium
+              Katalog Plugin & Theme WordPress Premium
             </h1>
             <p className="mt-4 max-w-2xl text-pretty leading-relaxed text-muted-foreground">
-              Pilih plugin WordPress premium original yang Anda butuhkan. Semua plugin dipasang
-              dengan aktivasi lisensi resmi, dikonfigurasi profesional oleh teknisi kami, dan
-              bergaransi. Harga transparan mulai dari Rp 25.000.
+              Pilih plugin atau theme WordPress premium original yang Anda butuhkan. Semua produk
+              dipasang dengan aktivasi lisensi resmi, dikonfigurasi profesional oleh teknisi kami,
+              dan bergaransi. Harga transparan mulai dari Rp 25.000.
             </p>
 
             <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
@@ -79,7 +85,7 @@ export default function KatalogPage() {
           </div>
         </section>
 
-        <CatalogClient />
+        <CatalogClient products={products} categories={categories} />
       </main>
       <SiteFooter />
     </>
