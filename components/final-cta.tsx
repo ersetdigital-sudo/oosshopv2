@@ -16,7 +16,7 @@ export function FinalCta() {
           <Button
             size="lg"
             variant="secondary"
-            className="bg-[#25D366] hover:bg-[#20BD5A] text-white border-0 px-8"
+            className="px-8"
             nativeButton={false}
             render={<a href={siteConfig.whatsapp} target="_blank" rel="noopener noreferrer" />}
           >

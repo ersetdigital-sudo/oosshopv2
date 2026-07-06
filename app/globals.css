@@ -34,7 +34,6 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* Light mode */
 :root {
   color-scheme: light;
   --background: oklch(1 0 0);
@@ -43,12 +42,14 @@
   --card-foreground: oklch(0.21 0.02 278);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.21 0.02 278);
+  /* Brand primary #5B5CEB */
   --primary: oklch(0.54 0.2 277);
   --primary-foreground: oklch(0.99 0 0);
   --secondary: oklch(0.97 0.005 278);
   --secondary-foreground: oklch(0.28 0.03 278);
   --muted: oklch(0.97 0.005 278);
   --muted-foreground: oklch(0.5 0.02 278);
+  /* Soft purple accent */
   --accent: oklch(0.95 0.03 279);
   --accent-foreground: oklch(0.42 0.16 277);
   --destructive: oklch(0.577 0.245 27.325);
@@ -58,28 +59,27 @@
   --radius: 0.75rem;
 }
 
-/* Dark mode — full dark palette */
 :root.dark,
 .dark {
   color-scheme: dark;
-  --background: #0B0B0F;
-  --foreground: #FFFFFF;
-  --card: #1A1A22;
-  --card-foreground: #FFFFFF;
-  --popover: #1A1A22;
-  --popover-foreground: #FFFFFF;
-  --primary: #818CF8;
-  --primary-foreground: #0B0B0F;
-  --secondary: #131318;
-  --secondary-foreground: #A1A1AA;
-  --muted: #131318;
-  --muted-foreground: #A1A1AA;
-  --accent: #1A1A22;
-  --accent-foreground: #818CF8;
-  --destructive: #EF4444;
-  --border: #2A2A35;
-  --input: #2A2A35;
-  --ring: #818CF8;
+  --background: oklch(0.17 0.015 278);
+  --foreground: oklch(0.97 0.005 278);
+  --card: oklch(0.21 0.02 278);
+  --card-foreground: oklch(0.97 0.005 278);
+  --popover: oklch(0.21 0.02 278);
+  --popover-foreground: oklch(0.97 0.005 278);
+  --primary: oklch(0.62 0.19 277);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.26 0.02 278);
+  --secondary-foreground: oklch(0.97 0.005 278);
+  --muted: oklch(0.26 0.02 278);
+  --muted-foreground: oklch(0.7 0.02 278);
+  --accent: oklch(0.3 0.04 279);
+  --accent-foreground: oklch(0.9 0.03 279);
+  --destructive: oklch(0.65 0.2 25);
+  --border: oklch(0.3 0.02 278);
+  --input: oklch(0.3 0.02 278);
+  --ring: oklch(0.62 0.19 277);
 }
 
 @layer base {
@@ -90,6 +90,6 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground;
   }
 }

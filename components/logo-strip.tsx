@@ -28,7 +28,7 @@ export function LogoStrip() {
           {brands.map((brand) => (
             <li key={brand.name} className="flex items-center justify-center">
               {brand.wordmark ? (
-                <span className="flex items-center rounded-md bg-white/10 px-3 py-1.5 opacity-80 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0">
+                <span className="flex items-center rounded-md bg-white px-3 py-1.5 opacity-80 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0">
                   <img
                     src={brand.src || '/placeholder.svg'}
                     alt={`Logo ${brand.name}`}
