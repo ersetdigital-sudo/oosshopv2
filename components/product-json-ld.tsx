@@ -7,11 +7,12 @@ type ProductJsonLdProps = {
   activePrice: number
   reviews: Review[]
   avgRating: string
+  faqItems?: { question: string; answer: string }[]
 }
 
 // Product schema for rich snippets (price, rating, availability) — critical for
 // Google Shopping-style results and being cited in AI Overview / ChatGPT answers.
-export function ProductJsonLd({ product, activePrice, reviews, avgRating }: ProductJsonLdProps) {
+export function ProductJsonLd({ product, activePrice, reviews, avgRating, faqItems = [] }: ProductJsonLdProps) {
   const url = `${siteConfig.url}/produk/${product.slug || product.id}`
 
   const productSchema = {
@@ -65,7 +66,24 @@ export function ProductJsonLd({ product, activePrice, reviews, avgRating }: Prod
     ],
   }
 
-  const schemas = [productSchema, breadcrumb]
+  const faqSchema =
+    faqItems.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          '@id': `${url}#faq`,
+          mainEntity: faqItems.map((item) => ({
+            '@type': 'Question',
+            name: item.question,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: item.answer,
+            },
+          })),
+        }
+      : null
+
+  const schemas = [productSchema, breadcrumb, ...(faqSchema ? [faqSchema] : [])]
 
   return (
     <>

@@ -150,14 +150,47 @@ export default async function ProdukPage({
   )
   const waLink = `${siteConfig.whatsapp}?text=${waMessage}`
 
-  const features = [
-    { icon: BadgeCheck, text: 'Lisensi 100% original dari developer' },
-    { icon: RefreshCw, text: 'Update otomatis selama masa aktif' },
-    { icon: Clock, text: 'Proses instalasi 5–15 menit' },
-    { icon: MessageCircle, text: 'Support teknis via WhatsApp' },
-    { icon: ShieldCheck, text: 'Kompatibel WordPress versi terbaru' },
-    { icon: Shield, text: 'Bebas malware & backdoor' },
-  ]
+  const genericIcons = [BadgeCheck, RefreshCw, Clock, MessageCircle, ShieldCheck, Shield]
+  const features =
+    product.features && product.features.length > 0
+      ? product.features.map((f, i) => ({
+          icon: genericIcons[i % genericIcons.length],
+          text: f.title ? `${f.title} — ${f.desc || ''}` : f.desc || '',
+        }))
+      : [
+          { icon: BadgeCheck, text: 'Lisensi 100% original dari developer' },
+          { icon: RefreshCw, text: 'Update otomatis selama masa aktif' },
+          { icon: Clock, text: 'Proses instalasi 5–15 menit' },
+          { icon: MessageCircle, text: 'Support teknis via WhatsApp' },
+          { icon: ShieldCheck, text: 'Kompatibel WordPress versi terbaru' },
+          { icon: Shield, text: 'Bebas malware & backdoor' },
+        ]
+
+  const faqItems: { question: string; answer: string }[] =
+    product.faq && product.faq.length > 0
+      ? product.faq.map((item) => ({
+          question: item.question || item.q || '',
+          answer: item.answer || item.a || '',
+        }))
+      : [
+          { question: `Apa itu ${product.name}?`, answer: product.description || product.name },
+          {
+            question: `Apakah ${product.name} original dan berlisensi?`,
+            answer: `Ya, semua produk di OOS SHOP 100% original dengan lisensi resmi langsung dari developer.`,
+          },
+          {
+            question: `Bagaimana proses instalasi ${product.name}?`,
+            answer: `Setelah pembayaran dikonfirmasi, tim kami akan langsung menginstal ${product.name} di website Anda dalam 5-15 menit.`,
+          },
+          {
+            question: `Apakah mendapatkan update otomatis?`,
+            answer: `Ya, Anda akan mendapatkan update otomatis selama masa lisensi aktif.`,
+          },
+          {
+            question: `Bagaimana jika ada masalah setelah instalasi?`,
+            answer: `Kami menyediakan support via WhatsApp. Tim kami siap membantu menyelesaikan masalah Anda.`,
+          },
+        ]
 
   return (
     <>
@@ -166,6 +199,7 @@ export default async function ProdukPage({
         activePrice={activePrice}
         reviews={reviews}
         avgRating={avgRating}
+        faqItems={faqItems}
       />
       <SiteHeader />
       <main className="pb-16">
@@ -349,6 +383,31 @@ export default async function ProdukPage({
                           </p>
                         )}
                       </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {/* FAQ */}
+              {faqItems.length > 0 && (
+                <div className="mt-10">
+                  <h2 className="text-lg font-semibold">Pertanyaan Seputar {product.name}</h2>
+                  <div className="mt-4 flex flex-col gap-3">
+                    {faqItems.map((item) => (
+                      <details
+                        key={item.question}
+                        className="group rounded-xl border border-border bg-card"
+                      >
+                        <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 text-left text-sm font-medium [&::-webkit-details-marker]:hidden">
+                          {item.question}
+                          <ChevronRight
+                            className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-90"
+                            aria-hidden
+                          />
+                        </summary>
+                        <p className="px-4 pb-4 text-sm leading-relaxed text-muted-foreground">
+                          {item.answer}
+                        </p>
+                      </details>
                     ))}
                   </div>
                 </div>

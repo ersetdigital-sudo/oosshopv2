@@ -1,10 +1,25 @@
 import { supabase } from './supabase'
 
+export type ProductFeature = {
+  title?: string
+  desc?: string
+}
+
+export type ProductFaqItem = {
+  q?: string
+  question?: string
+  a?: string
+  answer?: string
+}
+
 export type Product = {
   id: string
   name: string
   slug: string | null
   description: string | null
+  short_description: string | null
+  meta_title: string | null
+  meta_description: string | null
   price: number
   original_price: number | null
   category: string
@@ -17,6 +32,8 @@ export type Product = {
   flash_sale_price: number | null
   flash_sale_end: string | null
   flash_sale_sold: number | null
+  features: ProductFeature[] | null
+  faq: ProductFaqItem[] | null
   created_at: string
 }
 
