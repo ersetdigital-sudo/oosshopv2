@@ -2,22 +2,50 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import {
   ArrowRight,
   Building2,
+  CalendarDays,
   ChevronDown,
+  ClipboardList,
   GraduationCap,
   HeartPulse,
+  Home,
+  Hotel,
+  House,
+  LayoutDashboard,
+  LayoutGrid,
   Menu,
   MessageCircle,
   MousePointerClick,
+  Package,
   Plane,
+  ShieldCheck,
   ShoppingCart,
+  Users,
   X,
+  Zap,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { websiteServices, siteConfig } from '@/lib/data'
+
+// Icon map for dynamic rendering
+const iconMap: Record<string, typeof Building2> = {
+  Building2,
+  MousePointerClick,
+  ShoppingCart,
+  GraduationCap,
+  Plane,
+  HeartPulse,
+  CalendarDays,
+  Hotel,
+  House,
+  LayoutDashboard,
+  Package,
+  Users,
+}
 
 const navLinks = [
   { href: '/', label: 'Beranda' },
@@ -32,130 +60,162 @@ const navLinks = [
   },
 ]
 
-const menuIcons: Record<string, typeof Building2> = {
-  Building2,
-  MousePointerClick,
-  ShoppingCart,
-  GraduationCap,
-  Plane,
-  HeartPulse,
-}
-
 const serviceMenu = websiteServices.map((s) => ({
   href: `/layanan/${s.slug}`,
   label: s.menuLabel,
   description: s.menuDescription,
-  icon: menuIcons[s.icon] ?? Building2,
+  icon: iconMap[s.icon] ?? Building2,
 }))
 
-export function SiteHeader() {
-  const [open, setOpen] = useState(false)
-  const [servicesOpen, setServicesOpen] = useState(false)
+// Group services into columns for mega menu
+const serviceGroups = [
+  {
+    title: 'Website',
+    items: serviceMenu.filter((_, i) => i < 4),
+  },
+  {
+    title: 'Instansi & Organisasi',
+    items: serviceMenu.filter((_, i) => i >= 4 && i < 7),
+  },
+  {
+    title: 'Sistem & Aplikasi',
+    items: serviceMenu.filter((_, i) => i >= 7),
+  },
+]
 
-  // Lock body scroll when drawer is open
+export function SiteHeader() {
+  const [layananDrawerOpen, setLayananDrawerOpen] = useState(false)
+  const [lainnyaOpen, setLainnyaOpen] = useState(false)
+  const [desktopLayananOpen, setDesktopLayananOpen] = useState(false)
+  const pathname = usePathname()
+
+  // Lock body scroll when any mobile drawer/sheet is open
   useEffect(() => {
-    if (open) {
+    if (layananDrawerOpen || lainnyaOpen) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = ''
     }
-    return () => { document.body.style.overflow = '' }
-  }, [open])
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [layananDrawerOpen, lainnyaOpen])
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:px-6">
-        <Link href="/" className="flex items-center gap-2" aria-label="OOS SHOP - Beranda">
-          <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
-            O
-          </span>
-          <span className="text-lg font-semibold tracking-tight">
-            OOS <span className="text-primary">SHOP</span>
-          </span>
-        </Link>
+    <>
+      {/* ═══════════════════════════════════════════════ */}
+      {/* DESKTOP NAVBAR (hidden on mobile) */}
+      {/* ═══════════════════════════════════════════════ */}
+      <header className="sticky top-0 z-50 hidden w-full border-b border-border bg-background/90 backdrop-blur-xl md:block">
+        <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-4 md:px-6">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2.5" aria-label="OOS SHOP - Beranda">
+            <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
+              O
+            </span>
+            <span className="text-lg font-semibold tracking-tight">
+              OOS <span className="text-primary">SHOP</span>
+            </span>
+          </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-6 lg:flex" aria-label="Navigasi utama">
-          {navLinks.map((link) =>
-            link.dropdown ? (
-              <div key={link.href} className="group relative">
+          {/* Desktop nav links */}
+          <nav className="hidden items-center gap-1 lg:flex" aria-label="Navigasi utama">
+            {navLinks.map((link) =>
+              link.dropdown ? (
+                <div
+                  key={link.href}
+                  className="relative"
+                  onMouseEnter={() => setDesktopLayananOpen(true)}
+                  onMouseLeave={() => setDesktopLayananOpen(false)}
+                >
+                  <a
+                    href={link.href}
+                    className="flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                  >
+                    {link.label}
+                    <ChevronDown
+                      className={`size-3.5 transition-transform ${desktopLayananOpen ? 'rotate-180' : ''}`}
+                      aria-hidden
+                    />
+                  </a>
+
+                  {/* Mega dropdown */}
+                  {desktopLayananOpen && (
+                    <div className="absolute left-1/2 top-full z-50 w-[680px] -translate-x-1/2 pt-2">
+                      <div className="rounded-2xl border border-border bg-popover p-6 shadow-2xl">
+                        <div className="grid grid-cols-3 gap-x-6 gap-y-1">
+                          {serviceGroups.map((group) => (
+                            <div key={group.title}>
+                              <p className="mb-3 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                                {group.title}
+                              </p>
+                              <ul className="flex flex-col gap-0.5">
+                                {group.items.map((item) => {
+                                  const Icon = item.icon
+                                  return (
+                                    <li key={item.href}>
+                                      <Link
+                                        href={item.href}
+                                        className="flex items-start gap-3 rounded-xl p-2.5 transition-colors hover:bg-muted"
+                                        onClick={() => setDesktopLayananOpen(false)}
+                                      >
+                                        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent text-primary">
+                                          <Icon className="size-4" aria-hidden />
+                                        </span>
+                                        <span className="flex flex-col">
+                                          <span className="text-sm font-medium text-foreground">
+                                            {item.label}
+                                          </span>
+                                          <span className="mt-0.5 text-[11px] leading-snug text-muted-foreground">
+                                            {item.description}
+                                          </span>
+                                        </span>
+                                      </Link>
+                                    </li>
+                                  )
+                                })}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                        <a
+                          href={`${siteConfig.whatsapp}?text=${encodeURIComponent('Halo, saya ingin konsultasi pembuatan website')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-4 flex items-center justify-between rounded-xl border-t border-border px-3 py-3 text-sm font-medium text-primary transition-colors hover:bg-muted"
+                        >
+                          Konsultasi Gratis via WhatsApp
+                          <ArrowRight className="size-4" aria-hidden />
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
                 <a
+                  key={link.href}
                   href={link.href}
-                  className="flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  target={link.external ? '_blank' : undefined}
+                  rel={link.external ? 'noopener noreferrer' : undefined}
+                  className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 >
                   {link.label}
-                  <ChevronDown
-                    className="size-4 transition-transform group-hover:rotate-180"
-                    aria-hidden
-                  />
                 </a>
-                <div className="invisible absolute left-1/2 top-full z-50 w-[380px] -translate-x-1/2 pt-3 opacity-0 transition-all group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-                  <div className="rounded-2xl border border-border bg-popover p-3 shadow-xl">
-                    <p className="px-3 pb-2 pt-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                      Jasa Pembuatan Website
-                    </p>
-                    <ul className="flex flex-col gap-1">
-                      {serviceMenu.map((item) => {
-                        const Icon = item.icon
-                        return (
-                          <li key={item.href}>
-                            <Link
-                              href={item.href}
-                              className="flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-muted"
-                            >
-                              <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent text-primary">
-                                <Icon className="size-5" aria-hidden />
-                              </span>
-                              <span className="flex flex-col">
-                                <span className="text-sm font-medium text-foreground">
-                                  {item.label}
-                                </span>
-                                <span className="mt-0.5 text-xs leading-snug text-muted-foreground">
-                                  {item.description}
-                                </span>
-                              </span>
-                            </Link>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                    <a
-                      href={`${siteConfig.whatsapp}?text=${encodeURIComponent('Halo, saya ingin konsultasi pembuatan website')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-1 flex items-center justify-between rounded-xl border-t border-border px-3 py-3 text-sm font-medium text-primary transition-colors hover:bg-muted"
-                    >
-                      Konsultasi Gratis via WhatsApp
-                      <ArrowRight className="size-4" aria-hidden />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <a
-                key={link.href}
-                href={link.href}
-                target={link.external ? '_blank' : undefined}
-                rel={link.external ? 'noopener noreferrer' : undefined}
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {link.label}
-              </a>
-            ),
-          )}
-        </nav>
+              ),
+            )}
+          </nav>
 
-        {/* Right actions */}
-        <div className="flex items-center gap-1 sm:gap-2">
-          <ThemeToggle />
-          <Link
-            href="/katalog"
-            className="flex size-9 items-center justify-center rounded-md text-foreground transition-colors hover:bg-muted"
-            aria-label="Lihat katalog plugin"
-          >
-            <ShoppingCart className="size-5" aria-hidden />
-          </Link>
-          <div className="hidden sm:block">
+          {/* Right actions */}
+          <div className="hidden items-center gap-2 lg:flex">
+            <ThemeToggle />
+            <Link
+              href="/katalog"
+              className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              aria-label="Lihat katalog plugin"
+            >
+              <ShoppingCart className="size-5" aria-hidden />
+            </Link>
+            <div className="mx-1 h-6 w-px bg-border" />
             <Button
               size="sm"
               nativeButton={false}
@@ -165,115 +225,221 @@ export function SiteHeader() {
               Hubungi Kami
             </Button>
           </div>
+        </div>
+      </header>
 
-          {/* Mobile menu button */}
+      {/* ═══════════════════════════════════════════════ */}
+      {/* MOBILE TOP BAR (visible on mobile only) */}
+      {/* ═══════════════════════════════════════════════ */}
+      <header className="fixed left-0 right-0 top-0 z-50 border-b border-border bg-background/90 backdrop-blur-xl md:hidden">
+        <div className="flex h-14 items-center justify-between px-4">
+          <Link href="/" className="flex items-center gap-2" aria-label="OOS SHOP - Beranda">
+            <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-xs font-bold text-primary-foreground">
+              O
+            </span>
+            <span className="text-base font-semibold tracking-tight">
+              OOS <span className="text-primary">SHOP</span>
+            </span>
+          </Link>
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <Link
+              href="/katalog"
+              className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              aria-label="Lihat katalog"
+            >
+              <ShoppingCart className="size-5" aria-hidden />
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* Spacer for mobile top bar */}
+      <div className="h-14 md:hidden" aria-hidden />
+
+      {/* ═══════════════════════════════════════════════ */}
+      {/* MOBILE BOTTOM NAVIGATION BAR */}
+      {/* ═══════════════════════════════════════════════ */}
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/95 backdrop-blur-xl md:hidden"
+        aria-label="Navigasi mobile"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+      >
+        <div className="flex h-16 items-center justify-around px-2">
+          {/* Beranda */}
+          <Link
+            href="/"
+            className={`flex flex-col items-center gap-0.5 rounded-lg px-2 py-1 transition-colors ${
+              pathname === '/' ? 'text-primary' : 'text-muted-foreground'
+            }`}
+          >
+            <Home className="size-5" aria-hidden />
+            <span className="text-[10px] font-medium">Beranda</span>
+          </Link>
+
+          {/* Katalog */}
+          <Link
+            href="/katalog"
+            className={`flex flex-col items-center gap-0.5 rounded-lg px-2 py-1 transition-colors ${
+              pathname === '/katalog' ? 'text-primary' : 'text-muted-foreground'
+            }`}
+          >
+            <LayoutGrid className="size-5" aria-hidden />
+            <span className="text-[10px] font-medium">Katalog</span>
+          </Link>
+
+          {/* Layanan — opens drawer */}
           <button
             type="button"
-            className="flex size-9 items-center justify-center rounded-md text-foreground lg:hidden"
-            onClick={() => setOpen(true)}
-            aria-label="Buka menu"
+            onClick={() => setLayananDrawerOpen(true)}
+            className={`flex flex-col items-center gap-0.5 rounded-lg px-2 py-1 transition-colors ${
+              pathname.startsWith('/layanan') ? 'text-primary' : 'text-muted-foreground'
+            }`}
+          >
+            <Zap className="size-5" aria-hidden />
+            <span className="text-[10px] font-medium">Layanan</span>
+          </button>
+
+          {/* Pesanan */}
+          <a
+            href={`${siteConfig.whatsapp}?text=${encodeURIComponent('Halo, saya ingin menanyakan status pesanan saya')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1 text-muted-foreground transition-colors"
+          >
+            <ClipboardList className="size-5" aria-hidden />
+            <span className="text-[10px] font-medium">Pesanan</span>
+          </a>
+
+          {/* Lainnya — opens bottom sheet */}
+          <button
+            type="button"
+            onClick={() => setLainnyaOpen(true)}
+            className="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1 text-muted-foreground transition-colors"
           >
             <Menu className="size-5" aria-hidden />
+            <span className="text-[10px] font-medium">Lainnya</span>
           </button>
         </div>
-      </div>
+      </nav>
 
-      {/* Mobile Drawer */}
-      {open && (
-        <div className="fixed inset-0 z-[100] lg:hidden">
+      {/* ═══════════════════════════════════════════════ */}
+      {/* MOBILE LAYANAN DRAWER (from right) */}
+      {/* ═══════════════════════════════════════════════ */}
+      {layananDrawerOpen && (
+        <div className="fixed inset-0 z-[100] md:hidden">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setOpen(false)}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setLayananDrawerOpen(false)}
             aria-hidden
           />
           {/* Drawer panel */}
-          <nav
-            className="absolute right-0 top-0 flex h-full w-[300px] max-w-[85vw] flex-col bg-background shadow-2xl animate-in slide-in-from-right duration-300"
-            aria-label="Navigasi mobile"
-          >
-            {/* Drawer header */}
-            <div className="flex items-center justify-between border-b border-border px-4 py-4">
-              <span className="text-sm font-semibold">Menu</span>
+          <div className="absolute bottom-0 right-0 top-0 flex w-[300px] max-w-[85vw] animate-in slide-in-from-right duration-300 flex-col bg-background shadow-2xl">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-border px-5 py-4">
+              <span className="text-base font-bold">Layanan</span>
               <button
                 type="button"
-                onClick={() => setOpen(false)}
-                className="flex size-8 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
-                aria-label="Tutup menu"
+                onClick={() => setLayananDrawerOpen(false)}
+                className="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                aria-label="Tutup menu layanan"
               >
                 <X className="size-5" aria-hidden />
               </button>
             </div>
 
-            {/* Drawer body */}
-            <div className="flex-1 overflow-y-auto px-4 py-4">
-              <ul className="flex flex-col gap-1">
-                {navLinks.map((link) =>
-                  link.dropdown ? (
-                    <li key={link.href}>
-                      <button
-                        type="button"
-                        className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm text-foreground hover:bg-muted"
-                        onClick={() => setServicesOpen((v) => !v)}
-                        aria-expanded={servicesOpen}
-                      >
-                        {link.label}
-                        <ChevronDown
-                          className={`size-4 text-muted-foreground transition-transform ${servicesOpen ? 'rotate-180' : ''}`}
-                          aria-hidden
-                        />
-                      </button>
-                      {servicesOpen && (
-                        <ul className="ml-2 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
-                          {serviceMenu.map((item) => {
-                            const Icon = item.icon
-                            return (
-                              <li key={item.href}>
-                                <Link
-                                  href={item.href}
-                                  className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
-                                  onClick={() => setOpen(false)}
-                                >
-                                  <Icon className="size-4 shrink-0 text-primary" aria-hidden />
-                                  {item.label}
-                                </Link>
-                              </li>
-                            )
-                          })}
-                        </ul>
-                      )}
-                    </li>
-                  ) : (
-                    <li key={link.href}>
-                      <a
-                        href={link.href}
-                        target={link.external ? '_blank' : undefined}
-                        rel={link.external ? 'noopener noreferrer' : undefined}
-                        className="block rounded-lg px-3 py-2.5 text-sm text-foreground hover:bg-muted"
-                        onClick={() => setOpen(false)}
-                      >
-                        {link.label}
-                      </a>
-                    </li>
-                  ),
-                )}
-              </ul>
+            {/* Services list */}
+            <div className="flex-1 overflow-y-auto p-4">
+              <div className="flex flex-col gap-1">
+                {serviceMenu.map((item) => {
+                  const Icon = item.icon
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-muted"
+                      onClick={() => setLayananDrawerOpen(false)}
+                    >
+                      <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent text-primary">
+                        <Icon className="size-5" aria-hidden />
+                      </span>
+                      <span className="flex flex-col">
+                        <span className="text-sm font-semibold text-foreground">{item.label}</span>
+                        <span className="mt-0.5 text-xs text-muted-foreground">
+                          {item.description}
+                        </span>
+                      </span>
+                    </Link>
+                  )
+                })}
+              </div>
             </div>
 
-            {/* Drawer footer */}
-            <div className="border-t border-border px-4 py-4">
-              <Button
-                className="w-full"
-                nativeButton={false}
-                render={<a href={siteConfig.whatsapp} target="_blank" rel="noopener noreferrer" />}
+            {/* Footer */}
+            <div className="border-t border-border p-4">
+              <a
+                href={`${siteConfig.whatsapp}?text=${encodeURIComponent('Halo, saya ingin konsultasi pembuatan website')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-primary/20 bg-primary/10 py-3 text-sm font-medium text-primary transition-colors hover:bg-primary/20"
+                onClick={() => setLayananDrawerOpen(false)}
               >
-                <MessageCircle className="size-4" aria-hidden />
-                Hubungi Kami
-              </Button>
+                Konsultasi Gratis via WhatsApp
+              </a>
             </div>
-          </nav>
+          </div>
         </div>
       )}
-    </header>
+
+      {/* ═══════════════════════════════════════════════ */}
+      {/* MOBILE "LAINNYA" BOTTOM SHEET */}
+      {/* ═══════════════════════════════════════════════ */}
+      {lainnyaOpen && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm md:hidden"
+          onClick={() => setLainnyaOpen(false)}
+          aria-hidden
+        />
+      )}
+      <div
+        className={`fixed bottom-0 left-0 right-0 z-[110] rounded-t-2xl border-t border-border bg-background shadow-2xl transition-transform duration-300 ease-out md:hidden ${
+          lainnyaOpen ? 'translate-y-0' : 'translate-y-full'
+        }`}
+        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+      >
+        {/* Handle bar */}
+        <div className="mx-auto mt-3 mb-4 h-1 w-10 rounded-full bg-muted-foreground/30" />
+
+        <div className="px-5 pb-8">
+          <Link
+            href="/#keamanan"
+            onClick={() => setLainnyaOpen(false)}
+            className="flex items-center gap-3 rounded-lg px-3 py-3 text-foreground transition-colors hover:bg-muted"
+          >
+            <ShieldCheck className="size-5 text-muted-foreground" aria-hidden />
+            <span className="text-sm font-medium">Keunggulan</span>
+          </Link>
+          <Link
+            href="/#faq"
+            onClick={() => setLainnyaOpen(false)}
+            className="flex items-center gap-3 rounded-lg px-3 py-3 text-foreground transition-colors hover:bg-muted"
+          >
+            <MessageCircle className="size-5 text-muted-foreground" aria-hidden />
+            <span className="text-sm font-medium">FAQ</span>
+          </Link>
+          <a
+            href={`${siteConfig.whatsapp}?text=${encodeURIComponent('Halo, saya ingin bertanya')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setLainnyaOpen(false)}
+            className="flex items-center gap-3 rounded-lg px-3 py-3 text-foreground transition-colors hover:bg-muted"
+          >
+            <MessageCircle className="size-5 text-muted-foreground" aria-hidden />
+            <span className="text-sm font-medium">Hubungi Kami</span>
+          </a>
+        </div>
+      </div>
+    </>
   )
 }
