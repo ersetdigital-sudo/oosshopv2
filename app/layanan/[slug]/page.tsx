@@ -26,6 +26,7 @@ import { SiteFooter } from '@/components/site-footer'
 import { ServiceJsonLd } from '@/components/layanan/service-json-ld'
 import { Button } from '@/components/ui/button'
 import { getWebsiteService, websiteServices, siteConfig } from '@/lib/data'
+import { servicePricing } from '@/lib/pricing-data'
 
 const icons: Record<string, typeof Building2> = {
   Building2,
@@ -85,6 +86,7 @@ export default async function ServicePage({
 
   const Icon = icons[service.icon] ?? Building2
   const waHref = `${siteConfig.whatsapp}?text=${encodeURIComponent(`Halo, saya tertarik dengan layanan ${service.menuLabel}. Bisa konsultasi gratis?`)}`
+  const packages = servicePricing[service.slug] || null
 
   return (
     <>
@@ -323,6 +325,66 @@ export default async function ServicePage({
             </div>
           </div>
         </section>
+
+        {/* ═══ Pricing Section (only for services with packages) ═══ */}
+        {packages && (
+          <section className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20" id="harga">
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
+                Pilihan Paket {service.menuLabel}
+              </h2>
+              <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
+                Harga transparan, tanpa biaya tersembunyi. Semua paket sudah termasuk domain, hosting, SSL, dan maintenance.
+              </p>
+            </div>
+            <div className="mt-10 grid gap-6 md:grid-cols-3">
+              {packages.map((pkg) => (
+                <div
+                  key={pkg.name}
+                  className={`relative flex flex-col rounded-2xl border p-6 shadow-sm transition-all hover:shadow-md ${
+                    pkg.popular
+                      ? 'border-primary bg-card shadow-primary/10'
+                      : 'border-border bg-card'
+                  }`}
+                >
+                  {pkg.popular && (
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-xs font-bold text-primary-foreground">
+                      PALING POPULER
+                    </span>
+                  )}
+                  <h3 className="text-lg font-bold">{pkg.name}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{pkg.description}</p>
+                  <p className="mt-4 text-3xl font-bold text-primary">{pkg.price}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{pkg.renewal}</p>
+                  <ul className="mt-5 flex flex-1 flex-col gap-2">
+                    {pkg.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2 text-sm">
+                        <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
+                        <span className="text-foreground/90">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button
+                    size="lg"
+                    className="mt-6 w-full"
+                    variant={pkg.popular ? 'default' : 'outline'}
+                    nativeButton={false}
+                    render={
+                      <a
+                        href={`${siteConfig.whatsapp}?text=${encodeURIComponent(`Halo, saya tertarik dengan ${pkg.name} untuk ${service.menuLabel}. Bisa info lebih lanjut?`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      />
+                    }
+                  >
+                    <MessageCircle className="size-4" aria-hidden />
+                    Pilih {pkg.name}
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* ═══ FAQ Section — keyword-rich for featured snippets ═══ */}
         <section className="border-b border-border bg-muted/30" id="faq">

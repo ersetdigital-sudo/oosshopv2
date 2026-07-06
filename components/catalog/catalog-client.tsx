@@ -318,12 +318,10 @@ export function CatalogClient({
                         </span>
                       </div>
 
-                      {/* Buttons — Order + Add to Cart + Detail */}
+                      {/* Buttons — Cart | Pesan | Detail (like v1) */}
                       <div className="mt-4 flex items-center gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="flex-none"
+                        <button
+                          type="button"
                           onClick={() =>
                             addToCart({
                               id: product.id,
@@ -333,9 +331,11 @@ export function CatalogClient({
                               category: product.category,
                             })
                           }
+                          className="flex size-9 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                          aria-label="Tambah ke keranjang"
                         >
                           <ShoppingBag className="size-4" aria-hidden />
-                        </Button>
+                        </button>
                         <Button
                           size="sm"
                           className="flex-1"
@@ -358,6 +358,7 @@ export function CatalogClient({
                           render={<Link href={productHref} />}
                         >
                           Detail
+                          <ArrowRight className="size-3.5" aria-hidden />
                         </Button>
                       </div>
                     </div>
