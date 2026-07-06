@@ -75,13 +75,15 @@ export function ServiceJsonLd({ service }: { service: ServiceData }) {
         description: service.whatIs.priceNote,
       },
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.9',
-      bestRating: '5',
-      ratingCount: '1200',
-      reviewCount: '850',
-    },
+    ...(service.rating && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: service.rating.ratingValue,
+        bestRating: '5',
+        ratingCount: service.rating.ratingCount,
+        reviewCount: service.rating.reviewCount,
+      },
+    }),
     termsOfService: `${SITE_URL}/kebijakan-privasi`,
   }
 

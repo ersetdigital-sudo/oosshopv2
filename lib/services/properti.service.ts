@@ -186,4 +186,10 @@ export const properti: ServiceData = {
     'jasa-pembuatan-company-profile',
     'jasa-pembuatan-landing-page',
   ],
+
+  rating: {
+    ratingValue: '4.8',
+    ratingCount: '87',
+    reviewCount: '73',
+  },
 }

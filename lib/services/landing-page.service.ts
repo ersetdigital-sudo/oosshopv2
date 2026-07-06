@@ -217,4 +217,10 @@ export const landingPage: ServiceData = {
     'jasa-pembuatan-toko-online',
     'jasa-pembuatan-website-travel',
   ],
+
+  rating: {
+    ratingValue: '4.8',
+    ratingCount: '189',
+    reviewCount: '164',
+  },
 }

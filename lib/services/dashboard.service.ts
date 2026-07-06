@@ -186,4 +186,10 @@ export const dashboard: ServiceData = {
     'jasa-pembuatan-crm-erp',
     'jasa-pembuatan-company-profile',
   ],
+
+  rating: {
+    ratingValue: '4.9',
+    ratingCount: '76',
+    reviewCount: '64',
+  },
 }

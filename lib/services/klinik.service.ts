@@ -186,4 +186,10 @@ export const klinik: ServiceData = {
     'jasa-pembuatan-company-profile',
     'jasa-pembuatan-dashboard-admin',
   ],
+
+  rating: {
+    ratingValue: '4.9',
+    ratingCount: '143',
+    reviewCount: '121',
+  },
 }

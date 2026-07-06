@@ -42,6 +42,12 @@ export interface ServiceFAQ {
   answer: string
 }
 
+export interface ServiceRating {
+  ratingValue: string
+  ratingCount: string
+  reviewCount: string
+}
+
 export interface ServiceData {
   slug: string
   menuLabel: string
@@ -59,5 +65,6 @@ export interface ServiceData {
   useCases: string[]
   process: ServiceProcess[]
   faq: ServiceFAQ[]
+  rating?: ServiceRating // optional — omit to skip aggregateRating in schema
   relatedServices?: string[] // slugs for internal linking
 }

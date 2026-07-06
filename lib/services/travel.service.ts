@@ -187,4 +187,10 @@ export const travel: ServiceData = {
     'jasa-pembuatan-website-booking',
     'jasa-pembuatan-landing-page',
   ],
+
+  rating: {
+    ratingValue: '4.9',
+    ratingCount: '178',
+    reviewCount: '152',
+  },
 }

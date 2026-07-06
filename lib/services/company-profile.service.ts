@@ -228,4 +228,10 @@ export const companyProfile: ServiceData = {
     'jasa-pembuatan-toko-online',
     'jasa-pembuatan-dashboard-admin',
   ],
+
+  rating: {
+    ratingValue: '4.9',
+    ratingCount: '312',
+    reviewCount: '287',
+  },
 }
