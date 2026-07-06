@@ -23,6 +23,15 @@ import { siteConfig } from '@/lib/data'
 import { supabase } from '@/lib/supabase'
 import type { Product } from '@/lib/products'
 
+export type Review = {
+  id: string
+  product_id: string
+  customer_name: string
+  rating: number
+  comment: string | null
+  created_at: string
+}
+
 export const dynamic = 'force-dynamic'
 
 function isUUID(str: string) {
@@ -46,6 +55,15 @@ async function getRelatedProducts(product: Product): Promise<Product[]> {
     .neq('id', product.id)
     .limit(4)
   return (data as Product[]) || []
+}
+
+async function getReviews(productId: string): Promise<Review[]> {
+  const { data } = await supabase
+    .from('reviews')
+    .select('*')
+    .eq('product_id', productId)
+    .order('created_at', { ascending: false })
+  return (data as Review[]) || []
 }
 
 function formatIDR(value: number): string {
@@ -114,7 +132,15 @@ export default async function ProdukPage({
   const product = await getProduct(slug)
   if (!product) notFound()
 
-  const relatedProducts = await getRelatedProducts(product)
+  const [relatedProducts, reviews] = await Promise.all([
+    getRelatedProducts(product),
+    getReviews(product.id),
+  ])
+
+  const avgRating =
+    reviews.length > 0
+      ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
+      : '0'
 
   const activePrice = getActivePrice(product)
   const onSale = isFlashSale(product)
@@ -248,6 +274,78 @@ export default async function ProdukPage({
                   ))}
                 </ul>
               </div>
+
+              {/* Reviews / Ulasan */}
+              {reviews.length > 0 && (
+                <div className="mt-10">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-semibold">
+                      Ulasan Pembeli ({reviews.length})
+                    </h2>
+                    <div className="flex items-center gap-1.5">
+                      <div className="flex items-center">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className={`size-4 ${
+                              star <= Math.round(Number(avgRating))
+                                ? 'fill-amber-400 text-amber-400'
+                                : 'text-muted-foreground/30'
+                            }`}
+                            aria-hidden
+                          />
+                        ))}
+                      </div>
+                      <span className="text-sm font-semibold">{avgRating}</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex flex-col gap-4">
+                    {reviews.map((review) => (
+                      <div
+                        key={review.id}
+                        className="rounded-xl border border-border bg-card p-4"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                              {review.customer_name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold">{review.customer_name}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {new Date(review.created_at).toLocaleDateString('id-ID', {
+                                  day: 'numeric',
+                                  month: 'short',
+                                  year: 'numeric',
+                                })}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className={`size-3.5 ${
+                                  star <= review.rating
+                                    ? 'fill-amber-400 text-amber-400'
+                                    : 'text-muted-foreground/30'
+                                }`}
+                                aria-hidden
+                              />
+                            ))}
+                          </div>
+                        </div>
+                        {review.comment && (
+                          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                            {review.comment}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Right Column - Sticky Purchase Card */}

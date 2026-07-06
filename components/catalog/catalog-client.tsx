@@ -245,15 +245,15 @@ export function CatalogClient({
                         </span>
                       )}
 
-                      {/* Product image */}
+                      {/* Product image — full width, natural aspect ratio like v1 */}
                       {product.image_url ? (
-                        <div className="flex h-48 items-center justify-center overflow-hidden">
+                        <div className="overflow-hidden rounded-t-2xl">
                           <Image
                             src={product.image_url}
                             alt={product.name}
-                            width={300}
-                            height={300}
-                            className="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+                            width={400}
+                            height={400}
+                            className="w-full h-auto transition-transform duration-300 group-hover:scale-105"
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                           />
                         </div>
