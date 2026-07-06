@@ -103,8 +103,9 @@ export async function generateMetadata({
   const product = await getProduct(slug)
   if (!product) return { title: 'Produk Tidak Ditemukan | OOS SHOP' }
 
-  const title = `${product.name} — ${product.category} WordPress Premium | OOS SHOP`
+  const title = product.meta_title || `${product.name} — ${product.category} WordPress Premium | OOS SHOP`
   const description =
+    product.meta_description ||
     product.description ||
     `Beli ${product.name} original berlisensi di OOS SHOP. Harga ${formatIDR(product.price)}. Instal cepat, update otomatis.`
 
@@ -291,12 +292,17 @@ export default async function ProdukPage({
               </div>
 
               {/* Description */}
-              {product.description && (
+              {(product.long_description || product.description) && (
                 <div className="mt-6">
                   <h2 className="text-lg font-semibold">Deskripsi</h2>
-                  <p className="mt-2 leading-relaxed text-muted-foreground">
-                    {product.description}
-                  </p>
+                  <div className="mt-2 space-y-3 leading-relaxed text-muted-foreground">
+                    {product.long_description
+                      ? product.long_description
+                          .split('\n\n')
+                          .filter(Boolean)
+                          .map((paragraph, i) => <p key={i}>{paragraph}</p>)
+                      : <p>{product.description}</p>}
+                  </div>
                 </div>
               )}
 
