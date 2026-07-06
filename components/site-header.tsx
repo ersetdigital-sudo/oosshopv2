@@ -1,14 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import {
   ArrowRight,
   Building2,
   ChevronDown,
+  GraduationCap,
+  HeartPulse,
   Menu,
   MessageCircle,
   MousePointerClick,
+  Plane,
   ShoppingCart,
   X,
 } from 'lucide-react'
@@ -33,6 +36,9 @@ const menuIcons: Record<string, typeof Building2> = {
   Building2,
   MousePointerClick,
   ShoppingCart,
+  GraduationCap,
+  Plane,
+  HeartPulse,
 }
 
 const serviceMenu = websiteServices.map((s) => ({
@@ -46,6 +52,16 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false)
   const [servicesOpen, setServicesOpen] = useState(false)
 
+  // Lock body scroll when drawer is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [open])
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:px-6">
@@ -58,6 +74,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
+        {/* Desktop nav */}
         <nav className="hidden items-center gap-6 lg:flex" aria-label="Navigasi utama">
           {navLinks.map((link) =>
             link.dropdown ? (
@@ -128,6 +145,7 @@ export function SiteHeader() {
           )}
         </nav>
 
+        {/* Right actions */}
         <div className="flex items-center gap-1 sm:gap-2">
           <ThemeToggle />
           <Link
@@ -148,83 +166,102 @@ export function SiteHeader() {
             </Button>
           </div>
 
+          {/* Mobile menu button */}
           <button
             type="button"
             className="flex size-9 items-center justify-center rounded-md text-foreground lg:hidden"
-            onClick={() => setOpen(!open)}
-            aria-expanded={open}
-            aria-label={open ? 'Tutup menu' : 'Buka menu'}
+            onClick={() => setOpen(true)}
+            aria-label="Buka menu"
           >
-            {open ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
+            <Menu className="size-5" aria-hidden />
           </button>
         </div>
       </div>
 
+      {/* Mobile Drawer */}
       {open && (
-        <nav
-          className="border-t border-border bg-background px-4 py-4 lg:hidden"
-          aria-label="Navigasi mobile"
-        >
-          <ul className="flex flex-col gap-1">
-            {navLinks.map((link) =>
-              link.dropdown ? (
-                <li key={link.href}>
-                  <button
-                    type="button"
-                    className="flex w-full items-center justify-between rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
-                    onClick={() => setServicesOpen((v) => !v)}
-                    aria-expanded={servicesOpen}
-                  >
-                    {link.label}
-                    <ChevronDown
-                      className={`size-4 transition-transform ${servicesOpen ? 'rotate-180' : ''}`}
-                      aria-hidden
-                    />
-                  </button>
-                  {servicesOpen && (
-                    <ul className="ml-3 mt-1 flex flex-col gap-1 border-l border-border pl-3">
-                      {serviceMenu.map((item) => {
-                        const Icon = item.icon
-                        return (
-                          <li key={item.href}>
-                            <Link
-                              href={item.href}
-                              className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
-                              onClick={() => setOpen(false)}
-                            >
-                              <Icon className="size-4 shrink-0 text-primary" aria-hidden />
-                              {item.label}
-                            </Link>
-                          </li>
-                        )
-                      })}
-                      <li>
-                        <Link
-                          href="/katalog"
-                          className="block rounded-md px-3 py-2 text-sm font-medium text-primary hover:bg-muted"
-                          onClick={() => setOpen(false)}
-                        >
-                          Lihat Semua Katalog
-                        </Link>
-                      </li>
-                    </ul>
-                  )}
-                </li>
-              ) : (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    target={link.external ? '_blank' : undefined}
-                    rel={link.external ? 'noopener noreferrer' : undefined}
-                    className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
-                    onClick={() => setOpen(false)}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ),
-            )}
-            <li className="mt-2">
+        <div className="fixed inset-0 z-[100] lg:hidden">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setOpen(false)}
+            aria-hidden
+          />
+          {/* Drawer panel */}
+          <nav
+            className="absolute right-0 top-0 flex h-full w-[300px] max-w-[85vw] flex-col bg-background shadow-2xl animate-in slide-in-from-right duration-300"
+            aria-label="Navigasi mobile"
+          >
+            {/* Drawer header */}
+            <div className="flex items-center justify-between border-b border-border px-4 py-4">
+              <span className="text-sm font-semibold">Menu</span>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="flex size-8 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
+                aria-label="Tutup menu"
+              >
+                <X className="size-5" aria-hidden />
+              </button>
+            </div>
+
+            {/* Drawer body */}
+            <div className="flex-1 overflow-y-auto px-4 py-4">
+              <ul className="flex flex-col gap-1">
+                {navLinks.map((link) =>
+                  link.dropdown ? (
+                    <li key={link.href}>
+                      <button
+                        type="button"
+                        className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm text-foreground hover:bg-muted"
+                        onClick={() => setServicesOpen((v) => !v)}
+                        aria-expanded={servicesOpen}
+                      >
+                        {link.label}
+                        <ChevronDown
+                          className={`size-4 text-muted-foreground transition-transform ${servicesOpen ? 'rotate-180' : ''}`}
+                          aria-hidden
+                        />
+                      </button>
+                      {servicesOpen && (
+                        <ul className="ml-2 mt-1 flex flex-col gap-0.5 border-l border-border pl-3">
+                          {serviceMenu.map((item) => {
+                            const Icon = item.icon
+                            return (
+                              <li key={item.href}>
+                                <Link
+                                  href={item.href}
+                                  className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+                                  onClick={() => setOpen(false)}
+                                >
+                                  <Icon className="size-4 shrink-0 text-primary" aria-hidden />
+                                  {item.label}
+                                </Link>
+                              </li>
+                            )
+                          })}
+                        </ul>
+                      )}
+                    </li>
+                  ) : (
+                    <li key={link.href}>
+                      <a
+                        href={link.href}
+                        target={link.external ? '_blank' : undefined}
+                        rel={link.external ? 'noopener noreferrer' : undefined}
+                        className="block rounded-lg px-3 py-2.5 text-sm text-foreground hover:bg-muted"
+                        onClick={() => setOpen(false)}
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ),
+                )}
+              </ul>
+            </div>
+
+            {/* Drawer footer */}
+            <div className="border-t border-border px-4 py-4">
               <Button
                 className="w-full"
                 nativeButton={false}
@@ -233,9 +270,9 @@ export function SiteHeader() {
                 <MessageCircle className="size-4" aria-hidden />
                 Hubungi Kami
               </Button>
-            </li>
-          </ul>
-        </nav>
+            </div>
+          </nav>
+        </div>
       )}
     </header>
   )
