@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import {
   ArrowRight,
   BadgeCheck,
@@ -214,44 +215,47 @@ export function CatalogClient({
                 const waText = encodeURIComponent(
                   `Halo, saya ingin memesan ${product.name} (${formatIDR(activePrice)})`,
                 )
+                const productHref = `/produk/${product.slug || product.id}`
 
                 return (
                   <article
                     key={product.id}
                     className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-lg"
                   >
-                    {/* Image / Visual header */}
-                    <div className="relative flex h-44 items-center justify-center border-b border-border bg-accent/40">
+                    {/* Image — clickable to detail */}
+                    <Link href={productHref} className="relative block border-b border-border bg-accent/40">
                       {/* Badges */}
                       {product.badge && (
-                        <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-xs font-medium text-primary-foreground">
+                        <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-xs font-medium text-primary-foreground">
                           <Star className="size-3 fill-current" aria-hidden />
                           {product.badge}
                         </span>
                       )}
                       {onSale && (
-                        <span className="absolute right-3 top-3 rounded-full bg-red-500 px-2.5 py-1 text-xs font-bold text-white">
+                        <span className="absolute right-3 top-3 z-10 rounded-full bg-red-500 px-2.5 py-1 text-xs font-bold text-white">
                           FLASH SALE
                         </span>
                       )}
                       {!onSale && product.category && (
-                        <span className="absolute right-3 top-3 rounded-full border border-border bg-background px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                        <span className="absolute right-3 top-3 z-10 rounded-full border border-border bg-background px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
                           {product.category}
                         </span>
                       )}
 
                       {/* Product image */}
                       {product.image_url ? (
-                        <Image
-                          src={product.image_url}
-                          alt={product.name}
-                          width={300}
-                          height={300}
-                          className="h-full w-full object-contain p-4"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        />
+                        <div className="flex h-48 items-center justify-center overflow-hidden">
+                          <Image
+                            src={product.image_url}
+                            alt={product.name}
+                            width={300}
+                            height={300}
+                            className="h-full w-full object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          />
+                        </div>
                       ) : (
-                        <div className="flex flex-col items-center gap-2">
+                        <div className="flex h-48 flex-col items-center justify-center gap-2">
                           <span className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                             <BadgeCheck className="size-7" aria-hidden />
                           </span>
@@ -260,13 +264,15 @@ export function CatalogClient({
                           </span>
                         </div>
                       )}
-                    </div>
+                    </Link>
 
                     {/* Body */}
-                    <div className="flex flex-1 flex-col p-5">
-                      <h2 className="line-clamp-2 text-base font-semibold tracking-tight">
-                        {product.name}
-                      </h2>
+                    <div className="flex flex-1 flex-col p-4 sm:p-5">
+                      <Link href={productHref}>
+                        <h2 className="line-clamp-2 text-base font-semibold tracking-tight transition-colors hover:text-primary">
+                          {product.name}
+                        </h2>
+                      </Link>
                       {product.description && (
                         <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
                           {product.description}
@@ -309,26 +315,33 @@ export function CatalogClient({
                         </span>
                       </div>
 
-                      {/* CTA */}
-                      <Button
-                        size="sm"
-                        className="mt-4 w-full"
-                        nativeButton={false}
-                        render={
-                          <a
-                            href={`${siteConfig.whatsapp}?text=${waText}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          />
-                        }
-                      >
-                        <MessageCircle className="size-4" aria-hidden />
-                        Pesan Sekarang
-                        <ArrowRight
-                          className="ml-auto size-4 transition-transform group-hover:translate-x-0.5"
-                          aria-hidden
-                        />
-                      </Button>
+                      {/* Buttons — like v1: Order + Detail */}
+                      <div className="mt-4 flex items-center gap-2">
+                        <Button
+                          size="sm"
+                          className="flex-1"
+                          nativeButton={false}
+                          render={
+                            <a
+                              href={`${siteConfig.whatsapp}?text=${waText}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            />
+                          }
+                        >
+                          <MessageCircle className="size-4" aria-hidden />
+                          Pesan
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          nativeButton={false}
+                          render={<Link href={productHref} />}
+                        >
+                          Detail
+                          <ArrowRight className="size-4" aria-hidden />
+                        </Button>
+                      </div>
                     </div>
                   </article>
                 )
