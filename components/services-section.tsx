@@ -11,7 +11,7 @@ import {
   Star,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { serviceClusters, siteConfig } from '@/lib/data'
+import { serviceClusters } from '@/lib/data'
 
 const clusterIcons: Record<string, typeof LayoutTemplate> = {
   'page-builder': LayoutTemplate,
@@ -77,7 +77,11 @@ export function ServicesSection() {
                         </span>
                       )}
                       <div className="flex items-start justify-between gap-3">
-                        <h4 className="text-lg font-semibold tracking-tight">{service.name}</h4>
+                        <h4 className="text-lg font-semibold tracking-tight">
+                          <Link href={`/produk/${service.slug}`} className="hover:text-primary">
+                            {service.name}
+                          </Link>
+                        </h4>
                         <span className="shrink-0 rounded-full border border-border bg-background px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
                           {service.plugin}
                         </span>
@@ -99,15 +103,9 @@ export function ServicesSection() {
                         size="sm"
                         className={isFeatured ? 'w-fit' : 'w-fit bg-transparent'}
                         nativeButton={false}
-                        render={
-                          <a
-                            href={`${siteConfig.whatsapp}?text=${encodeURIComponent(`Halo, saya ingin memesan ${service.name}`)}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          />
-                        }
+                        render={<Link href={`/produk/${service.slug}`} />}
                       >
-                        Pesan {service.plugin}
+                        Lihat Detail {service.plugin}
                         <ArrowRight
                           className="ml-1 size-4 transition-transform group-hover:translate-x-0.5"
                           aria-hidden
