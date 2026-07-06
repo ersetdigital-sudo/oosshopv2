@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   ShoppingBag,
   Package,
+  FileText,
   Settings,
   LogOut,
   ArrowLeft,
@@ -19,12 +20,13 @@ import type { Session } from '@supabase/supabase-js'
 const navItems = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { label: 'Produk', href: '/admin/produk', icon: Package },
+  { label: 'Blog', href: '/admin/blog', icon: FileText },
   { label: 'Pesanan', href: '/admin/orders', icon: ShoppingBag },
   { label: 'Setting', href: '/admin/settings', icon: Settings },
 ]
 
-// Bottom nav shows only the 4 most important items on mobile
-const mobileNavItems = navItems
+// Bottom nav shows only the 4 most important items on mobile (Setting moved to "more")
+const mobileNavItems = navItems.filter((item) => item.href !== '/admin/settings')
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)

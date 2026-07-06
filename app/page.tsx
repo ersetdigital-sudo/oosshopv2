@@ -12,8 +12,13 @@ import { ArticlesSection } from '@/components/articles-section'
 import { FinalCta } from '@/components/final-cta'
 import { SiteFooter } from '@/components/site-footer'
 import { JsonLd } from '@/components/json-ld'
+import { getPublishedArticles } from '@/lib/blog'
 
-export default function HomePage() {
+export const dynamic = 'force-dynamic'
+
+export default async function HomePage() {
+  const articles = await getPublishedArticles()
+
   return (
     <>
       <JsonLd />
@@ -28,7 +33,7 @@ export default function HomePage() {
         <TrustSecurity />
         <WebsiteDevelopment />
         <FaqSection />
-        <ArticlesSection />
+        <ArticlesSection articles={articles.slice(0, 3)} />
         <FinalCta />
       </main>
       <SiteFooter />

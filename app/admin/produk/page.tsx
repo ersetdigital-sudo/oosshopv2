@@ -14,44 +14,11 @@ function formatPrice(price: number) {
   }).format(price)
 }
 
-function generateSlug(name: string) {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '')
-}
-
-type FormData = {
-  name: string
-  description: string
-  price: string
-  original_price: string
-  category: string
-  badge: string
-  is_featured: boolean
-}
-
 export default function AdminProdukPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('')
-  const [showForm, setShowForm] = useState(false)
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    description: '',
-    price: '',
-    original_price: '',
-    category: 'Plugin',
-    badge: '',
-    is_featured: false,
-  })
-  const [imageFile, setImageFile] = useState<File | null>(null)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
     fetchProducts()
@@ -76,86 +43,6 @@ export default function AdminProdukPage() {
       return matchSearch && matchCategory
     })
   }, [products, search, categoryFilter])
-
-  function openEditForm(product: Product) {
-    setEditingProduct(product)
-    setFormData({
-      name: product.name || '',
-      description: product.description || '',
-      price: String(product.price || ''),
-      original_price: product.original_price ? String(product.original_price) : '',
-      category: product.category || 'Plugin',
-      badge: product.badge || '',
-      is_featured: product.is_featured || false,
-    })
-    setImageFile(null)
-    setImagePreview(product.image_url || null)
-    setShowForm(true)
-  }
-
-  async function compressImage(file: File, maxWidth = 800, quality = 0.7): Promise<Blob> {
-    return new Promise((resolve) => {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const img = new window.Image()
-        img.onload = () => {
-          const canvas = document.createElement('canvas')
-          let width = img.width
-          let height = img.height
-          if (width > maxWidth) {
-            height = Math.round((height * maxWidth) / width)
-            width = maxWidth
-          }
-          canvas.width = width
-          canvas.height = height
-          const ctx = canvas.getContext('2d')
-          ctx?.drawImage(img, 0, 0, width, height)
-          canvas.toBlob((blob) => resolve(blob as Blob), 'image/webp', quality)
-        }
-        img.src = e.target?.result as string
-      }
-      reader.readAsDataURL(file)
-    })
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setSubmitting(true)
-    let image_url: string | null = editingProduct?.image_url || null
-
-    if (!imagePreview && !imageFile) {
-      image_url = null
-    } else if (imageFile) {
-      const compressedBlob = await compressImage(imageFile, 800, 0.7)
-      const fileName = `${Date.now()}.webp`
-      const { error: uploadError } = await supabase.storage
-        .from('product-images')
-        .upload(fileName, compressedBlob, { contentType: 'image/webp' })
-      if (!uploadError) {
-        const { data } = supabase.storage.from('product-images').getPublicUrl(fileName)
-        image_url = data.publicUrl
-      }
-    }
-
-    const productData = {
-      name: formData.name,
-      description: formData.description,
-      price: Number(formData.price),
-      original_price: formData.original_price ? Number(formData.original_price) : null,
-      category: formData.category,
-      badge: formData.badge || null,
-      is_featured: formData.is_featured,
-      image_url,
-      slug: generateSlug(formData.name),
-    }
-
-    if (editingProduct) {
-      await supabase.from('products').update(productData).eq('id', editingProduct.id)
-    }
-    setShowForm(false)
-    setSubmitting(false)
-    fetchProducts()
-  }
 
   async function handleDelete(id: string) {
     if (!confirm('Yakin ingin menghapus produk ini?')) return
@@ -260,12 +147,12 @@ export default function AdminProdukPage() {
                 </div>
               </div>
               <div className="flex shrink-0 flex-col gap-1">
-                <button
-                  onClick={() => openEditForm(p)}
+                <Link
+                  href={`/admin/produk/edit/${p.id}`}
                   className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground"
                 >
                   <Pencil className="size-4" aria-hidden />
-                </button>
+                </Link>
                 <button
                   onClick={() => handleDelete(p.id)}
                   className="rounded-lg p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
@@ -325,12 +212,12 @@ export default function AdminProdukPage() {
                   </td>
                   <td className="p-4">
                     <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => openEditForm(p)}
+                      <Link
+                        href={`/admin/produk/edit/${p.id}`}
                         className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground"
                       >
                         <Pencil className="size-4" aria-hidden />
-                      </button>
+                      </Link>
                       <button
                         onClick={() => handleDelete(p.id)}
                         className="rounded-lg p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
@@ -343,116 +230,6 @@ export default function AdminProdukPage() {
               ))}
             </tbody>
           </table>
-        </div>
-      )}
-
-      {/* Edit Modal */}
-      {showForm && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-border bg-card p-6">
-            <h3 className="mb-4 text-lg font-semibold">Edit Produk</h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-                  Nama Produk
-                </label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                  className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-                  Deskripsi
-                </label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={3}
-                  className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-                    Harga
-                  </label>
-                  <input
-                    type="number"
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    required
-                    className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-                    Harga Asli
-                  </label>
-                  <input
-                    type="number"
-                    value={formData.original_price}
-                    onChange={(e) => setFormData({ ...formData, original_price: e.target.value })}
-                    className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-                  Gambar
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0]
-                    if (file) {
-                      setImageFile(file)
-                      setImagePreview(URL.createObjectURL(file))
-                    }
-                  }}
-                  className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary"
-                />
-                {imagePreview && (
-                  <Image
-                    src={imagePreview}
-                    alt="Preview"
-                    width={80}
-                    height={80}
-                    className="mt-2 rounded-lg object-cover"
-                  />
-                )}
-              </div>
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
-                  checked={formData.is_featured}
-                  onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
-                  className="size-4 rounded border-border"
-                />
-                Tampilkan di homepage (featured)
-              </label>
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => setShowForm(false)}
-                  className="flex-1 rounded-xl border border-border py-2.5 text-sm font-medium hover:bg-muted"
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-                >
-                  {submitting ? <RefreshCw className="size-4 animate-spin" aria-hidden /> : 'Simpan'}
-                </button>
-              </div>
-            </form>
-          </div>
         </div>
       )}
     </div>

@@ -18,6 +18,7 @@ export type Product = {
   slug: string | null
   description: string | null
   short_description: string | null
+  long_description: string | null
   meta_title: string | null
   meta_description: string | null
   price: number
@@ -34,6 +35,7 @@ export type Product = {
   flash_sale_sold: number | null
   features: ProductFeature[] | null
   faq: ProductFaqItem[] | null
+  variants: { name: string; price: number }[] | null
   created_at: string
 }
 
