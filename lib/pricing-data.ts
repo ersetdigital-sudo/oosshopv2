@@ -266,7 +266,6 @@ export const servicePricing: Record<string, PricingPackage[]> = {
         'SEO Advanced + Schema',
         'Integrasi Payment Gateway',
         '5x Revisi',
-        'Source Code Lengkap',
       ],
       description: 'Website travel lengkap dengan booking system dan e-tiket digital.',
       popular: true,

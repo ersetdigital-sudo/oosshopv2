@@ -222,27 +222,6 @@ export const travel: ServiceData = {
     'Reminder H-1 sebelum keberangkatan',
   ],
 
-  promoPricing: {
-    badge: 'Paket Website Travel Lengkap',
-    originalPrice: 'Rp 2.500.000',
-    price: 'Rp 1.500.000',
-    savingsLabel: 'Hemat Rp 1.000.000 dari harga normal',
-    ctaLabel: 'Konsultasi Paket Ini',
-    includes: [
-      'Website tour travel full fitur',
-      'E-Tiket digital dengan QR code',
-      'Sistem booking multi-step',
-      'Admin dashboard lengkap',
-      'Notifikasi WhatsApp otomatis',
-      'Blog editor untuk artikel wisata',
-      'Sistem kode promo & diskon',
-      'SEO optimized & mobile responsive',
-      'Domain, hosting, dan SSL',
-      'Free konsultasi & revisi',
-    ],
-    note: 'Harga dapat menyesuaikan kebutuhan fitur tambahan. Konsultasikan kebutuhan Anda untuk penawaran akhir.',
-  },
-
   testimonials: [
     {
       text: 'Dulu tiap minggu harus rekap manual. Sekarang tinggal buka dashboard, semua sudah ada.',
