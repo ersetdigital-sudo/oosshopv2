@@ -9,7 +9,7 @@ import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { Button } from '@/components/ui/button'
 import { useCart } from '@/lib/cart-context'
-import { siteConfig } from '@/lib/data'
+import { supabase } from '@/lib/supabase'
 
 function formatIDR(value: number): string {
   return new Intl.NumberFormat('id-ID', {
@@ -31,6 +31,7 @@ export default function CheckoutPage() {
   })
   const [showPassword, setShowPassword] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   if (cart.length === 0) {
     return (
@@ -48,23 +49,72 @@ export default function CheckoutPage() {
     )
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (submitting) return
     setSubmitting(true)
+    setError(null)
 
-    // Build WhatsApp message with order details
-    const itemsList = cart
-      .map((item) => `• ${item.name}${item.variant ? ` (${item.variant})` : ''} x${item.qty} = ${formatIDR(item.price * item.qty)}`)
-      .join('\n')
+    const now = new Date()
+    const dateStr = now.toISOString().slice(0, 10).replace(/-/g, '')
+    const rand = String(Math.floor(Math.random() * 9999) + 1).padStart(4, '0')
+    const invoiceNumber = `INV-${dateStr}-${rand}`
 
-    const message = `Halo OOS SHOP, saya ingin order:\n\n${itemsList}\n\n💰 Total: ${formatIDR(totalPrice)}\n\n📋 Data Instalasi:\nNama: ${form.name}\nWhatsApp: ${form.phone}\nDomain: ${form.domain}\nUsername: ${form.username}\nPassword: ${form.password}\n\nMohon diproses. Terima kasih!`
+    const orderData = {
+      invoice_number: invoiceNumber,
+      customer_name: form.name,
+      customer_phone: form.phone,
+      customer_domain: form.domain || null,
+      customer_username: form.username || null,
+      customer_password: form.password || null,
+      items: cart.map((item) => ({
+        id: item.id,
+        name: item.variant ? `${item.name} (${item.variant})` : item.name,
+        price: item.price,
+        qty: item.qty,
+        variant: item.variant || null,
+        image_url: item.image_url || null,
+      })),
+      total_items: totalItems,
+      total_price: totalPrice,
+      status: 'pending',
+    }
 
-    const waUrl = `${siteConfig.whatsapp}?text=${encodeURIComponent(message)}`
+    const { data: order, error: insertError } = await supabase
+      .from('orders')
+      .insert([orderData])
+      .select()
+      .single()
 
-    // Clear cart and redirect to WhatsApp
+    if (insertError || !order) {
+      setError('Gagal menyimpan pesanan. Silakan coba lagi atau hubungi kami via WhatsApp.')
+      setSubmitting(false)
+      return
+    }
+
+    // Notify admin via WhatsApp (best-effort, don't block checkout on failure)
+    try {
+      await fetch('/api/notify-admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          invoiceNumber,
+          customerName: form.name,
+          customerPhone: form.phone,
+          items: cart.map((item) => ({
+            name: item.variant ? `${item.name} (${item.variant})` : item.name,
+            qty: item.qty,
+          })),
+          totalPrice,
+          domain: form.domain,
+        }),
+      })
+    } catch {
+      // Non-critical — order is already saved
+    }
+
     clearCart()
-    window.open(waUrl, '_blank')
-    router.push('/')
+    router.push(`/thank-you/${order.id}`)
   }
 
   return (
@@ -317,12 +367,16 @@ export default function CheckoutPage() {
                   className="mt-5 w-full"
                   disabled={submitting}
                 >
-                  {submitting ? 'Memproses...' : 'Pesan via WhatsApp'}
+                  {submitting ? 'Memproses...' : 'Buat Pesanan'}
                 </Button>
+
+                {error && (
+                  <p className="mt-3 text-center text-xs font-medium text-red-500">{error}</p>
+                )}
 
                 <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-xs text-muted-foreground">
                   <ShieldCheck className="size-3.5 shrink-0" aria-hidden />
-                  Pesanan akan dikirim ke WhatsApp OOS SHOP untuk diproses.
+                  Lanjut ke halaman pembayaran setelah pesanan dibuat.
                 </p>
               </div>
             </aside>
@@ -335,6 +389,9 @@ export default function CheckoutPage() {
         className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/95 p-4 backdrop-blur-xl md:hidden"
         style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
       >
+        {error && (
+          <p className="mb-2 text-center text-xs font-medium text-red-500">{error}</p>
+        )}
         <div className="mb-2.5 flex items-center justify-between">
           <span className="text-xs text-muted-foreground">{totalItems} item</span>
           <span className="text-lg font-bold">{formatIDR(totalPrice)}</span>
@@ -346,7 +403,7 @@ export default function CheckoutPage() {
           className="w-full"
           disabled={submitting}
         >
-          {submitting ? 'Memproses...' : 'Pesan via WhatsApp'}
+          {submitting ? 'Memproses...' : 'Buat Pesanan'}
         </Button>
       </div>
 
