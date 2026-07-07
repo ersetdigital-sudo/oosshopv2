@@ -9,6 +9,7 @@ import {
   ChevronRight,
   Clock,
   Download,
+  Eye,
   MessageCircle,
   RefreshCw,
   Shield,
@@ -276,18 +277,37 @@ export default async function ProdukPage({
 
                 {/* Stats */}
                 <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                  {product.total_sold > 0 && (
-                    <span className="flex items-center gap-1">
-                      <Download className="size-4" aria-hidden />
-                      {product.total_sold} terjual
+                  {reviews.length > 0 && (
+                    <span className="flex items-center gap-1.5">
+                      <span className="flex items-center">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className={`size-3.5 ${
+                              star <= Math.round(Number(avgRating))
+                                ? 'fill-amber-400 text-amber-400'
+                                : 'text-muted-foreground/30'
+                            }`}
+                            aria-hidden
+                          />
+                        ))}
+                      </span>
+                      <span>
+                        {Number(avgRating).toFixed(2)}{' '}
+                        <span className="text-muted-foreground/70">
+                          ({reviews.length} {reviews.length === 1 ? 'Review' : 'Reviews'})
+                        </span>
+                      </span>
                     </span>
                   )}
-                  {product.views > 0 && (
-                    <span className="flex items-center gap-1">
-                      <Star className="size-4 text-amber-500" aria-hidden />
-                      {product.views} dilihat
-                    </span>
-                  )}
+                  <span className="flex items-center gap-1">
+                    <Eye className="size-4" aria-hidden />
+                    {(product.views || 0).toLocaleString('id-ID')} Views
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Download className="size-4" aria-hidden />
+                    {(product.total_sold || 0).toLocaleString('id-ID')} Sold
+                  </span>
                 </div>
               </div>
 
