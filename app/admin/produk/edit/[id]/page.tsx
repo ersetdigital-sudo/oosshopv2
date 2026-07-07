@@ -149,11 +149,14 @@ export default function EditProdukPage() {
       }
     }
 
-    const productData = {
-      name: formData.name,
-      slug: formData.slug || generateSlug(formData.name),
-      description: formData.description,
-      long_description: formData.long_description || null,
+    const derivedDescription =
+ formData.meta_description.trim() || formData.long_description.trim().slice(0, 160)
+
+ const productData = {
+ name: formData.name,
+ slug: formData.slug || generateSlug(formData.name),
+ description: derivedDescription,
+ long_description: formData.long_description || null,
       price: Number(formData.price),
       original_price: formData.original_price ? Number(formData.original_price) : null,
       category: formData.category,
@@ -260,30 +263,6 @@ export default function EditProdukPage() {
                 className="flex-1 rounded-xl border border-border bg-background px-4 py-2.5 font-mono text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
-          </div>
-
-          <div>
-            <div className="mb-1.5 flex items-center justify-between">
-              <label className="block text-xs font-medium text-muted-foreground">
-                Deskripsi Singkat <span className="text-muted-foreground/70">(preview katalog & fallback meta description)</span>
-              </label>
-              <span
-                className={`shrink-0 text-xs font-medium ${
-                  formData.description.length > 160 ? 'text-destructive' : 'text-muted-foreground'
-                }`}
-              >
-                {formData.description.length}/160 karakter
-              </span>
-            </div>
-            <textarea
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              rows={2}
-              className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-            />
-            <p className="mt-1 text-[11px] text-muted-foreground">
-              Rekomendasi: maksimal 160 karakter. Lebih dari itu akan terpotong di hasil pencarian Google.
-            </p>
           </div>
 
           <div>
