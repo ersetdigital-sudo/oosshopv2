@@ -1,10 +1,36 @@
-import Link from 'next/link'
-import { allServices, siteConfig } from '@/lib/data'
+'use client'
 
-const serviceLinksCol1 = allServices.slice(0, 7)
-const serviceLinksCol2 = allServices.slice(7)
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { siteConfig } from '@/lib/data'
+import { supabase } from '@/lib/supabase'
+
+type FooterProduct = {
+  id: string
+  name: string
+  slug: string | null
+}
 
 export function SiteFooter() {
+  const [products, setProducts] = useState<FooterProduct[]>([])
+
+  // Fetch real products from Supabase so footer links always match an actual
+  // /produk/[slug] page — the previous static list (lib/data.ts) used
+  // placeholder slugs that didn't exist in the database and 404'd.
+  useEffect(() => {
+    supabase
+      .from('products')
+      .select('id, name, slug')
+      .order('created_at', { ascending: false })
+      .limit(14)
+      .then(({ data }) => {
+        if (data) setProducts(data as FooterProduct[])
+      })
+  }, [])
+
+  const serviceLinksCol1 = products.slice(0, 7)
+  const serviceLinksCol2 = products.slice(7)
+
   return (
     <footer className="border-t border-border bg-background">
       <div className="mx-auto max-w-6xl px-4 py-12 md:px-6 md:py-16">
@@ -26,9 +52,9 @@ export function SiteFooter() {
             <h3 className="text-sm font-semibold">Layanan Instal Plugin</h3>
             <ul className="mt-4 flex flex-col gap-2">
               {serviceLinksCol1.map((service) => (
-                <li key={service.slug}>
+                <li key={service.id}>
                   <Link
-                    href={`/produk/${service.slug}`}
+                    href={`/produk/${service.slug || service.id}`}
                     className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {service.name}
@@ -42,9 +68,9 @@ export function SiteFooter() {
             <h3 className="text-sm font-semibold">Layanan Lainnya</h3>
             <ul className="mt-4 flex flex-col gap-2">
               {serviceLinksCol2.map((service) => (
-                <li key={service.slug}>
+                <li key={service.id}>
                   <Link
-                    href={`/produk/${service.slug}`}
+                    href={`/produk/${service.slug || service.id}`}
                     className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {service.name}
