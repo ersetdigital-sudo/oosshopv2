@@ -8,7 +8,7 @@ import { SiteFooter } from '@/components/site-footer'
 import { getArticleBySlug, getRelatedArticles } from '@/lib/blog'
 import { siteConfig } from '@/lib/data'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 300
 
 // Extract FAQ from HTML content (looks for FAQ heading + list structure)
 function extractFAQ(content: string): { question: string; answer: string }[] {

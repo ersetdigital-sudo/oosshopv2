@@ -180,6 +180,18 @@ export default function EditProdukPage() {
       return
     }
 
+    // Best-effort: refresh ISR cache for /katalog and this product's page
+    // immediately, instead of waiting for the revalidate window to elapse.
+    try {
+      await fetch('/api/revalidate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug: productData.slug }),
+      })
+    } catch {
+      // Non-critical — page will still refresh on its own within the ISR window
+    }
+
     router.push('/admin/produk')
   }
 

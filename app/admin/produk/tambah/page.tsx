@@ -166,6 +166,18 @@ export default function TambahProdukPage() {
       return
     }
 
+    // Best-effort: refresh ISR cache for /katalog and the new product page
+    // immediately, instead of waiting for the revalidate window to elapse.
+    try {
+      await fetch('/api/revalidate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug: productData.slug }),
+      })
+    } catch {
+      // Non-critical — page will still refresh on its own within the ISR window
+    }
+
     router.push('/admin/produk')
   }
 

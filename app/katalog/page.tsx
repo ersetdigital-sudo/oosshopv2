@@ -8,7 +8,9 @@ import { CatalogJsonLd } from '@/components/catalog/catalog-json-ld'
 import { siteConfig } from '@/lib/data'
 import { getAllProducts, getCategories } from '@/lib/products'
 
-export const dynamic = 'force-dynamic'
+// ISR: revalidate every 60s so new/updated products from admin show up without
+// waiting for a full redeploy, while still serving cached HTML for speed.
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'Katalog 500+ Plugin & Theme WordPress Premium Original | OOS SHOP',

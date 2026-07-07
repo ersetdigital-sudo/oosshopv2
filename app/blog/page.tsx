@@ -7,7 +7,7 @@ import { SiteFooter } from '@/components/site-footer'
 import { getPublishedArticles } from '@/lib/blog'
 import { siteConfig } from '@/lib/data'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Blog - Tips WordPress, Plugin & Pembuatan Website | OOS SHOP',

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import {
+  AlertTriangle,
   ArrowLeft,
   BadgeCheck,
   CheckCircle2,
@@ -15,6 +16,8 @@ import {
   Shield,
   ShieldCheck,
   Star,
+  Timer,
+  Wallet,
 } from 'lucide-react'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
@@ -34,7 +37,9 @@ export type Review = {
   created_at: string
 }
 
-export const dynamic = 'force-dynamic'
+// ISR: revalidate every 300s (5 min) — price/content rarely changes intraday,
+// so a longer window is fine and keeps TTFB low for this high-traffic page type.
+export const revalidate = 300
 
 function isUUID(str: string) {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str)
@@ -342,6 +347,46 @@ export default async function ProdukPage({
                 </ul>
               </div>
 
+              {/* Cara Kerja */}
+              <div className="mt-8">
+                <h2 className="text-lg font-semibold">Cara Kerja</h2>
+                <ol className="mt-4 flex flex-col gap-4">
+                  {[
+                    { title: 'Order', desc: `Pilih ${product.name} dan lakukan pemesanan via WhatsApp atau keranjang.` },
+                    { title: 'Konfirmasi', desc: 'Kami konfirmasi pesanan dan minta data akses WordPress yang diperlukan.' },
+                    { title: 'Instalasi', desc: `Tim kami langsung menginstal dan mengaktivasi lisensi ${product.name} di website Anda.` },
+                    { title: 'Selesai', desc: 'Instalasi selesai, Anda menerima konfirmasi dan bisa langsung menggunakan plugin.' },
+                  ].map((step, i) => (
+                    <li key={step.title} className="flex gap-4">
+                      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+                        {i + 1}
+                      </span>
+                      <div>
+                        <h3 className="text-sm font-semibold tracking-tight">{step.title}</h3>
+                        <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{step.desc}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+
+              {/* Warning: nulled/bajakan */}
+              <div className="mt-8 flex items-start gap-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                  <AlertTriangle className="size-5" aria-hidden />
+                </span>
+                <div>
+                  <h3 className="text-sm font-semibold text-amber-700 dark:text-amber-400">
+                    Hati-hati Plugin Nulled &amp; Bajakan
+                  </h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-amber-700/90 dark:text-amber-300/80">
+                    Banyak penjual murah menggunakan plugin nulled/bajakan yang berisiko malware,
+                    backdoor, dan pencurian data — plus tidak bisa update resmi dari developer. Semua
+                    produk di OOS SHOP 100% original dengan lisensi resmi, bukan hasil crack.
+                  </p>
+                </div>
+              </div>
+
               {/* Reviews / Ulasan */}
               {reviews.length > 0 && (
                 <div className="mt-10">
@@ -457,6 +502,31 @@ export default async function ProdukPage({
                   )}
                   <p className="text-3xl font-bold text-primary">{formatIDR(activePrice)}</p>
                   <p className="mt-1 text-xs text-muted-foreground">Sudah termasuk instalasi</p>
+                </div>
+
+                {/* Info Harga */}
+                <div className="mt-5 grid grid-cols-1 gap-2.5 rounded-xl border border-border bg-accent/40 p-4">
+                  <div className="flex items-center gap-2.5">
+                    <Wallet className="size-4 shrink-0 text-primary" aria-hidden />
+                    <div className="flex flex-1 items-center justify-between text-xs">
+                      <span className="text-muted-foreground">Harga</span>
+                      <span className="font-semibold text-foreground">{formatIDR(activePrice)}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2.5">
+                    <ShieldCheck className="size-4 shrink-0 text-primary" aria-hidden />
+                    <div className="flex flex-1 items-center justify-between text-xs">
+                      <span className="text-muted-foreground">Garansi</span>
+                      <span className="font-semibold text-foreground">Uang kembali 100%</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2.5">
+                    <Timer className="size-4 shrink-0 text-primary" aria-hidden />
+                    <div className="flex flex-1 items-center justify-between text-xs">
+                      <span className="text-muted-foreground">Estimasi Pengerjaan</span>
+                      <span className="font-semibold text-foreground">5–15 menit</span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* CTA Buttons */}
