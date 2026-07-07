@@ -143,7 +143,7 @@ export default function TambahProdukPage() {
     }
 
     const derivedDescription =
- formData.meta_description.trim() || formData.long_description.trim().slice(0, 160)
+ formData.meta_description.trim() || formData.description.trim() || formData.long_description.trim().slice(0, 160)
 
  const productData = {
  name: formData.name,
