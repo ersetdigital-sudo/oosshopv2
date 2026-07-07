@@ -105,7 +105,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 text-sm text-muted-foreground md:flex-row">
-          <p>&copy; {new Date().getFullYear()} OOS SHOP. Seluruh hak cipta dilindungi.</p>
+          <p>&copy; {new Date().getFullYear()} OOS SHOP. Semua hak dilindungi.</p>
           <p>
             Semua merek dagang plugin adalah milik masing-masing pengembang. OOS SHOP menyediakan
             jasa instalasi dengan lisensi resmi.
