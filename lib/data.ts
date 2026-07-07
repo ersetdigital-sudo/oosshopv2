@@ -121,18 +121,6 @@ export const serviceClusters: ServiceCluster[] = [
         ],
       },
       {
-        slug: 'jasa-instal-litespeed-cache',
-        name: 'Jasa Instal LiteSpeed Cache',
-        plugin: 'LiteSpeed Cache',
-        description:
-          'Untuk hosting berbasis LiteSpeed, LSCache adalah pilihan optimasi paling efektif. Kami konfigurasi server-level caching, image optimization, dan CDN QUIC.cloud dengan benar.',
-        benefits: [
-          'Server-level caching maksimal',
-          'Setup image optimization & QUIC.cloud CDN',
-          'Konfigurasi aman tanpa konflik plugin',
-        ],
-      },
-      {
         slug: 'jasa-instal-perfmatters',
         name: 'Jasa Instal Perfmatters',
         plugin: 'Perfmatters',
@@ -142,18 +130,6 @@ export const serviceClusters: ServiceCluster[] = [
           'Script manager dikonfigurasi per halaman',
           'Mengurangi ukuran halaman secara signifikan',
           'Pasangan ideal untuk WP Rocket / LSCache',
-        ],
-      },
-      {
-        slug: 'jasa-instal-imagify',
-        name: 'Jasa Instal Imagify',
-        plugin: 'Imagify',
-        description:
-          'Imagify mengompres gambar secara otomatis tanpa menurunkan kualitas visual, termasuk konversi ke format WebP. Kami instal, aktivasi, dan optimasi seluruh media library Anda.',
-        benefits: [
-          'Kompresi otomatis semua gambar baru',
-          'Konversi WebP untuk loading lebih cepat',
-          'Optimasi massal media library termasuk',
         ],
       },
     ],
@@ -235,9 +211,7 @@ const servicePrices: Record<string, number> = {
   'jasa-instal-crocoblock-all-inclusive-plugin': 50000,
   'jasa-instal-jetengine': 35000,
   'jasa-instal-wp-rocket': 40000,
-  'jasa-instal-litespeed-cache': 30000,
   'jasa-instal-perfmatters': 30000,
-  'jasa-instal-imagify': 25000,
   'jasa-instal-rankmath-pro': 35000,
   'jasa-instal-seopress-pro': 30000,
   'jasa-instal-fluentform-pro': 30000,
