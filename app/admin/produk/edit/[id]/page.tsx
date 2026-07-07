@@ -263,15 +263,27 @@ export default function EditProdukPage() {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-              Deskripsi Singkat
-            </label>
+            <div className="mb-1.5 flex items-center justify-between">
+              <label className="block text-xs font-medium text-muted-foreground">
+                Deskripsi Singkat <span className="text-muted-foreground/70">(preview katalog & fallback meta description)</span>
+              </label>
+              <span
+                className={`shrink-0 text-xs font-medium ${
+                  formData.description.length > 160 ? 'text-destructive' : 'text-muted-foreground'
+                }`}
+              >
+                {formData.description.length}/160 karakter
+              </span>
+            </div>
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               rows={2}
               className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              Rekomendasi: maksimal 160 karakter. Lebih dari itu akan terpotong di hasil pencarian Google.
+            </p>
           </div>
 
           <div>
@@ -418,15 +430,27 @@ export default function EditProdukPage() {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
-              Meta Description
-            </label>
+            <div className="mb-1.5 flex items-center justify-between">
+              <label className="block text-xs font-medium text-muted-foreground">
+                Meta Description <span className="text-muted-foreground/70">(kosongkan untuk pakai Deskripsi Singkat)</span>
+              </label>
+              <span
+                className={`shrink-0 text-xs font-medium ${
+                  formData.meta_description.length > 160 ? 'text-destructive' : 'text-muted-foreground'
+                }`}
+              >
+                {formData.meta_description.length}/160 karakter
+              </span>
+            </div>
             <textarea
               value={formData.meta_description}
               onChange={(e) => setFormData({ ...formData, meta_description: e.target.value })}
               rows={2}
               className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              Rekomendasi: maksimal 160 karakter. Ini yang tampil di hasil pencarian Google jika diisi.
+            </p>
           </div>
         </div>
 
