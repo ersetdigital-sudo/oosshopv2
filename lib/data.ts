@@ -45,7 +45,7 @@ export const serviceClusters: ServiceCluster[] = [
         ],
       },
       {
-        slug: 'jasa-instal-essential-addons',
+        slug: 'essential-addons-for-elementor-pro',
         name: 'Jasa Instal Essential Addons',
         plugin: 'Essential Addons Pro',
         description:
@@ -77,7 +77,7 @@ export const serviceClusters: ServiceCluster[] = [
       'Untuk kebutuhan website listing, direktori, real estate, atau katalog custom — toolkit dynamic content premium yang kami instal dan konfigurasi sampai berjalan.',
     services: [
       {
-        slug: 'jasa-instal-crocoblock',
+        slug: 'jasa-instal-crocoblock-all-inclusive-plugin',
         name: 'Jasa Instal Crocoblock',
         plugin: 'Crocoblock (JetPlugins)',
         description:
@@ -165,7 +165,7 @@ export const serviceClusters: ServiceCluster[] = [
       'Plugin SEO premium dengan fitur schema, redirect manager, dan analisis konten — kami instal beserta konfigurasi dasar SEO yang benar untuk website Anda.',
     services: [
       {
-        slug: 'jasa-instal-rank-math-pro',
+        slug: 'jasa-instal-rankmath-pro',
         name: 'Jasa Instal Rank Math Pro',
         plugin: 'Rank Math Pro',
         description:
@@ -197,7 +197,7 @@ export const serviceClusters: ServiceCluster[] = [
       'Kumpulkan leads dan kelola email marketing langsung dari WordPress tanpa biaya langganan bulanan pihak ketiga.',
     services: [
       {
-        slug: 'jasa-instal-fluent-forms-pro',
+        slug: 'jasa-instal-fluentform-pro',
         name: 'Jasa Instal Fluent Forms Pro',
         plugin: 'Fluent Forms Pro',
         description:
@@ -230,17 +230,17 @@ export const allServices = serviceClusters.flatMap((c) => c.services)
 const servicePrices: Record<string, number> = {
   'jasa-instal-elementor-pro': 35000,
   'jasa-instal-astra-pro': 30000,
-  'jasa-instal-essential-addons': 25000,
+  'essential-addons-for-elementor-pro': 25000,
   'jasa-instal-templately': 25000,
-  'jasa-instal-crocoblock': 50000,
+  'jasa-instal-crocoblock-all-inclusive-plugin': 50000,
   'jasa-instal-jetengine': 35000,
   'jasa-instal-wp-rocket': 40000,
   'jasa-instal-litespeed-cache': 30000,
   'jasa-instal-perfmatters': 30000,
   'jasa-instal-imagify': 25000,
-  'jasa-instal-rank-math-pro': 35000,
+  'jasa-instal-rankmath-pro': 35000,
   'jasa-instal-seopress-pro': 30000,
-  'jasa-instal-fluent-forms-pro': 30000,
+  'jasa-instal-fluentform-pro': 30000,
   'jasa-instal-fluentcrm': 45000,
 }
 
@@ -255,8 +255,8 @@ const categoryShortLabels: Record<string, string> = {
 const bestSellerSlugs = new Set([
   'jasa-instal-elementor-pro',
   'jasa-instal-wp-rocket',
-  'jasa-instal-rank-math-pro',
-  'jasa-instal-crocoblock',
+  'jasa-instal-rankmath-pro',
+  'jasa-instal-crocoblock-all-inclusive-plugin',
 ])
 
 export type CatalogItem = PluginService & {
