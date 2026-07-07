@@ -27,12 +27,12 @@ export function SiteFooter() {
             <ul className="mt-4 flex flex-col gap-2">
               {serviceLinksCol1.map((service) => (
                 <li key={service.slug}>
-                  <a
-                    href="#layanan"
+                  <Link
+                    href={`/produk/${service.slug}`}
                     className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {service.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -43,21 +43,21 @@ export function SiteFooter() {
             <ul className="mt-4 flex flex-col gap-2">
               {serviceLinksCol2.map((service) => (
                 <li key={service.slug}>
-                  <a
-                    href="#layanan"
+                  <Link
+                    href={`/produk/${service.slug}`}
                     className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {service.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
               <li>
-                <a
-                  href="#website-development"
+                <Link
+                  href="/#website-development"
                   className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                   Jasa Pembuatan Website
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
@@ -66,29 +66,29 @@ export function SiteFooter() {
             <h3 className="text-sm font-semibold">Informasi</h3>
             <ul className="mt-4 flex flex-col gap-2">
               <li>
-                <a href="#cara-kerja" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                <Link href="/#cara-kerja" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                   Cara Kerja
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#perbandingan" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                <Link href="/#perbandingan" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                   Perbandingan Layanan
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#keamanan" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                <Link href="/#keamanan" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                   Keamanan &amp; Garansi
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#faq" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                <Link href="/#faq" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                   FAQ
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#artikel" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                <Link href="/blog" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                   Artikel &amp; Panduan
-                </a>
+                </Link>
               </li>
               <li>
                 <a
