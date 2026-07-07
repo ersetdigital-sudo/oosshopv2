@@ -205,14 +205,17 @@ export default async function BlogPostPage({
               prose-headings:font-semibold
               prose-h2:mt-8 prose-h2:mb-4 prose-h2:text-xl sm:prose-h2:text-2xl
               prose-h3:mt-6 prose-h3:mb-3 prose-h3:text-lg
-              prose-p:leading-relaxed prose-p:text-muted-foreground
+              prose-p:my-4 prose-p:leading-relaxed prose-p:text-muted-foreground
               prose-a:text-primary prose-a:no-underline hover:prose-a:underline
               prose-strong:text-foreground
-              prose-li:text-muted-foreground
+              prose-ul:my-4 prose-ol:my-4 prose-li:my-1 prose-li:text-muted-foreground
               prose-img:rounded-xl prose-img:border prose-img:border-border
               prose-blockquote:border-primary prose-blockquote:text-muted-foreground
               prose-code:rounded prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:text-primary
-              prose-pre:rounded-xl prose-pre:border prose-pre:border-border prose-pre:bg-card"
+              prose-pre:rounded-xl prose-pre:border prose-pre:border-border prose-pre:bg-card
+ prose-table:w-full prose-table:border-collapse prose-table:my-6 prose-table:overflow-hidden prose-table:rounded-lg
+ prose-th:border prose-th:border-border prose-th:bg-muted prose-th:px-4 prose-th:py-2.5 prose-th:text-left prose-th:font-semibold prose-th:text-foreground
+ prose-td:border prose-td:border-border prose-td:px-4 prose-td:py-2.5 prose-td:text-muted-foreground"
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{ __html: article.content }}
           />
