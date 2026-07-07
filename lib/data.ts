@@ -89,14 +89,14 @@ export const serviceClusters: ServiceCluster[] = [
         ],
       },
       {
-        slug: 'jasa-instal-jetengine',
-        name: 'Jasa Instal JetEngine',
-        plugin: 'JetEngine',
+        slug: 'jasa-instal-advanced-custom-fields-acf-pro',
+        name: 'Jasa Instal Advanced Custom Fields PRO',
+        plugin: 'ACF PRO',
         description:
-          'JetEngine memungkinkan Anda membuat custom post type, custom field, dan listing dinamis tanpa coding. Kami instal dan siapkan struktur data awal untuk proyek Anda.',
+          'Advanced Custom Fields PRO memungkinkan Anda membuat custom field dan struktur data kompleks lewat interface visual tanpa coding. Kami instal dan siapkan struktur field awal untuk proyek Anda.',
         benefits: [
-          'Custom post type & field tanpa coding',
-          'Listing grid dinamis siap pakai',
+          'Custom field & repeater tanpa coding',
+          'Interface visual yang mudah dipahami',
           'Setup struktur data awal termasuk',
         ],
       },
@@ -168,9 +168,9 @@ export const serviceClusters: ServiceCluster[] = [
   },
   {
     id: 'marketing',
-    title: 'Plugin Form Builder & Email Marketing WordPress',
+    title: 'Plugin Form Builder WordPress',
     intro:
-      'Kumpulkan leads dan kelola email marketing langsung dari WordPress tanpa biaya langganan bulanan pihak ketiga.',
+      'Kumpulkan leads dan bangun form interaktif langsung dari WordPress — kami instal dan konfigurasi form builder premium sesuai kebutuhan bisnis Anda.',
     services: [
       {
         slug: 'jasa-instal-fluentform-pro',
@@ -185,15 +185,15 @@ export const serviceClusters: ServiceCluster[] = [
         ],
       },
       {
-        slug: 'jasa-instal-fluentcrm',
-        name: 'Jasa Instal FluentCRM',
-        plugin: 'FluentCRM Pro',
+        slug: 'jasa-instal-jetform-builder-pro',
+        name: 'Jasa Instal JetForm Builder Pro',
+        plugin: 'JetForm Builder Pro',
         description:
-          'FluentCRM adalah email marketing & CRM self-hosted di dalam WordPress. Kelola kontak, automasi email, dan campaign tanpa biaya bulanan per subscriber. Kami instal dan setup SMTP dengan benar.',
+          'JetForm Builder Pro adalah plugin pembuat form WordPress paling fleksibel dengan visual builder drag-and-drop, conditional logic, integrasi payment gateway, dan lebih dari 20 action setelah submit form.',
         benefits: [
-          'Email automation tanpa biaya per subscriber',
-          'Setup SMTP agar email masuk inbox',
-          'Integrasi dengan Fluent Forms & WooCommerce',
+          'Visual builder drag-and-drop',
+          'Conditional logic & payment gateway',
+          '20+ action setelah submit form',
         ],
       },
     ],
@@ -209,13 +209,13 @@ const servicePrices: Record<string, number> = {
   'essential-addons-for-elementor-pro': 25000,
   'jasa-instal-oxygen-builder': 50000,
   'jasa-instal-crocoblock-all-inclusive-plugin': 50000,
-  'jasa-instal-jetengine': 35000,
+  'jasa-instal-advanced-custom-fields-acf-pro': 80000,
   'jasa-instal-wp-rocket': 40000,
   'jasa-instal-perfmatters': 30000,
   'jasa-instal-rankmath-pro': 35000,
   'jasa-instal-seopress-pro': 30000,
   'jasa-instal-fluentform-pro': 30000,
-  'jasa-instal-fluentcrm': 45000,
+  'jasa-instal-jetform-builder-pro': 50000,
 }
 
 const categoryShortLabels: Record<string, string> = {
@@ -223,7 +223,7 @@ const categoryShortLabels: Record<string, string> = {
   'dynamic-website': 'Dynamic Content',
   performa: 'Cache & Performa',
   seo: 'SEO',
-  marketing: 'Form & Email',
+  marketing: 'Form Builder',
 }
 
 const bestSellerSlugs = new Set([
