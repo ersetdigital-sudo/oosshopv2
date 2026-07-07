@@ -12,6 +12,24 @@ type ProductJsonLdProps = {
 
 // Product schema for rich snippets (price, rating, availability) — critical for
 // Google Shopping-style results and being cited in AI Overview / ChatGPT answers.
+// Reusable MerchantReturnPolicy — referenced by @id from every product's Offer.
+// Keeping it as a single shared entity (rather than duplicating on every page)
+// matches the pattern schema.org expects and avoids inconsistent policies.
+function returnPolicy(siteUrl: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'MerchantReturnPolicy' as const,
+    '@id': `${siteUrl}#return-policy`,
+    name: 'Garansi Refund 7 Hari',
+    url: `${siteUrl}/syarat-ketentuan`,
+    applicableCountry: 'ID',
+    returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+    merchantReturnDays: 7,
+    returnMethod: 'https://schema.org/ReturnByMail',
+    returnFees: 'https://schema.org/FreeReturn',
+  }
+}
+
 export function ProductJsonLd({ product, activePrice, reviews, avgRating, faqItems = [] }: ProductJsonLdProps) {
   const url = `${siteConfig.url}/produk/${product.slug || product.id}`
 
@@ -23,16 +41,19 @@ export function ProductJsonLd({ product, activePrice, reviews, avgRating, faqIte
     description: product.description || product.name,
     category: product.category,
     image: product.image_url || `${siteConfig.url}/icon-512.png`,
+    sku: product.id,
     brand: { '@type': 'Brand', name: 'OOS SHOP' },
     url,
     offers: {
       '@type': 'Offer',
       url,
       priceCurrency: 'IDR',
-      price: String(activePrice),
+      price: activePrice,
+      priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
       availability: 'https://schema.org/InStock',
       itemCondition: 'https://schema.org/NewCondition',
       seller: { '@id': `${siteConfig.url}#organization` },
+      hasMerchantReturnPolicy: { '@id': `${siteConfig.url}#return-policy` },
     },
     ...(reviews.length > 0 && {
       aggregateRating: {
@@ -83,7 +104,12 @@ export function ProductJsonLd({ product, activePrice, reviews, avgRating, faqIte
         }
       : null
 
-  const schemas = [productSchema, breadcrumb, ...(faqSchema ? [faqSchema] : [])]
+  const schemas = [
+    returnPolicy(siteConfig.url),
+    productSchema,
+    breadcrumb,
+    ...(faqSchema ? [faqSchema] : []),
+  ]
 
   return (
     <>

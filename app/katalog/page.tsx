@@ -45,7 +45,7 @@ export default async function KatalogPage() {
 
   return (
     <>
-      <CatalogJsonLd />
+      <CatalogJsonLd products={products} />
       <SiteHeader />
       <main>
         {/* Hero */}

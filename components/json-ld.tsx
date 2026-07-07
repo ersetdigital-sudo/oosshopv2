@@ -96,13 +96,11 @@ export function JsonLd() {
       '@type': 'Country',
       name: 'Indonesia',
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.9',
-      bestRating: '5',
-      ratingCount: '1200',
-      reviewCount: '850',
-    },
+    // No aggregateRating here — Google requires rating data to be sourced from
+    // real customer reviews (see components/product-json-ld.tsx which pulls
+    // genuine Supabase `reviews` per product). A site-wide rating aggregated
+    // across all services with no real backing data risks a manual action for
+    // spammy structured data. Service schema is still fully valid without it.
     offers: {
       '@type': 'AggregateOffer',
       priceCurrency: 'IDR',
