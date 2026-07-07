@@ -52,7 +52,7 @@ export function Hero() {
               render={<a href={siteConfig.whatsapp} target="_blank" rel="noopener noreferrer" />}
             >
               <MessageCircle className="size-5" aria-hidden />
-              Konsultasi Gratis via WhatsApp
+              Konsultasi Gratis
             </Button>
           </div>
 

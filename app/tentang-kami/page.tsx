@@ -205,7 +205,7 @@ export default function TentangKamiPage() {
                     <MessageCircle className="size-5 text-emerald-500" aria-hidden />
                   </div>
                   <p className="text-xs text-muted-foreground">WhatsApp</p>
-                  <p className="mt-1 text-sm font-semibold">+62 852-1215-0100</p>
+                  <p className="mt-1 text-sm font-semibold">62 852-1215-0100</p>
                 </div>
                 <div className="rounded-xl border border-border bg-background p-5">
                   <div className="mx-auto mb-3 flex size-10 items-center justify-center rounded-lg bg-primary/10">

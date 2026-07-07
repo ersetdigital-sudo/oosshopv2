@@ -129,7 +129,7 @@ export default async function ServicePage({
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                   <Button size="lg" nativeButton={false} render={<a href={waHref} target="_blank" rel="noopener noreferrer" />}>
                     <MessageCircle className="size-4" aria-hidden />
-                    Konsultasi Gratis via WhatsApp
+                    Konsultasi Gratis
                   </Button>
                   <Button size="lg" variant="outline" nativeButton={false} render={<Link href="/katalog" />}>
                     Lihat Katalog Plugin
@@ -622,7 +622,7 @@ export default async function ServicePage({
             <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
               <Button size="lg" nativeButton={false} render={<a href={waHref} target="_blank" rel="noopener noreferrer" />}>
                 <MessageCircle className="size-4" aria-hidden />
-                Konsultasi Gratis via WhatsApp
+                Konsultasi Gratis
               </Button>
               <Button size="lg" variant="outline" nativeButton={false} render={<Link href="/#layanan" />}>
                 Lihat Layanan Lain

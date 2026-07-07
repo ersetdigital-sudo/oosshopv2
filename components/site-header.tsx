@@ -186,7 +186,7 @@ export function SiteHeader() {
                           rel="noopener noreferrer"
                           className="mt-4 flex items-center justify-between rounded-xl border-t border-border px-3 py-3 text-sm font-medium text-primary transition-colors hover:bg-muted"
                         >
-                          Konsultasi Gratis via WhatsApp
+                          Konsultasi Gratis
                           <ArrowRight className="size-4" aria-hidden />
                         </a>
                       </div>
@@ -397,7 +397,7 @@ export function SiteHeader() {
                 className="flex w-full items-center justify-center gap-2 rounded-xl border border-primary/20 bg-primary/10 py-3 text-sm font-medium text-primary transition-colors hover:bg-primary/20"
                 onClick={() => setLayananDrawerOpen(false)}
               >
-                Konsultasi Gratis via WhatsApp
+                Konsultasi Gratis
               </a>
             </div>
           </div>
