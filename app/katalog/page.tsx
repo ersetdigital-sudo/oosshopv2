@@ -8,9 +8,11 @@ import { CatalogJsonLd } from '@/components/catalog/catalog-json-ld'
 import { siteConfig } from '@/lib/data'
 import { getAllProducts, getCategories } from '@/lib/products'
 
-// ISR: revalidate every 60s so new/updated products from admin show up without
-// waiting for a full redeploy, while still serving cached HTML for speed.
-export const revalidate = 60
+// ISR: on-demand revalidation via revalidatePath() in /api/revalidate handles
+// instant cache refresh whenever admin adds/edits a product. This interval is
+// just a safety-net fallback (e.g. if that call fails/times out) — kept long
+// since it's rarely the thing actually doing the invalidation.
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Katalog 500+ Plugin & Theme WordPress Premium Original | OOS SHOP',

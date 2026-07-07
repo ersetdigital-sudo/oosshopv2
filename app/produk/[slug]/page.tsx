@@ -37,9 +37,11 @@ export type Review = {
   created_at: string
 }
 
-// ISR: revalidate every 300s (5 min) — price/content rarely changes intraday,
-// so a longer window is fine and keeps TTFB low for this high-traffic page type.
-export const revalidate = 300
+// ISR: on-demand revalidation via revalidatePath() in /api/revalidate handles
+// instant cache refresh whenever admin edits this product. This interval is
+// just a safety-net fallback (e.g. if that call fails/times out) — kept long
+// since it's rarely the thing actually doing the invalidation.
+export const revalidate = 3600
 
 function isUUID(str: string) {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str)
