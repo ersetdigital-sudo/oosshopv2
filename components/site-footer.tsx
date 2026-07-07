@@ -104,11 +104,22 @@ export function SiteFooter() {
           </nav>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 text-sm text-muted-foreground md:flex-row">
-          <p>&copy; {new Date().getFullYear()} OOS SHOP. Semua hak dilindungi.</p>
-          <p>
-            Semua merek dagang plugin adalah milik masing-masing pengembang. OOS SHOP menyediakan
-            jasa instalasi dengan lisensi resmi.
+        <div className="mt-12 flex flex-col items-center gap-4 border-t border-border pt-6 text-center">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-muted-foreground sm:text-sm">
+            <Link href="/tentang-kami" className="transition-colors hover:text-foreground">
+              Tentang Kami
+            </Link>
+            <span className="hidden text-border sm:inline">·</span>
+            <Link href="/kebijakan-privasi" className="transition-colors hover:text-foreground">
+              Kebijakan Privasi
+            </Link>
+            <span className="hidden text-border sm:inline">·</span>
+            <Link href="/syarat-ketentuan" className="transition-colors hover:text-foreground">
+              Syarat &amp; Ketentuan
+            </Link>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            &copy; {new Date().getFullYear()} OOS SHOP. Semua hak dilindungi.
           </p>
         </div>
       </div>
