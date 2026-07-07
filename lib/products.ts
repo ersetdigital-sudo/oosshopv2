@@ -36,7 +36,8 @@ export type Product = {
   features: ProductFeature[] | null
   faq: ProductFaqItem[] | null
   variants: { name: string; price: number }[] | null
-  created_at: string
+ created_at: string
+ updated_at: string | null
 }
 
 export async function getAllProducts(): Promise<Product[]> {

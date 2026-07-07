@@ -155,6 +155,7 @@ export default function EditProdukPage() {
  const productData = {
  name: formData.name,
  slug: formData.slug || generateSlug(formData.name),
+ updated_at: new Date().toISOString(),
  description: derivedDescription,
  long_description: formData.long_description || null,
       price: Number(formData.price),

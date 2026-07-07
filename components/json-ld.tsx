@@ -78,8 +78,9 @@ export function JsonLd() {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '.hero-description', '#faq details'],
     },
-    lastReviewed: new Date().toISOString().split('T')[0],
-    dateModified: new Date().toISOString().split('T')[0],
+    datePublished: '2022-01-01',
+ lastReviewed: new Date().toISOString().split('T')[0],
+ dateModified: new Date().toISOString().split('T')[0],
   }
 
   // 4. Service — plugin installation service (primary)

@@ -20,14 +20,25 @@ export const metadata: Metadata = {
     'plugin wordpress premium original',
   ],
   generator: 'v0.app',
-  openGraph: {
-    title: 'Jasa Instal Plugin WordPress Premium Original & Bergaransi | OOS SHOP',
-    description:
-      'Instalasi plugin WordPress premium original dengan aktivasi lisensi resmi. Tanpa nulled, bergaransi, selesai 1x24 jam.',
-    type: 'website',
-    locale: 'id_ID',
-    siteName: 'OOS SHOP',
-  },
+ metadataBase: new URL('https://www.oos-shop.com'),
+ authors: [{ name: 'OOS SHOP', url: 'https://www.oos-shop.com' }],
+ alternates: { canonical: '/' },
+ openGraph: {
+ title: 'Jasa Instal Plugin WordPress Premium Original & Bergaransi | OOS SHOP',
+ description:
+ 'Instalasi plugin WordPress premium original dengan aktivasi lisensi resmi. Tanpa nulled, bergaransi, selesai 1x24 jam.',
+ type: 'website',
+ locale: 'id_ID',
+ siteName: 'OOS SHOP',
+ url: '/',
+ images: [{ url: '/opengraph-image', width: 1200, height: 630 }],
+ },
+ twitter: {
+ card: 'summary_large_image',
+ title: 'Jasa Instal Plugin WordPress Premium Original & Bergaransi | OOS SHOP',
+ description: 'Instalasi plugin WordPress premium original dengan aktivasi lisensi resmi. Tanpa nulled, bergaransi, selesai 1x24 jam.',
+ images: ['/opengraph-image'],
+ },
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '48x48' },

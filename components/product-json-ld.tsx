@@ -42,8 +42,10 @@ export function ProductJsonLd({ product, activePrice, reviews, avgRating, faqIte
     category: product.category,
     image: product.image_url || `${siteConfig.url}/icon-512.png`,
     sku: product.id,
-    brand: { '@type': 'Brand', name: 'OOS SHOP' },
-    url,
+ brand: { '@type': 'Brand', name: 'OOS SHOP' },
+ datePublished: product.created_at,
+ dateModified: product.updated_at || product.created_at,
+ url,
     offers: {
       '@type': 'Offer',
       url,
