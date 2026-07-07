@@ -67,8 +67,47 @@ export default function AdminOrdersPage() {
   async function updateStatus(orderId: string, newStatus: Order['status']) {
     if (updatingId) return
     setUpdatingId(orderId)
+    const order = orders.find((o) => o.id === orderId)
     await supabase.from('orders').update({ status: newStatus }).eq('id', orderId)
     await fetchOrders()
+
+    // Send WA notification to customer + bump total_sold when marked as done
+    if (newStatus === 'done' && order) {
+      for (const item of order.items || []) {
+        if (item.id) {
+          const { data: product } = await supabase
+            .from('products')
+            .select('total_sold')
+            .eq('id', item.id)
+            .single()
+          if (product) {
+            await supabase
+              .from('products')
+              .update({ total_sold: (product.total_sold || 0) + (item.qty || 1) })
+              .eq('id', item.id)
+          }
+        }
+      }
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+      const token = session?.access_token
+      if (token) {
+        fetch('/api/send-wa', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({
+            phone: order.customer_phone,
+            customerName: order.customer_name,
+            invoiceNumber: order.invoice_number,
+            items: order.items,
+            domain: order.customer_domain,
+          }),
+        }).catch(() => {})
+      }
+    }
+
     setUpdatingId(null)
   }
 
