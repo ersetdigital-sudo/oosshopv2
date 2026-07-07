@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import {
   ArrowRight,
+  Bell,
   Building2,
   CalendarDays,
   CheckCircle2,
@@ -16,10 +17,12 @@ import {
   MousePointerClick,
   Package,
   Plane,
+  QrCode,
+  Quote,
   ShoppingCart,
   Sparkles,
-  Users,
   Star,
+  Users,
 } from 'lucide-react'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
@@ -157,6 +160,22 @@ export default async function ServicePage({
           </div>
         </section>
 
+        {/* ═══ Trust Stats Bar (optional) ═══ */}
+        {service.trustStats && service.trustStats.length > 0 && (
+          <section className="border-b border-border bg-muted/30">
+            <div className="mx-auto max-w-6xl px-4 py-8 md:px-6">
+              <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+                {service.trustStats.map((stat) => (
+                  <div key={stat.label} className="flex flex-col items-center text-center">
+                    <p className="text-2xl font-bold sm:text-3xl">{stat.value}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* ═══ TOC (Table of Contents) ═══ */}
         <nav className="mx-auto max-w-3xl px-4 py-6 md:px-6" aria-label="Daftar isi">
           <details className="group rounded-xl border border-border bg-card p-4">
@@ -243,6 +262,88 @@ export default async function ServicePage({
                   <span className="text-sm font-medium text-foreground">{feature}</span>
                 </div>
               ))}
+            </div>
+          </section>
+        )}
+
+        {/* ═══ Showcase Highlight (optional) ═══ */}
+        {service.showcase && (
+          <section className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
+            <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+              <div>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                  {service.showcase.badge}
+                </span>
+                <h2 className="mt-4 text-balance text-2xl font-bold tracking-tight md:text-3xl">
+                  {service.showcase.title}
+                </h2>
+                <p className="mt-4 leading-relaxed text-muted-foreground">
+                  {service.showcase.description}
+                </p>
+                <ul className="mt-6 flex flex-col gap-4">
+                  {service.showcase.highlights.map((item) => (
+                    <li key={item.title} className="flex items-start gap-3">
+                      <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
+                        <CheckCircle2 className="size-3.5" aria-hidden />
+                      </span>
+                      <div>
+                        <p className="text-sm font-semibold">{item.title}</p>
+                        <p className="text-sm text-muted-foreground">{item.description}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="flex justify-center lg:justify-end">
+                <div className="flex size-40 items-center justify-center rounded-3xl border border-border bg-card shadow-sm sm:size-48">
+                  <QrCode className="size-20 text-primary/70 sm:size-24" aria-hidden />
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ═══ Notification Preview (optional) ═══ */}
+        {service.notificationPreview && service.notificationPreview.length > 0 && (
+          <section className="border-y border-border bg-muted/30">
+            <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
+              <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+                <div>
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                    <Bell className="size-3.5" aria-hidden />
+                    Notifikasi Otomatis
+                  </span>
+                  <h2 className="mt-4 text-balance text-2xl font-bold tracking-tight md:text-3xl">
+                    Update Otomatis via WhatsApp
+                  </h2>
+                  <p className="mt-4 leading-relaxed text-muted-foreground">
+                    Pelanggan dan tim Anda mendapat notifikasi WhatsApp otomatis di setiap tahap penting, tanpa perlu pantau manual.
+                  </p>
+                  <ul className="mt-6 flex flex-col gap-3">
+                    {service.notificationPreview.map((item) => (
+                      <li key={item} className="flex items-center gap-2.5 text-sm text-foreground/90">
+                        <CheckCircle2 className="size-4 shrink-0 text-emerald-500" aria-hidden />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="flex justify-center">
+                  <div className="w-full max-w-xs rounded-2xl border border-border bg-card p-4 shadow-sm">
+                    <div className="flex flex-col gap-2.5">
+                      {service.notificationPreview.slice(0, 3).map((item) => (
+                        <div
+                          key={item}
+                          className="ml-auto max-w-[85%] rounded-xl rounded-tr-sm bg-emerald-600 px-3 py-2 text-white shadow-sm"
+                        >
+                          <p className="text-xs leading-relaxed">{item}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="mt-3 text-center text-xs text-muted-foreground">Contoh notifikasi WhatsApp otomatis</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         )}
@@ -349,6 +450,80 @@ export default async function ServicePage({
             </div>
           </div>
         </section>
+
+        {/* ═══ Promo Pricing Highlight (optional) ═══ */}
+        {service.promoPricing && (
+          <section className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
+            <div className="mx-auto max-w-lg overflow-hidden rounded-3xl border-2 border-primary bg-card shadow-xl shadow-primary/10">
+              <div className="bg-primary px-6 py-3 text-center">
+                <p className="text-sm font-bold text-primary-foreground">{service.promoPricing.badge}</p>
+              </div>
+              <div className="p-8">
+                <p className="text-sm text-muted-foreground line-through">{service.promoPricing.originalPrice}</p>
+                <p className="mt-1 text-4xl font-bold sm:text-5xl">{service.promoPricing.price}</p>
+                <p className="mt-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                  ✓ {service.promoPricing.savingsLabel}
+                </p>
+
+                <ul className="mt-7 flex flex-col gap-3">
+                  {service.promoPricing.includes.map((item) => (
+                    <li key={item} className="flex items-center gap-3 text-sm">
+                      <CheckCircle2 className="size-4 shrink-0 text-primary" aria-hidden />
+                      <span className="text-foreground/90">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Button
+                  size="lg"
+                  className="mt-8 w-full"
+                  nativeButton={false}
+                  render={
+                    <a
+                      href={`${siteConfig.whatsapp}?text=${encodeURIComponent(`Halo, saya tertarik dengan ${service.promoPricing.badge} untuk ${service.menuLabel}. Bisa info lebih lanjut?`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    />
+                  }
+                >
+                  <MessageCircle className="size-4" aria-hidden />
+                  {service.promoPricing.ctaLabel}
+                </Button>
+                {service.promoPricing.note && (
+                  <p className="mt-3 text-center text-xs text-muted-foreground">{service.promoPricing.note}</p>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ═══ Testimonials (optional) ═══ */}
+        {service.testimonials && service.testimonials.length > 0 && (
+          <section className="border-y border-border bg-muted/30">
+            <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
+              <div className="mx-auto max-w-2xl text-center">
+                <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
+                  Kata Mereka yang Sudah Pakai
+                </h2>
+                <p className="mt-3 leading-relaxed text-muted-foreground">
+                  Testimoni dari pelanggan yang menggunakan layanan {service.menuLabel.toLowerCase()}.
+                </p>
+              </div>
+              <div className="mt-10 grid gap-5 sm:grid-cols-3">
+                {service.testimonials.map((t) => (
+                  <div key={t.name} className="rounded-2xl border border-border bg-card p-5">
+                    <Quote className="size-5 text-primary/40" aria-hidden />
+                    <p className="mt-3 text-sm italic leading-relaxed text-foreground/90">&ldquo;{t.text}&rdquo;</p>
+                    <div className="mt-4">
+                      <p className="text-sm font-semibold">{t.name}</p>
+                      <p className="text-xs text-muted-foreground">{t.role}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ═══ Pricing (optional) ═══ */}
         {packages && (

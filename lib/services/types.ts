@@ -48,6 +48,39 @@ export interface ServiceRating {
   reviewCount: string
 }
 
+export interface ServiceTrustStat {
+  value: string
+  label: string
+}
+
+export interface ServiceShowcaseHighlight {
+  title: string
+  description: string
+}
+
+export interface ServiceShowcase {
+  badge: string
+  title: string
+  description: string
+  highlights: ServiceShowcaseHighlight[]
+}
+
+export interface ServiceTestimonial {
+  text: string
+  name: string
+  role: string
+}
+
+export interface ServicePromoPricing {
+  badge: string
+  originalPrice: string
+  price: string
+  savingsLabel: string
+  ctaLabel: string
+  includes: string[]
+  note?: string
+}
+
 export interface ServiceData {
   slug: string
   menuLabel: string
@@ -67,4 +100,13 @@ export interface ServiceData {
   faq: ServiceFAQ[]
   rating?: ServiceRating // optional — omit to skip aggregateRating in schema
   relatedServices?: string[] // slugs for internal linking
+
+  // Extra visual/marketing sections — purely presentational, NOT read by
+  // ServiceJsonLd or generateServiceMetadata, so adding these never changes
+  // structured data or metadata output for this or any other service.
+  trustStats?: ServiceTrustStat[]
+  showcase?: ServiceShowcase
+  notificationPreview?: string[]
+  promoPricing?: ServicePromoPricing
+  testimonials?: ServiceTestimonial[]
 }
