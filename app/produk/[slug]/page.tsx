@@ -212,7 +212,7 @@ export default async function ProdukPage({
         faqItems={faqItems}
       />
       <SiteHeader />
-      <main className="pb-32 md:pb-16">
+      <main className="pb-40 md:pb-16">
         <div className="mx-auto max-w-6xl px-4 py-6 md:px-6">
           {/* Breadcrumb */}
           <nav aria-label="Breadcrumb">

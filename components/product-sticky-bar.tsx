@@ -24,7 +24,6 @@ export function ProductStickyBar({ product, waLink, formattedPrice }: Props) {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show after scrolling 300px
       setVisible(window.scrollY > 300)
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -40,55 +39,43 @@ export function ProductStickyBar({ product, waLink, formattedPrice }: Props) {
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-40 md:hidden transition-transform duration-300 ${
-        visible ? 'translate-y-0' : 'translate-y-full'
+      className={`fixed bottom-16 left-0 right-0 z-40 md:hidden transition-all duration-300 ${
+        visible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0 pointer-events-none'
       }`}
-      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      {/* Gradient fade at the top edge for a modern look */}
-      <div className="pointer-events-none absolute inset-x-0 -top-6 h-6 bg-gradient-to-t from-background/80 to-transparent" />
-
-      <div className="border-t border-border bg-background/95 backdrop-blur-xl px-4 py-3">
-        {/* Price row */}
-        <div className="mb-2.5 flex items-center justify-between">
-          <div>
-            <p className="text-xs text-muted-foreground">Total harga</p>
-            <p className="text-lg font-bold text-primary leading-tight">{formattedPrice}</p>
-          </div>
-          <span className="inline-flex items-center gap-1 rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
-            <Check className="size-3" aria-hidden />
-            Original
-          </span>
+      <div className="mx-3 mb-2 flex items-center gap-3 rounded-2xl border border-border bg-background/95 p-3 shadow-lg backdrop-blur-xl">
+        {/* Price */}
+        <div className="min-w-0 flex-1">
+          <p className="text-lg font-bold leading-tight text-primary">{formattedPrice}</p>
+          <p className="text-[10px] text-muted-foreground">Termasuk instalasi</p>
         </div>
 
         {/* Action buttons */}
-        <div className="flex items-center gap-2.5">
-          <Button
-            size="lg"
-            variant="outline"
-            className="flex-1 gap-2"
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
             onClick={handleAddToCart}
+            className={`flex size-10 items-center justify-center rounded-xl border transition-all ${
+              added
+                ? 'border-green-500 bg-green-500/10 text-green-600'
+                : 'border-border bg-card text-foreground hover:border-primary hover:bg-primary/5'
+            }`}
+            aria-label="Tambah ke keranjang"
           >
             {added ? (
-              <>
-                <Check className="size-4" aria-hidden />
-                Ditambahkan!
-              </>
+              <Check className="size-5" aria-hidden />
             ) : (
-              <>
-                <ShoppingBag className="size-4" aria-hidden />
-                Keranjang
-              </>
+              <ShoppingBag className="size-5" aria-hidden />
             )}
-          </Button>
+          </button>
           <Button
-            size="lg"
-            className="flex-[1.3] gap-2"
+            size="default"
+            className="gap-1.5 rounded-xl px-4"
             nativeButton={false}
             render={<a href={waLink} target="_blank" rel="noopener noreferrer" />}
           >
             <MessageCircle className="size-4" aria-hidden />
-            Pesan Sekarang
+            Pesan
           </Button>
         </div>
       </div>
