@@ -54,14 +54,13 @@ export function ServiceJsonLd({ service }: { service: ServiceData }) {
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: `Paket ${service.menuLabel}`,
-      itemListElement: service.benefits.map((b, i) => ({
+      itemListElement: service.benefits.map((b) => ({
         '@type': 'Offer',
         itemOffered: {
           '@type': 'Service',
           name: b.title,
           description: b.description,
         },
-        position: i + 1,
       })),
     },
     offers: {
