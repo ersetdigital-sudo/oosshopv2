@@ -17,6 +17,7 @@ export interface ServiceHero {
   heading: string
   subheading: string
   icon: string // lucide icon name
+  hook?: string // reflective question above the main heading
 }
 
 export interface ServiceWhatIs {
@@ -29,6 +30,19 @@ export interface ServiceWhatIs {
 export interface ServiceBenefit {
   title: string
   description: string
+}
+
+export interface ServiceProblemSection {
+  title: string
+  intro?: string
+  items: ServiceBenefit[]
+}
+
+export interface ServiceFinalCta {
+  title: string
+  lines: string[]
+  question: string
+  closing: string
 }
 
 export interface ServiceProcess {
@@ -95,9 +109,11 @@ export interface ServiceData {
   whyChooseUs?: ServiceBenefit[]
   features?: string[]
   benefits: ServiceBenefit[]
+  problemSection?: ServiceProblemSection
   useCases: string[]
   process: ServiceProcess[]
   faq: ServiceFAQ[]
+  finalCta?: ServiceFinalCta
   rating?: ServiceRating // optional — omit to skip aggregateRating in schema
   relatedServices?: string[] // slugs for internal linking
 

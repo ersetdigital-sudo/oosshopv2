@@ -77,9 +77,9 @@ export default async function ServicePage({
   const packages = servicePricing[service.slug] || null
 
   // Build TOC from available sections
-  const toc: { id: string; label: string }[] = [
-    { id: 'apa-itu', label: `Apa Itu ${service.menuLabel}` },
-  ]
+  const toc: { id: string; label: string }[] = []
+  if (service.problemSection) toc.push({ id: 'masalah', label: 'Masalah yang Sering Dihadapi' })
+  toc.push({ id: 'apa-itu', label: `Apa Itu ${service.menuLabel}` })
   if (service.whyChooseUs?.length) toc.push({ id: 'kenapa-kami', label: 'Kenapa Memilih Kami' })
   if (service.features?.length) toc.push({ id: 'fitur', label: 'Fitur' })
   toc.push({ id: 'keunggulan', label: 'Keunggulan' })
@@ -118,7 +118,13 @@ export default async function ServicePage({
                   {service.hero.badge}
                 </span>
 
-                <h1 className="mt-4 text-balance text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
+                {service.hero.hook && (
+                  <h2 className="mt-4 text-balance text-xl font-semibold tracking-tight text-foreground md:text-2xl">
+                    {service.hero.hook}
+                  </h2>
+                )}
+
+                <h1 className={`text-balance text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl ${service.hero.hook ? 'mt-3' : 'mt-4'}`}>
                   {service.hero.heading}
                 </h1>
 
@@ -169,6 +175,35 @@ export default async function ServicePage({
                   <div key={stat.label} className="flex flex-col items-center text-center">
                     <p className="text-2xl font-bold sm:text-3xl">{stat.value}</p>
                     <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ═══ Problem Section (optional) ═══ */}
+        {service.problemSection && (
+          <section className="border-b border-border bg-muted/30" id="masalah">
+            <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
+              <div className="mx-auto max-w-2xl text-center">
+                <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
+                  {service.problemSection.title}
+                </h2>
+                {service.problemSection.intro && (
+                  <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
+                    {service.problemSection.intro}
+                  </p>
+                )}
+              </div>
+              <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {service.problemSection.items.map((item) => (
+                  <div
+                    key={item.title}
+                    className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm"
+                  >
+                    <h3 className="text-base font-semibold tracking-tight">{item.title}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
                   </div>
                 ))}
               </div>
@@ -613,12 +648,33 @@ export default async function ServicePage({
         {/* ═══ Final CTA ═══ */}
         <section className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
           <div className="rounded-3xl border border-primary/30 bg-accent/40 p-8 text-center md:p-12">
-            <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
-              Siap Membangun {service.menuLabel} Anda?
-            </h2>
-            <p className="mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-muted-foreground">
-              Konsultasikan kebutuhan Anda secara gratis. Kami bantu rancang solusi terbaik sesuai tujuan dan anggaran bisnis Anda. Tanpa commitment, tanpa biaya konsultasi.
-            </p>
+            {service.finalCta ? (
+              <>
+                <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
+                  {service.finalCta.title}
+                </h2>
+                <div className="mx-auto mt-5 max-w-2xl space-y-1 text-pretty leading-relaxed text-muted-foreground">
+                  {service.finalCta.lines.map((line, i) => (
+                    <p key={i}>{line}</p>
+                  ))}
+                </div>
+                <p className="mt-5 text-base font-medium text-foreground">
+                  {service.finalCta.question}
+                </p>
+                <p className="mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-muted-foreground">
+                  {service.finalCta.closing}
+                </p>
+              </>
+            ) : (
+              <>
+                <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
+                  Siap Membangun {service.menuLabel} Anda?
+                </h2>
+                <p className="mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-muted-foreground">
+                  Konsultasikan kebutuhan Anda secara gratis. Kami bantu rancang solusi terbaik sesuai tujuan dan anggaran bisnis Anda. Tanpa commitment, tanpa biaya konsultasi.
+                </p>
+              </>
+            )}
             <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
               <Button size="lg" nativeButton={false} render={<a href={waHref} target="_blank" rel="noopener noreferrer" />}>
                 <MessageCircle className="size-4" aria-hidden />

@@ -31,6 +31,7 @@ export const companyProfile: ServiceData = {
 
   hero: {
     badge: 'Jasa Pembuatan Website Company Profile',
+    hook: 'Calon Klien Mencari Bisnis Anda di Google, Tapi Tidak Menemukan Website Resmi?',
     heading: 'Jasa Pembuatan Website Company Profile Profesional, Siap Online dalam 5–14 Hari',
     subheading:
       'Bangun kredibilitas bisnis Anda dengan website company profile yang modern, mobile responsive, dan SEO friendly. Cocok untuk perusahaan, UMKM, startup, hingga instansi — dengan desain custom sesuai brand, harga transparan mulai Rp 1.250.000, dan support aktif via WhatsApp.',
@@ -141,6 +142,39 @@ export const companyProfile: ServiceData = {
     },
   ],
 
+  problemSection: {
+    title: 'Apakah Bisnis Anda Mengalami Masalah Ini?',
+    intro:
+      'Banyak bisnis di Indonesia menghadapi kendala yang sebenarnya bisa diatasi dengan satu website company profile yang tepat.',
+    items: [
+      {
+        title: 'Calon klien ragu karena tidak ada website resmi',
+        description:
+          'Di era digital, perusahaan tanpa website sering dianggap kurang profesional. Calon klien cenderung memilih vendor yang sudah punya company profile online.',
+      },
+      {
+        title: 'Informasi bisnis tersebar dan tidak terstruktur',
+        description:
+          'Profil ada di WhatsApp, portofolio di Instagram, alamat di Google Maps. Calon klien harus bolak-balik platform untuk mengenal bisnis Anda.',
+      },
+      {
+        title: 'Website lama tidak mobile friendly',
+        description:
+          'Lebih dari 70% pengunjung website di Indonesia mengakses melalui HP. Jika tampilan tidak responsif, pengunjung akan langsung keluar.',
+      },
+      {
+        title: 'Sulit ditemukan di Google',
+        description:
+          'Website ada, tapi tidak muncul di halaman pencarian. Padahal calon klien yang siap membeli biasanya mencari dulu di Google.',
+      },
+      {
+        title: 'Maintenance menyita waktu dan biaya',
+        description:
+          'Update kecil saja harus manggil developer dan bayar tambahan. Akhirnya website dibiarkan usang dan tidak relevan.',
+      },
+    ],
+  },
+
   useCases: [
     'Perusahaan (PT/CV) yang ingin website company profile profesional agar dipercaya calon klien dan mitra bisnis',
     'UMKM dan startup yang butuh kehadiran online resmi untuk memperluas jangkauan pasar',
@@ -236,6 +270,19 @@ export const companyProfile: ServiceData = {
         'Bisa. Website di-hosting pada server dengan CDN global sehingga dapat diakses dengan cepat dari mana saja. Cocok untuk perusahaan dengan klien atau mitra internasional.',
     },
   ],
+
+  finalCta: {
+    title: 'Saatnya Bisnis Anda Punya Wajah Digital yang Profesional',
+    lines: [
+      'Calon klien mencari bisnis Anda di Google setiap hari.',
+      'Mereka mencari informasi.',
+      'Mereka menilai kredibilitas.',
+      'Mereka memutuskan apakah akan menghubungi Anda atau pindah ke kompetitor.',
+    ],
+    question: 'Apakah mereka menemukan website company profile yang membuat mereka yakin untuk bekerja sama dengan Anda?',
+    closing:
+      'Jika belum, sekarang saatnya membangun website company profile profesional bersama OOS SHOP. Konsultasikan kebutuhan Anda secara gratis — tanpa commitment, tanpa biaya konsultasi.',
+  },
 
   relatedServices: [
     'jasa-pembuatan-landing-page',
