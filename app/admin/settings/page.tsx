@@ -10,6 +10,11 @@ const SETTINGS_KEYS = [
   'ai_blog_model',
   'admin_phone',
   'fonnte_api_key',
+ 'social_instagram',
+ 'social_facebook',
+ 'social_shopee',
+ 'social_tiktok',
+ 'social_telegram',
 ]
 
 export default function AdminSettingsPage() {
@@ -177,6 +182,34 @@ export default function AdminSettingsPage() {
               className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
             <p className="mt-1.5 text-[11px] text-muted-foreground">Format: 628xxx (tanpa + atau 0)</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Social Media */}
+      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
+        <h3 className="mb-1 text-sm font-semibold">Social Media</h3>
+        <p className="mb-5 text-xs text-muted-foreground">Link akun sosial media yang tampil di footer website</p>
+        <div className="space-y-4">
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Instagram</label>
+            <input type="text" value={settings.social_instagram || ''} onChange={(e) => setSettings((p) => ({ ...p, social_instagram: e.target.value }))} placeholder="https://instagram.com/..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" />
+          </div>
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Facebook</label>
+            <input type="text" value={settings.social_facebook || ''} onChange={(e) => setSettings((p) => ({ ...p, social_facebook: e.target.value }))} placeholder="https://facebook.com/..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" />
+          </div>
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Shopee</label>
+            <input type="text" value={settings.social_shopee || ''} onChange={(e) => setSettings((p) => ({ ...p, social_shopee: e.target.value }))} placeholder="https://shopee.co.id/..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" />
+          </div>
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-muted-foreground">TikTok</label>
+            <input type="text" value={settings.social_tiktok || ''} onChange={(e) => setSettings((p) => ({ ...p, social_tiktok: e.target.value }))} placeholder="https://tiktok.com/@..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" />
+          </div>
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Telegram</label>
+            <input type="text" value={settings.social_telegram || ''} onChange={(e) => setSettings((p) => ({ ...p, social_telegram: e.target.value }))} placeholder="https://t.me/..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" />
           </div>
         </div>
       </div>
