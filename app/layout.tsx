@@ -81,7 +81,7 @@ export default function RootLayout({
                   logo: {
                     '@type': 'ImageObject',
                     '@id': 'https://www.oos-shop.com/#logo',
-                    url: 'https://res.cloudinary.com/ddbq1mlsc/image/upload/v1782933784/Logo_OOS_SHOP_fied1z.png',
+                    url: 'https://www.oos-shop.com/icon-512.png',
                     width: 512,
                     height: 512,
                     caption: 'OOS SHOP',
@@ -93,6 +93,7 @@ export default function RootLayout({
                     name: 'Andri',
                     url: 'https://www.oos-shop.com/tentang-kami',
                   },
+                  areaServed: { '@type': 'Country', name: 'Indonesia' },
                   address: {
                     '@type': 'PostalAddress',
                     streetAddress: 'Calangcang No.82, Legok Kidul',
@@ -116,14 +117,32 @@ export default function RootLayout({
                     'https://t.me/Oos_shop',
                     'https://wa.me/6285212150100',
                   ],
+                  knowsAbout: [
+                    'WordPress Plugin Installation',
+                    'Jasa Pembuatan Website Company Profile',
+                    'Jasa Pembuatan Landing Page',
+                    'Jasa Pembuatan Toko Online',
+                    'SEO Optimization',
+                    'Web Development Indonesia',
+                  ],
                 },
                 {
                   '@type': 'WebSite',
                   '@id': 'https://www.oos-shop.com/#website',
                   name: 'OOS SHOP',
                   url: 'https://www.oos-shop.com',
-                  publisher: { '@id': 'https://www.oos-shop.com/#organization' },
+                  description:
+                    'Jasa instal plugin WordPress premium original berlisensi resmi dan jasa pembuatan website profesional di Indonesia.',
                   inLanguage: 'id-ID',
+                  publisher: { '@id': 'https://www.oos-shop.com/#organization' },
+                  potentialAction: {
+                    '@type': 'SearchAction',
+                    target: {
+                      '@type': 'EntryPoint',
+                      urlTemplate: 'https://www.oos-shop.com/katalog?q={search_term_string}',
+                    },
+                    'query-input': 'required name=search_term_string',
+                  },
                 },
               ],
             }),

@@ -2,84 +2,14 @@ import { allServices, faqs, websiteServices, siteConfig } from '@/lib/data'
 
 const SITE_URL = siteConfig.url ?? 'https://www.oos-shop.com'
 
+/**
+ * Homepage-specific structured data schemas.
+ * Organization and WebSite are NOT defined here — they come from layout.tsx
+ * which renders on every page. This component only adds page-specific entities.
+ */
 export function JsonLd() {
   const graph = [
-    // 1. Organization — defined ONCE, referenced by @id elsewhere
-    {
-      '@type': 'Organization',
-      '@id': `${SITE_URL}/#organization`,
-      name: 'OOS SHOP',
-      url: SITE_URL,
-      logo: {
-        '@type': 'ImageObject',
-        '@id': `${SITE_URL}/#logo`,
-        url: `${SITE_URL}/icon-512.png`,
-        width: 512,
-        height: 512,
-        caption: 'OOS SHOP',
-      },
-      description: siteConfig.description,
-      foundingDate: '2022',
-      areaServed: { '@type': 'Country', name: 'Indonesia' },
-      contactPoint: {
-        '@type': 'ContactPoint',
-        telephone: '+6285212150100',
-        contactType: 'customer service',
-        areaServed: 'ID',
-        availableLanguage: ['Indonesian', 'English'],
-      },
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: 'Calangcang No.82, Legok Kidul',
-        addressLocality: 'Paseh',
-        addressRegion: 'Jawa Barat',
-        postalCode: '45381',
-        addressCountry: 'ID',
-      },
-      sameAs: [
-        'https://www.instagram.com/oos.shop/',
-        'https://www.tiktok.com/@oos.shop',
-        'https://shopee.co.id/oos.shop',
-        'https://www.facebook.com/share/18ZRZ3XiBH/',
-        'https://t.me/Oos_shop',
-        'https://wa.me/6285212150100',
-      ],
-      founder: {
-        '@type': 'Person',
-        '@id': `${SITE_URL}/#founder`,
-        name: 'Andri',
-        url: `${SITE_URL}/tentang-kami`,
-      },
-      knowsAbout: [
-        'WordPress Plugin Installation',
-        'Jasa Pembuatan Website Company Profile',
-        'Jasa Pembuatan Landing Page',
-        'Jasa Pembuatan Toko Online',
-        'SEO Optimization',
-        'Web Development Indonesia',
-      ],
-    },
-
-    // 2. WebSite — with SearchAction for sitelinks search box
-    {
-      '@type': 'WebSite',
-      '@id': `${SITE_URL}/#website`,
-      name: siteConfig.name,
-      url: SITE_URL,
-      description: siteConfig.description,
-      inLanguage: 'id-ID',
-      publisher: { '@id': `${SITE_URL}/#organization` },
-      potentialAction: {
-        '@type': 'SearchAction',
-        target: {
-          '@type': 'EntryPoint',
-          urlTemplate: `${SITE_URL}/katalog?q={search_term_string}`,
-        },
-        'query-input': 'required name=search_term_string',
-      },
-    },
-
-    // 3. WebPage — homepage entity
+    // 1. WebPage — homepage entity
     {
       '@type': 'WebPage',
       '@id': `${SITE_URL}/#webpage`,
@@ -98,7 +28,7 @@ export function JsonLd() {
       dateModified: new Date().toISOString().split('T')[0],
     },
 
-    // 4. Service — plugin installation service (primary)
+    // 2. Service — plugin installation service (primary)
     {
       '@type': 'Service',
       '@id': `${SITE_URL}/#plugin-service`,
@@ -130,7 +60,7 @@ export function JsonLd() {
       },
     },
 
-    // 5. Service — website development service (secondary)
+    // 3. Service — website development service (secondary)
     {
       '@type': 'Service',
       '@id': `${SITE_URL}/#webdev-service`,
@@ -155,7 +85,7 @@ export function JsonLd() {
       },
     },
 
-    // 6. FAQPage
+    // 4. FAQPage
     {
       '@type': 'FAQPage',
       '@id': `${SITE_URL}/#faq`,
@@ -166,7 +96,7 @@ export function JsonLd() {
       })),
     },
 
-    // 7. BreadcrumbList
+    // 5. BreadcrumbList
     {
       '@type': 'BreadcrumbList',
       '@id': `${SITE_URL}/#breadcrumb`,
@@ -175,7 +105,7 @@ export function JsonLd() {
       ],
     },
 
-    // 8. ItemList — for sitelinks & internal pages
+    // 6. ItemList — for sitelinks & internal pages
     {
       '@type': 'ItemList',
       name: 'Layanan OOS SHOP',
