@@ -200,7 +200,7 @@ export default function AdminSettingsPage() {
           {/* Add Button */}
           <div className="flex justify-between items-center">
             <p className="text-muted-foreground text-sm">{filteredBanks.length} {activeTab === 'ewallet' ? 'e-wallet' : 'rekening'} terdaftar</p>
-            <button onClick={() => openForm()} className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-foreground text-sm font-semibold rounded-xl transition-all shadow-lg shadow-primary-500/20">
+            <button onClick={() => openForm()} className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-primary-500/20">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
               Tambah {activeTab === 'ewallet' ? 'E-Wallet' : 'Rekening'}
             </button>
@@ -340,7 +340,7 @@ export default function AdminSettingsPage() {
               <button
                 onClick={saveFonnteSettings}
                 disabled={fonnteSaving}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-foreground text-sm font-semibold rounded-xl transition-all shadow-lg shadow-green-500/20 disabled:opacity-50"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-green-500/20 disabled:opacity-50"
               >
                 {fonnteSaving ? (
                   <>
@@ -540,7 +540,7 @@ export default function AdminSettingsPage() {
               <button
                 onClick={saveGeminiSettings}
                 disabled={geminiSaving}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-foreground text-sm font-semibold rounded-xl transition-all shadow-lg shadow-purple-500/20 disabled:opacity-50"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-purple-500/20 disabled:opacity-50"
               >
                 {geminiSaving ? (
                   <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Menyimpan...</>
@@ -616,7 +616,7 @@ export default function AdminSettingsPage() {
                 setPgSaving(false)
               }}
               disabled={pgSaving}
-              className="mt-5 flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-foreground text-sm font-semibold rounded-xl transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-50"
+              className="mt-5 flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-50"
             >
               {pgSaving ? (
                 <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Menyimpan...</>
@@ -665,7 +665,7 @@ export default function AdminSettingsPage() {
               <button
                 onClick={saveSocialSettings}
                 disabled={socialSaving}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-600 to-pink-500 hover:from-pink-500 hover:to-pink-400 text-foreground text-sm font-semibold rounded-xl transition-all shadow-lg shadow-pink-500/20 disabled:opacity-50"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-600 to-pink-500 hover:from-pink-500 hover:to-pink-400 text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-pink-500/20 disabled:opacity-50"
               >
                 {socialSaving ? (
                   <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Menyimpan...</>
