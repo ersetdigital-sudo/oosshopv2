@@ -322,7 +322,7 @@ export function CatalogClient({
                       <div className="mt-4 flex items-center gap-2">
                         <Button
                           size="sm"
-                          className="flex-1"
+                          className="flex-1 gap-1 px-2 text-xs sm:gap-1.5 sm:px-3 sm:text-sm"
                           onClick={() =>
                             addToCart({
                               id: product.id,
@@ -333,11 +333,14 @@ export function CatalogClient({
                             })
                           }
                         >
-                          + Keranjang
+                          <ShoppingBag className="size-3.5 shrink-0 sm:size-4" aria-hidden />
+                          <span className="sm:hidden">Keranjang</span>
+                          <span className="hidden sm:inline">+ Keranjang</span>
                         </Button>
                         <Button
                           size="sm"
                           variant="outline"
+                          className="px-2 text-xs sm:px-3 sm:text-sm"
                           nativeButton={false}
                           render={<Link href={productHref} />}
                         >

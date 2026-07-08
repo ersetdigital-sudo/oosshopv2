@@ -313,15 +313,15 @@ export function SiteHeader() {
           </button>
 
           {/* Pesanan */}
-          <a
-            href={`${siteConfig.whatsapp}?text=${encodeURIComponent('Halo, saya ingin menanyakan status pesanan saya')}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1 text-muted-foreground transition-colors"
+          <Link
+            href="/dashboard"
+            className={`flex flex-col items-center gap-0.5 rounded-lg px-2 py-1 transition-colors ${
+              pathname === '/dashboard' ? 'text-primary' : 'text-muted-foreground'
+            }`}
           >
             <ClipboardList className="size-5" aria-hidden />
             <span className="text-[10px] font-medium">Pesanan</span>
-          </a>
+          </Link>
 
           {/* Lainnya — opens bottom sheet */}
           <button
