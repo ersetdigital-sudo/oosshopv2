@@ -109,6 +109,8 @@ export interface ServiceData {
   // Optional sections — only rendered if data exists
   whyChooseUs?: ServiceBenefit[]
   features?: string[]
+  featuresTitle?: string // override default features section heading
+  featuresIntro?: string // override default features section intro
   benefits: ServiceBenefit[]
   problemSection?: ServiceProblemSection
   solutionSection?: ServiceProblemSection

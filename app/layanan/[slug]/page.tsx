@@ -368,10 +368,10 @@ export default async function ServicePage({
           <section className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20" id="fitur">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
-                Fitur {service.menuLabel} yang Anda Dapatkan
+                {service.featuresTitle ?? `Fitur ${service.menuLabel} yang Anda Dapatkan`}
               </h2>
               <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
-                Semua yang Anda butuhkan untuk hasil profesional dan maksimal.
+                {service.featuresIntro ?? 'Semua yang Anda butuhkan untuk hasil profesional dan maksimal.'}
               </p>
             </div>
             <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">

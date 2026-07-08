@@ -78,6 +78,10 @@ export const companyProfile: ServiceData = {
     },
   ],
 
+  featuresTitle: 'Fitur Lengkap di Setiap Website Company Profile',
+  featuresIntro:
+    'Semua yang dibutuhkan bisnis modern untuk tampil profesional dan mudah ditemukan, sudah tersedia sejak awal.',
+
   features: [
     'Desain website custom sesuai brand identity',
     'Domain & hosting (tergantung paket)',
