@@ -172,7 +172,7 @@ export default function AdminSettingsPage() {
       {/* Header */}
       <div>
         <h2 className="font-heading text-xl font-bold text-white">Pengaturan</h2>
-        <p className="text-dark-400 text-sm mt-0.5">Kelola rekening pembayaran dan notifikasi WhatsApp</p>
+        <p className="text-muted-foreground text-sm mt-0.5">Kelola rekening pembayaran dan notifikasi WhatsApp</p>
       </div>
 
       {/* Tab Navigation */}
@@ -199,8 +199,8 @@ export default function AdminSettingsPage() {
         <div className="space-y-4">
           {/* Add Button */}
           <div className="flex justify-between items-center">
-            <p className="text-dark-400 text-sm">{filteredBanks.length} {activeTab === 'ewallet' ? 'e-wallet' : 'rekening'} terdaftar</p>
-            <button onClick={() => openForm()} className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-primary-500/20">
+            <p className="text-muted-foreground text-sm">{filteredBanks.length} {activeTab === 'ewallet' ? 'e-wallet' : 'rekening'} terdaftar</p>
+            <button onClick={() => openForm()} className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-foreground text-sm font-semibold rounded-xl transition-all shadow-lg shadow-primary-500/20">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
               Tambah {activeTab === 'ewallet' ? 'E-Wallet' : 'Rekening'}
             </button>
@@ -212,7 +212,7 @@ export default function AdminSettingsPage() {
               <div className="w-16 h-16 bg-dark-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-dark-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
               </div>
-              <p className="text-dark-400 text-sm">Belum ada {activeTab === 'ewallet' ? 'e-wallet' : 'rekening'}. Tambahkan agar muncul di halaman pembayaran.</p>
+              <p className="text-muted-foreground text-sm">Belum ada {activeTab === 'ewallet' ? 'e-wallet' : 'rekening'}. Tambahkan agar muncul di halaman pembayaran.</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -225,13 +225,13 @@ export default function AdminSettingsPage() {
                       </div>
                       <div>
                         <div className="flex items-center gap-2 mb-0.5">
-                          <p className="text-white font-semibold text-sm">{bank.bank_name}</p>
+                          <p className="text-foreground font-semibold text-sm">{bank.bank_name}</p>
                           {!bank.is_active && (
                             <span className="text-[10px] px-2 py-0.5 bg-dark-800 text-dark-400 rounded-full border border-dark-700">Nonaktif</span>
                           )}
                         </div>
-                        <p className="text-white font-mono text-base font-bold">{bank.account_number}</p>
-                        <p className="text-dark-400 text-xs mt-0.5">a.n. {bank.account_name}</p>
+                        <p className="text-foreground font-mono text-base font-bold">{bank.account_number}</p>
+                        <p className="text-muted-foreground text-xs mt-0.5">a.n. {bank.account_name}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 ml-16 sm:ml-0">
@@ -274,8 +274,8 @@ export default function AdminSettingsPage() {
                 <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
               </div>
               <div>
-                <h3 className="text-white font-semibold text-sm">Notifikasi WhatsApp (Fonnte)</h3>
-                <p className="text-dark-400 text-xs">Kirim notifikasi otomatis ke customer saat pesanan selesai</p>
+                <h3 className="text-foreground font-semibold text-sm">Notifikasi WhatsApp (Fonnte)</h3>
+                <p className="text-muted-foreground text-xs">Kirim notifikasi otomatis ke customer saat pesanan selesai</p>
               </div>
             </div>
 
@@ -289,7 +289,7 @@ export default function AdminSettingsPage() {
                     value={fonnteKey}
                     onChange={e => setFonnteKey(e.target.value)}
                     placeholder="Masukkan API key dari fonnte.com"
-                    className="w-full px-4 py-3 pr-12 bg-dark-800/70 border border-dark-700 rounded-xl text-white text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all font-mono"
+                    className="w-full px-4 py-3 pr-12 bg-dark-800/70 border border-dark-700 rounded-xl text-foreground text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all font-mono"
                   />
                   <button
                     type="button"
@@ -315,7 +315,7 @@ export default function AdminSettingsPage() {
                   value={adminPhone}
                   onChange={e => setAdminPhone(e.target.value)}
                   placeholder="6285212150100"
-                  className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-white text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+                  className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-foreground text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
                 />
                 <p className="text-dark-500 text-[11px] mt-1.5">Format: 628xxx (tanpa + atau 0)</p>
               </div>
@@ -327,7 +327,7 @@ export default function AdminSettingsPage() {
                   value={fonnteMessage}
                   onChange={e => setFonnteMessage(e.target.value)}
                   rows={6}
-                  className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-white text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all resize-none font-mono leading-relaxed"
+                  className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-foreground text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all resize-none font-mono leading-relaxed"
                 />
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {['{nama}', '{invoice}', '{items}', '{domain}'].map(v => (
@@ -340,7 +340,7 @@ export default function AdminSettingsPage() {
               <button
                 onClick={saveFonnteSettings}
                 disabled={fonnteSaving}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-green-500/20 disabled:opacity-50"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-foreground text-sm font-semibold rounded-xl transition-all shadow-lg shadow-green-500/20 disabled:opacity-50"
               >
                 {fonnteSaving ? (
                   <>
@@ -368,8 +368,8 @@ export default function AdminSettingsPage() {
                 <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
               </div>
               <div>
-                <h3 className="text-white font-semibold text-sm">Integrasi AI — Generate Konten Produk</h3>
-                <p className="text-dark-400 text-xs">Generate deskripsi produk, SEO meta, fitur, dan FAQ otomatis dengan AI</p>
+                <h3 className="text-foreground font-semibold text-sm">Integrasi AI — Generate Konten Produk</h3>
+                <p className="text-muted-foreground text-xs">Generate deskripsi produk, SEO meta, fitur, dan FAQ otomatis dengan AI</p>
               </div>
             </div>
 
@@ -394,7 +394,7 @@ export default function AdminSettingsPage() {
                     value={geminiKey}
                     onChange={e => setGeminiKey(e.target.value)}
                     placeholder="Masukkan API key dari OpenAgentic.id"
-                    className="w-full px-4 py-3 pr-12 bg-dark-800/70 border border-dark-700 rounded-xl text-white text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all font-mono"
+                    className="w-full px-4 py-3 pr-12 bg-dark-800/70 border border-dark-700 rounded-xl text-foreground text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all font-mono"
                   />
                   <button
                     type="button"
@@ -414,7 +414,7 @@ export default function AdminSettingsPage() {
               {/* Model Selection */}
               <div>
                   <label className="text-dark-300 text-xs font-medium mb-2 block">Model untuk Produk</label>
-                  <select value={aiModel} onChange={e => setAiModel(e.target.value)} className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-white text-sm focus:outline-none focus:border-primary-500 transition-all">
+                  <select value={aiModel} onChange={e => setAiModel(e.target.value)} className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-foreground text-sm focus:outline-none focus:border-primary-500 transition-all">
                     <option value="">— Pilih Model —</option>
                     <optgroup label="🆓 Gratis (Free Tier)">
                       <option value="claude-sonnet-4.5">Claude Sonnet 4.5 (Free)</option>
@@ -477,7 +477,7 @@ export default function AdminSettingsPage() {
               {/* Blog Model Selection */}
               <div>
                   <label className="text-dark-300 text-xs font-medium mb-2 block">Model untuk Blog</label>
-                  <select value={aiBlogModel} onChange={e => setAiBlogModel(e.target.value)} className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-white text-sm focus:outline-none focus:border-primary-500 transition-all">
+                  <select value={aiBlogModel} onChange={e => setAiBlogModel(e.target.value)} className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-foreground text-sm focus:outline-none focus:border-primary-500 transition-all">
                     <option value="">— Sama dengan Produk —</option>
                     <optgroup label="🆓 Gratis (Free Tier)">
                       <option value="claude-sonnet-4.5">Claude Sonnet 4.5 (Free)</option>
@@ -540,7 +540,7 @@ export default function AdminSettingsPage() {
               <button
                 onClick={saveGeminiSettings}
                 disabled={geminiSaving}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-purple-500/20 disabled:opacity-50"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-foreground text-sm font-semibold rounded-xl transition-all shadow-lg shadow-purple-500/20 disabled:opacity-50"
               >
                 {geminiSaving ? (
                   <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Menyimpan...</>
@@ -581,7 +581,7 @@ export default function AdminSettingsPage() {
             {/* Toggle */}
             <div className="flex items-center justify-between p-4 bg-dark-800/50 border border-dark-700/50 rounded-xl mb-5">
               <div>
-                <p className="text-white text-sm font-medium">Aktifkan Payment Gateway</p>
+                <p className="text-foreground text-sm font-medium">Aktifkan Payment Gateway</p>
                 <p className="text-dark-500 text-xs mt-0.5">Jika nonaktif, customer hanya melihat rekening manual</p>
               </div>
               <button
@@ -594,7 +594,7 @@ export default function AdminSettingsPage() {
 
             {pgEnabled && (
               <div className="space-y-4 p-4 bg-dark-800/30 border border-dark-700/30 rounded-xl">
-                <p className="text-dark-400 text-xs">API Key dan VA Number dikonfigurasi di environment variables (Vercel).</p>
+                <p className="text-muted-foreground text-xs">API Key dan VA Number dikonfigurasi di environment variables (Vercel).</p>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="p-3 bg-dark-800/50 rounded-lg">
                     <p className="text-dark-500 text-[10px] uppercase tracking-wider">Status</p>
@@ -602,7 +602,7 @@ export default function AdminSettingsPage() {
                   </div>
                   <div className="p-3 bg-dark-800/50 rounded-lg">
                     <p className="text-dark-500 text-[10px] uppercase tracking-wider">Provider</p>
-                    <p className="text-white text-sm font-semibold mt-0.5">iPaymu</p>
+                    <p className="text-foreground text-sm font-semibold mt-0.5">iPaymu</p>
                   </div>
                 </div>
                 <p className="text-dark-500 text-[11px]">Metode: Virtual Account (BCA, BNI, Mandiri, BRI) + QRIS</p>
@@ -616,7 +616,7 @@ export default function AdminSettingsPage() {
                 setPgSaving(false)
               }}
               disabled={pgSaving}
-              className="mt-5 flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-50"
+              className="mt-5 flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-foreground text-sm font-semibold rounded-xl transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-50"
             >
               {pgSaving ? (
                 <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Menyimpan...</>
@@ -657,7 +657,7 @@ export default function AdminSettingsPage() {
                     value={social[f.key]}
                     onChange={e => setSocial({ ...social, [f.key]: e.target.value })}
                     placeholder={f.placeholder}
-                    className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-white text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+                    className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-foreground text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
                   />
                 </div>
               ))}
@@ -665,7 +665,7 @@ export default function AdminSettingsPage() {
               <button
                 onClick={saveSocialSettings}
                 disabled={socialSaving}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-600 to-pink-500 hover:from-pink-500 hover:to-pink-400 text-white text-sm font-semibold rounded-xl transition-all shadow-lg shadow-pink-500/20 disabled:opacity-50"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-600 to-pink-500 hover:from-pink-500 hover:to-pink-400 text-foreground text-sm font-semibold rounded-xl transition-all shadow-lg shadow-pink-500/20 disabled:opacity-50"
               >
                 {socialSaving ? (
                   <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Menyimpan...</>
@@ -710,7 +710,7 @@ export default function AdminSettingsPage() {
                   onChange={e => setFormData({ ...formData, bank_name: e.target.value })}
                   required
                   placeholder="BCA, BRI, Mandiri, Dana, OVO, dll"
-                  className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-white text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+                  className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-foreground text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
                 />
               </div>
               <div>
@@ -721,7 +721,7 @@ export default function AdminSettingsPage() {
                   onChange={e => setFormData({ ...formData, account_name: e.target.value })}
                   required
                   placeholder="Nama sesuai rekening"
-                  className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-white text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+                  className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-foreground text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
                 />
               </div>
               <div>
@@ -732,11 +732,11 @@ export default function AdminSettingsPage() {
                   onChange={e => setFormData({ ...formData, account_number: e.target.value })}
                   required
                   placeholder="1234567890"
-                  className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-white text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+                  className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-foreground text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
                 />
               </div>
               <div className="flex gap-3 pt-3">
-                <button type="submit" disabled={submitting} className="flex-1 py-3 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-white font-semibold rounded-xl transition-all shadow-lg shadow-primary-500/20 disabled:opacity-50">
+                <button type="submit" disabled={submitting} className="flex-1 py-3 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-foreground font-semibold rounded-xl transition-all shadow-lg shadow-primary-500/20 disabled:opacity-50">
                   {submitting ? 'Menyimpan...' : (editingBank ? 'Update' : 'Simpan')}
                 </button>
                 <button type="button" onClick={() => setShowForm(false)} className="flex-1 py-3 bg-dark-800 hover:bg-dark-700 text-dark-300 font-medium rounded-xl transition-all border border-dark-700">
