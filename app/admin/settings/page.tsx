@@ -183,8 +183,8 @@ export default function AdminSettingsPage() {
             onClick={() => setActiveTab(tab.key)}
             className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-1 sm:flex-none justify-center sm:justify-start ${
               activeTab === tab.key
-                ? 'bg-primary-600/15 text-primary-400 border border-primary-500/20 shadow-sm'
-                : 'text-dark-400 hover:text-white hover:bg-dark-800/60 border border-transparent'
+                ? 'bg-primary/10 text-primary border border-primary/20 shadow-sm'
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted border border-transparent'
             }`}
           >
             {tab.icon}
