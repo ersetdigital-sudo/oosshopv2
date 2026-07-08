@@ -79,6 +79,7 @@ export default async function ServicePage({
   // Build TOC from available sections
   const toc: { id: string; label: string }[] = []
   if (service.problemSection) toc.push({ id: 'masalah', label: 'Masalah yang Sering Dihadapi' })
+  if (service.solutionSection) toc.push({ id: 'solusi', label: 'Solusi dari OOS SHOP' })
   toc.push({ id: 'apa-itu', label: `Apa Itu ${service.menuLabel}` })
   if (service.whyChooseUs?.length) toc.push({ id: 'kenapa-kami', label: 'Kenapa Memilih Kami' })
   if (service.features?.length) toc.push({ id: 'fitur', label: 'Fitur' })
@@ -203,6 +204,35 @@ export default async function ServicePage({
                     className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm"
                   >
                     <h3 className="text-base font-semibold tracking-tight">{item.title}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ═══ Solution Section (optional) ═══ */}
+        {service.solutionSection && (
+          <section className="border-b border-border bg-accent/20" id="solusi">
+            <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
+              <div className="mx-auto max-w-2xl text-center">
+                <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
+                  {service.solutionSection.title}
+                </h2>
+                {service.solutionSection.intro && (
+                  <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
+                    {service.solutionSection.intro}
+                  </p>
+                )}
+              </div>
+              <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {service.solutionSection.items.map((item) => (
+                  <div
+                    key={item.title}
+                    className="flex flex-col rounded-2xl border border-primary/20 bg-card p-5 shadow-sm"
+                  >
+                    <h3 className="text-base font-semibold tracking-tight text-primary">{item.title}</h3>
                     <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
                   </div>
                 ))}

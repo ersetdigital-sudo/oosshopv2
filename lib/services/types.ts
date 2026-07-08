@@ -110,6 +110,7 @@ export interface ServiceData {
   features?: string[]
   benefits: ServiceBenefit[]
   problemSection?: ServiceProblemSection
+  solutionSection?: ServiceProblemSection
   useCases: string[]
   process: ServiceProcess[]
   faq: ServiceFAQ[]

@@ -175,6 +175,39 @@ export const companyProfile: ServiceData = {
     ],
   },
 
+  solutionSection: {
+    title: 'Solusi dari OOS SHOP',
+    intro:
+      'Kami tidak hanya membuat website. Kami membantu bisnis Anda memiliki company profile digital yang menjadi aset jangka panjang.',
+    items: [
+      {
+        title: 'Website resmi yang membangun kredibilitas',
+        description:
+          'Buat bisnis Anda terlihat profesional dan terpercaya sejak kunjungan pertama dengan desain custom yang mencerminkan identitas brand.',
+      },
+      {
+        title: 'Semua informasi bisnis di satu tempat',
+        description:
+          'Profil perusahaan, layanan, portofolio, testimoni, dan kontak tersentralisasi dalam satu website yang mudah diakses kapan saja.',
+      },
+      {
+        title: 'Tampilan optimal di smartphone dan desktop',
+        description:
+          'Website 100% mobile responsive sehingga calon klien yang browsing dari HP tetap mendapatkan pengalaman terbaik.',
+      },
+      {
+        title: 'Siap bersaing di halaman pertama Google',
+        description:
+          'Dibangun dengan struktur HTML semantik, schema markup, meta tag teroptimasi, dan loading cepat untuk performa SEO maksimal.',
+      },
+      {
+        title: 'Mudah dikelola tanpa ribet',
+        description:
+          'Dashboard CMS intuitif + pelatihan singkat + maintenance gratis 1 tahun. Update konten bisa dilakukan sendiri tanpa perlu developer.',
+      },
+    ],
+  },
+
   useCases: [
     'Perusahaan (PT/CV) yang ingin website company profile profesional agar dipercaya calon klien dan mitra bisnis',
     'UMKM dan startup yang butuh kehadiran online resmi untuk memperluas jangkauan pasar',
