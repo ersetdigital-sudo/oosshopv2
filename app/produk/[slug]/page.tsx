@@ -23,6 +23,7 @@ import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { Button } from '@/components/ui/button'
 import { AddToCartButton } from '@/components/add-to-cart-button'
+import { ProductStickyBar } from '@/components/product-sticky-bar'
 import { ProductJsonLd } from '@/components/product-json-ld'
 import { siteConfig } from '@/lib/data'
 import { supabase } from '@/lib/supabase'
@@ -211,7 +212,7 @@ export default async function ProdukPage({
         faqItems={faqItems}
       />
       <SiteHeader />
-      <main className="pb-16">
+      <main className="pb-32 md:pb-16">
         <div className="mx-auto max-w-6xl px-4 py-6 md:px-6">
           {/* Breadcrumb */}
           <nav aria-label="Breadcrumb">
@@ -627,6 +628,20 @@ export default async function ProdukPage({
           )}
         </div>
       </main>
+
+      {/* Mobile sticky checkout bar */}
+      <ProductStickyBar
+        product={{
+          id: product.id,
+          name: product.name,
+          price: activePrice,
+          image_url: product.image_url,
+          category: product.category,
+        }}
+        waLink={waLink}
+        formattedPrice={formatIDR(activePrice)}
+      />
+
       <SiteFooter />
     </>
   )
