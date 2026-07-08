@@ -29,6 +29,12 @@ export default function AdminSettingsPage() {
   // Social media settings
   const [social, setSocial] = useState({ instagram: '', facebook: '', shopee: '', tiktok: '', telegram: '' })
   const [socialSaving, setSocialSaving] = useState(false)
+  const [toast, setToast] = useState<{message: string; type: 'success' | 'error'} | null>(null)
+
+  function showToast(message: string, type: 'success' | 'error' = 'success') {
+    setToast({ message, type })
+    setTimeout(() => setToast(null), 3000)
+  }
 
   useEffect(() => {
     fetchBanks()
@@ -73,6 +79,7 @@ export default function AdminSettingsPage() {
     await supabase.from('settings').upsert({ key: 'fonnte_message', value: fonnteMessage }, { onConflict: 'key' })
     await supabase.from('settings').upsert({ key: 'admin_phone', value: adminPhone }, { onConflict: 'key' })
     setFonnteSaving(false)
+    showToast('Pengaturan WhatsApp berhasil disimpan!')
   }
 
   async function saveGeminiSettings() {
@@ -82,6 +89,7 @@ export default function AdminSettingsPage() {
     await supabase.from('settings').upsert({ key: 'ai_model', value: aiModel }, { onConflict: 'key' })
     await supabase.from('settings').upsert({ key: 'ai_blog_model', value: aiBlogModel }, { onConflict: 'key' })
     setGeminiSaving(false)
+    showToast('Pengaturan AI berhasil disimpan!')
   }
 
   async function saveSocialSettings() {
@@ -92,6 +100,7 @@ export default function AdminSettingsPage() {
     await supabase.from('settings').upsert({ key: 'social_tiktok', value: social.tiktok }, { onConflict: 'key' })
     await supabase.from('settings').upsert({ key: 'social_telegram', value: social.telegram }, { onConflict: 'key' })
     setSocialSaving(false)
+    showToast('Social media berhasil disimpan!')
   }
 
   async function fetchBanks() {
@@ -169,6 +178,20 @@ export default function AdminSettingsPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
+      {toast && (
+        <div className={`fixed top-4 right-4 z-50 flex items-center gap-3 rounded-xl border px-5 py-3.5 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-300 ${
+          toast.type === 'error'
+            ? 'border-red-500/30 bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20'
+            : 'border-green-500/30 bg-green-50 text-green-700 dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20'
+        }`}>
+          {toast.type === 'success' ? (
+            <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          ) : (
+            <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          )}
+          <p className="text-sm font-medium">{toast.message}</p>
+        </div>
+      )}
       {/* Header */}
       <div>
         <h2 className="font-heading text-xl font-bold text-white">Pengaturan</h2>
