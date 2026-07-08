@@ -151,21 +151,6 @@ export default async function ServicePage({
                     <ArrowRight className="size-4" aria-hidden />
                   </Button>
                 </div>
-
-                <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
-                  <span className="flex items-center gap-1.5">
-                    <CheckCircle2 className="size-4 text-primary" aria-hidden />
-                    1.200+ website dibuat
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <CheckCircle2 className="size-4 text-primary" aria-hidden />
-                    Garansi 30 hari
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <CheckCircle2 className="size-4 text-primary" aria-hidden />
-                    Revisi hingga puas
-                  </span>
-                </div>
               </div>
 
               <span className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm md:size-20">
