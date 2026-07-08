@@ -33,7 +33,7 @@ export const companyProfile: ServiceData = {
     badge: 'Jasa Pembuatan Website Company Profile',
     heading: 'Jasa Pembuatan Website Company Profile Profesional',
     subheading:
-      'Buat website resmi perusahaan yang representatif, mudah ditemukan di Google, dan siap menjangkau calon klien. Desain disesuaikan dengan brand Anda, mulai dari Rp 1.250.000.',
+      'Bangun kredibilitas bisnis Anda dengan website perusahaan yang modern, cepat, mobile friendly, dan SEO-friendly. Kami merancang company profile online yang siap ditemukan calon klien di Google.',
     icon: 'Building2',
   },
 
