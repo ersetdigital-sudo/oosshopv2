@@ -27,6 +27,11 @@ export default function AdminSettingsPage() {
   const [adminPhone, setAdminPhone] = useState('')
   const [fonnteKey, setFonnteKey] = useState('')
   const [showFonnteKey, setShowFonnteKey] = useState(false)
+  const [socialIG, setSocialIG] = useState('')
+  const [socialFB, setSocialFB] = useState('')
+  const [socialShopee, setSocialShopee] = useState('')
+  const [socialTiktok, setSocialTiktok] = useState('')
+  const [socialTelegram, setSocialTelegram] = useState('')
 
   useEffect(() => {
     fetchSettings()
@@ -40,6 +45,11 @@ export default function AdminSettingsPage() {
       setAiBlogModel(data.find((d) => d.key === 'ai_blog_model')?.value || '')
       setAdminPhone(data.find((d) => d.key === 'admin_phone')?.value || '')
       setFonnteKey(data.find((d) => d.key === 'fonnte_api_key')?.value || '')
+      setSocialIG(data.find((d) => d.key === 'social_instagram')?.value || '')
+      setSocialFB(data.find((d) => d.key === 'social_facebook')?.value || '')
+      setSocialShopee(data.find((d) => d.key === 'social_shopee')?.value || '')
+      setSocialTiktok(data.find((d) => d.key === 'social_tiktok')?.value || '')
+      setSocialTelegram(data.find((d) => d.key === 'social_telegram')?.value || '')
     }
     setLoaded(true)
   }
@@ -53,6 +63,11 @@ export default function AdminSettingsPage() {
       supabase.from('settings').upsert({ key: 'ai_blog_model', value: aiBlogModel }, { onConflict: 'key' }),
       supabase.from('settings').upsert({ key: 'admin_phone', value: adminPhone }, { onConflict: 'key' }),
       supabase.from('settings').upsert({ key: 'fonnte_api_key', value: fonnteKey }, { onConflict: 'key' }),
+      supabase.from('settings').upsert({ key: 'social_instagram', value: socialIG }, { onConflict: 'key' }),
+      supabase.from('settings').upsert({ key: 'social_facebook', value: socialFB }, { onConflict: 'key' }),
+      supabase.from('settings').upsert({ key: 'social_shopee', value: socialShopee }, { onConflict: 'key' }),
+      supabase.from('settings').upsert({ key: 'social_tiktok', value: socialTiktok }, { onConflict: 'key' }),
+      supabase.from('settings').upsert({ key: 'social_telegram', value: socialTelegram }, { onConflict: 'key' }),
     ])
     setSaving(false)
   }
@@ -193,23 +208,23 @@ export default function AdminSettingsPage() {
         <div className="space-y-4">
           <div>
             <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Instagram</label>
-            <input type="text" value={settings.social_instagram || ''} onChange={(e) => setSettings((p) => ({ ...p, social_instagram: e.target.value }))} placeholder="https://instagram.com/..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" />
+            <input type="text" value={socialIG} onChange={(e) => setSocialIG(e.target.value)} placeholder="https://instagram.com/..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" />
           </div>
           <div>
             <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Facebook</label>
-            <input type="text" value={settings.social_facebook || ''} onChange={(e) => setSettings((p) => ({ ...p, social_facebook: e.target.value }))} placeholder="https://facebook.com/..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" />
+            <input type="text" value={socialFB} onChange={(e) => setSocialFB(e.target.value)} placeholder="https://facebook.com/..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" />
           </div>
           <div>
             <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Shopee</label>
-            <input type="text" value={settings.social_shopee || ''} onChange={(e) => setSettings((p) => ({ ...p, social_shopee: e.target.value }))} placeholder="https://shopee.co.id/..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" />
+            <input type="text" value={socialShopee} onChange={(e) => setSocialShopee(e.target.value)} placeholder="https://shopee.co.id/..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" />
           </div>
           <div>
             <label className="mb-1.5 block text-xs font-medium text-muted-foreground">TikTok</label>
-            <input type="text" value={settings.social_tiktok || ''} onChange={(e) => setSettings((p) => ({ ...p, social_tiktok: e.target.value }))} placeholder="https://tiktok.com/@..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" />
+            <input type="text" value={socialTiktok} onChange={(e) => setSocialTiktok(e.target.value)} placeholder="https://tiktok.com/@..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" />
           </div>
           <div>
             <label className="mb-1.5 block text-xs font-medium text-muted-foreground">Telegram</label>
-            <input type="text" value={settings.social_telegram || ''} onChange={(e) => setSettings((p) => ({ ...p, social_telegram: e.target.value }))} placeholder="https://t.me/..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" />
+            <input type="text" value={socialTelegram} onChange={(e) => setSocialTelegram(e.target.value)} placeholder="https://t.me/..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-primary" />
           </div>
         </div>
       </div>
