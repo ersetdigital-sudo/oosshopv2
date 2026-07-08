@@ -6,6 +6,7 @@ import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { getPublishedArticles } from '@/lib/blog'
 import { siteConfig } from '@/lib/data'
+import { organizationSchema, websiteSchema } from '@/lib/schema/organization'
 
 export const revalidate = 300
 
@@ -39,13 +40,15 @@ export default async function BlogPage() {
       ? {
           '@context': 'https://schema.org',
           '@graph': [
+            organizationSchema,
+            websiteSchema,
             {
               '@type': 'CollectionPage',
               '@id': `${siteConfig.url}/blog#webpage`,
               url: `${siteConfig.url}/blog`,
               name: 'Blog - Tips WordPress, Plugin & Pembuatan Website | OOS SHOP',
               description: 'Artikel seputar WordPress, plugin premium, dan tips pembuatan website profesional.',
-              isPartOf: { '@id': `${siteConfig.url}#website` },
+              isPartOf: { '@id': `${siteConfig.url}/#website` },
               inLanguage: 'id-ID',
             },
             {

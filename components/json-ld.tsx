@@ -1,15 +1,20 @@
 import { allServices, faqs, websiteServices, siteConfig } from '@/lib/data'
+import { organizationSchema, websiteSchema } from '@/lib/schema/organization'
 
 const SITE_URL = siteConfig.url ?? 'https://www.oos-shop.com'
 
 /**
- * Homepage-specific structured data schemas.
- * Organization and WebSite are NOT defined here — they come from layout.tsx
- * which renders on every page. This component only adds page-specific entities.
+ * Homepage structured data — single @graph containing ALL entities.
+ * Organization and WebSite are included from shared module (single source of truth).
+ * Only ONE <script type="application/ld+json"> is output per page.
  */
 export function JsonLd() {
   const graph = [
-    // 1. WebPage — homepage entity
+    // Global entities (from shared module)
+    organizationSchema,
+    websiteSchema,
+
+    // Page-specific entities
     {
       '@type': 'WebPage',
       '@id': `${SITE_URL}/#webpage`,
@@ -28,7 +33,6 @@ export function JsonLd() {
       dateModified: new Date().toISOString().split('T')[0],
     },
 
-    // 2. Service — plugin installation service (primary)
     {
       '@type': 'Service',
       '@id': `${SITE_URL}/#plugin-service`,
@@ -60,7 +64,6 @@ export function JsonLd() {
       },
     },
 
-    // 3. Service — website development service (secondary)
     {
       '@type': 'Service',
       '@id': `${SITE_URL}/#webdev-service`,
@@ -85,7 +88,6 @@ export function JsonLd() {
       },
     },
 
-    // 4. FAQPage
     {
       '@type': 'FAQPage',
       '@id': `${SITE_URL}/#faq`,
@@ -96,7 +98,6 @@ export function JsonLd() {
       })),
     },
 
-    // 5. BreadcrumbList
     {
       '@type': 'BreadcrumbList',
       '@id': `${SITE_URL}/#breadcrumb`,
@@ -105,7 +106,6 @@ export function JsonLd() {
       ],
     },
 
-    // 6. ItemList — for sitelinks & internal pages
     {
       '@type': 'ItemList',
       name: 'Layanan OOS SHOP',

@@ -16,6 +16,7 @@ import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { Button } from '@/components/ui/button'
 import { siteConfig } from '@/lib/data'
+import { organizationSchema, websiteSchema } from '@/lib/schema/organization'
 
 export const metadata: Metadata = {
   title: 'Tentang Kami | OOS SHOP',
@@ -54,6 +55,8 @@ export default function TentangKamiPage() {
   const aboutJsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
+      organizationSchema,
+      websiteSchema,
       {
         '@type': 'AboutPage',
         '@id': `${siteConfig.url}/tentang-kami#aboutpage`,

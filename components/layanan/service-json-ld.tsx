@@ -1,17 +1,22 @@
 import type { ServiceData } from '@/lib/services'
+import { organizationSchema, websiteSchema } from '@/lib/schema/organization'
 
 const SITE_URL = 'https://www.oos-shop.com'
 
 /**
- * Renders page-specific structured data for a service page using a single @graph.
- * Organization and WebSite are NOT defined here — they come from layout.tsx.
- * All references use @id to point to the global definitions.
+ * Service page structured data — single @graph containing ALL entities.
+ * Organization and WebSite included from shared module (single source of truth).
+ * Only ONE <script type="application/ld+json"> is output per page.
  */
 export function ServiceJsonLd({ service }: { service: ServiceData }) {
   const pageUrl = `${SITE_URL}/layanan/${service.slug}`
 
   const graph = [
-    // 1. WebPage
+    // Global entities (from shared module)
+    organizationSchema,
+    websiteSchema,
+
+    // Page-specific entities
     {
       '@type': 'WebPage',
       '@id': `${pageUrl}#webpage`,
@@ -31,7 +36,6 @@ export function ServiceJsonLd({ service }: { service: ServiceData }) {
       lastReviewed: service.updatedAt,
     },
 
-    // 2. Service
     {
       '@type': 'Service',
       '@id': `${pageUrl}#service`,
@@ -67,7 +71,6 @@ export function ServiceJsonLd({ service }: { service: ServiceData }) {
       termsOfService: `${SITE_URL}/kebijakan-privasi`,
     },
 
-    // 3. FAQPage
     {
       '@type': 'FAQPage',
       '@id': `${pageUrl}#faq`,
@@ -78,7 +81,6 @@ export function ServiceJsonLd({ service }: { service: ServiceData }) {
       })),
     },
 
-    // 4. BreadcrumbList
     {
       '@type': 'BreadcrumbList',
       '@id': `${pageUrl}#breadcrumb`,
@@ -89,7 +91,6 @@ export function ServiceJsonLd({ service }: { service: ServiceData }) {
       ],
     },
 
-    // 5. HowTo
     {
       '@type': 'HowTo',
       '@id': `${pageUrl}#howto`,

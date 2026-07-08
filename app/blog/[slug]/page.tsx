@@ -7,6 +7,7 @@ import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { getArticleBySlug, getRelatedArticles } from '@/lib/blog'
 import { siteConfig } from '@/lib/data'
+import { organizationSchema, websiteSchema } from '@/lib/schema/organization'
 
 export const revalidate = 300
 
@@ -94,6 +95,8 @@ export default async function BlogPostPage({
   const articleJsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
+      organizationSchema,
+      websiteSchema,
       {
         '@type': 'BlogPosting',
         '@id': `${postUrl}#blogpost`,
@@ -144,15 +147,16 @@ export default async function BlogPostPage({
         }
       : null
 
+  // Merge FAQ into the same @graph if available
+  if (faqJsonLd) {
+    articleJsonLd['@graph'].push(faqJsonLd)
+  }
+
   const articleJsonLdScript = JSON.stringify(articleJsonLd)
-  const faqJsonLdScript = faqJsonLd ? JSON.stringify(faqJsonLd) : null
 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: articleJsonLdScript }} />
-      {faqJsonLdScript && (
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: faqJsonLdScript }} />
-      )}
       <SiteHeader />
       <main className="pb-16">
         <article className="mx-auto max-w-3xl px-4 py-8 md:px-6">
