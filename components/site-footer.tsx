@@ -43,23 +43,6 @@ export function SiteFooter() {
  }
  })
  }, [])
-
-  const [social, setSocial] = useState<Record<string, string>>({})
-
- useEffect(() => {
- supabase
- .from('settings')
- .select('key, value')
- .in('key', ['social_instagram', 'social_facebook', 'social_shopee', 'social_tiktok', 'social_telegram'])
- .then(({ data }) => {
- if (data) {
- const map: Record<string, string> = {}
- data.forEach((d: { key: string; value: string }) => { map[d.key] = d.value })
- setSocial(map)
- }
- })
- }, [])
-
  const serviceLinksCol1 = products.slice(0, 7)
   const serviceLinksCol2 = products.slice(7)
 
