@@ -188,9 +188,4 @@ export const sekolah: ServiceData = {
     'jasa-pembuatan-crm-erp',
   ],
 
-  rating: {
-    ratingValue: '4.8',
-    ratingCount: '156',
-    reviewCount: '134',
-  },
 }

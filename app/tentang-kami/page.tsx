@@ -49,8 +49,40 @@ const whyUs = [
 ]
 
 export default function TentangKamiPage() {
+  const pageUrl = `${siteConfig.url}/tentang-kami`
+
+  const aboutJsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'AboutPage',
+        '@id': `${siteConfig.url}/tentang-kami#aboutpage`,
+        url: pageUrl,
+        name: 'Tentang Kami | OOS SHOP',
+        description:
+          'Kenali lebih dekat OOS SHOP — penyedia jasa instal plugin WordPress original berlisensi resmi dan layanan pembuatan website profesional di Indonesia.',
+        inLanguage: 'id-ID',
+        isPartOf: { '@id': `${siteConfig.url}/#website` },
+        mainEntity: { '@id': `${siteConfig.url}/#organization` },
+        breadcrumb: { '@id': `${pageUrl}#breadcrumb` },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${pageUrl}#breadcrumb`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Beranda', item: siteConfig.url },
+          { '@type': 'ListItem', position: 2, name: 'Tentang Kami', item: pageUrl },
+        ],
+      },
+    ],
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutJsonLd) }}
+      />
       <SiteHeader />
       <main className="pb-20">
         <div className="mx-auto max-w-4xl px-4 py-6 md:px-6">

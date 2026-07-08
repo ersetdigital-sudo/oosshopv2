@@ -188,12 +188,6 @@ export const travel: ServiceData = {
     'jasa-pembuatan-landing-page',
   ],
 
-  rating: {
-    ratingValue: '4.9',
-    ratingCount: '178',
-    reviewCount: '152',
-  },
-
   trustStats: [
     { value: '10+', label: 'Fitur Lengkap' },
     { value: 'Full', label: 'Admin Dashboard' },

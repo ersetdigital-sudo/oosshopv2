@@ -187,9 +187,4 @@ export const hotel: ServiceData = {
     'jasa-pembuatan-website-properti',
   ],
 
-  rating: {
-    ratingValue: '4.9',
-    ratingCount: '134',
-    reviewCount: '112',
-  },
 }

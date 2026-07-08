@@ -188,9 +188,4 @@ export const booking: ServiceData = {
     'jasa-pembuatan-dashboard-admin',
   ],
 
-  rating: {
-    ratingValue: '4.8',
-    ratingCount: '98',
-    reviewCount: '84',
-  },
 }

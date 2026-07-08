@@ -103,20 +103,21 @@ export default async function BlogPostPage({
         image: article.thumbnail ? [article.thumbnail] : undefined,
         author: {
           '@type': 'Person',
+          '@id': `${siteConfig.url}/#founder`,
           name: 'Andri',
-          url: siteConfig.url,
+          url: `${siteConfig.url}/tentang-kami`,
         },
-        publisher: { '@id': `${siteConfig.url}#organization` },
+        publisher: { '@id': `${siteConfig.url}/#organization` },
         datePublished: publishedAt,
         dateModified: modifiedAt,
         mainEntityOfPage: {
           '@type': 'WebPage',
           '@id': `${postUrl}#webpage`,
           url: postUrl,
-          isPartOf: { '@id': `${siteConfig.url}#website` },
+          isPartOf: { '@id': `${siteConfig.url}/#website` },
         },
         inLanguage: 'id-ID',
-        isPartOf: { '@id': `${siteConfig.url}#website` },
+        isPartOf: { '@id': `${siteConfig.url}/#website` },
       },
       {
         '@type': 'BreadcrumbList',
@@ -244,6 +245,28 @@ export default async function BlogPostPage({
                 className="inline-flex items-center justify-center rounded-lg border border-border px-6 py-3 text-sm font-semibold hover:bg-muted"
               >
                 Lihat Layanan
+              </Link>
+            </div>
+          </div>
+
+          {/* Author bio — E-E-A-T signal for Google & AI crawlers */}
+          <div className="mt-12 flex items-start gap-4 rounded-2xl border border-border bg-card p-6">
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xl font-bold text-primary">
+              A
+            </div>
+            <div>
+              <p className="font-semibold text-foreground">Andri</p>
+              <p className="text-sm text-muted-foreground">Founder &amp; Penulis di OOS SHOP</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                Berpengalaman di bidang web development dan ekosistem WordPress sejak 2022.
+                Membantu UMKM dan bisnis di Indonesia memiliki aset digital profesional melalui
+                plugin premium berlisensi resmi dan layanan pembuatan website.
+              </p>
+              <Link
+                href="/tentang-kami"
+                className="mt-2 inline-block text-sm font-medium text-primary hover:underline"
+              >
+                Selengkapnya tentang kami &rarr;
               </Link>
             </div>
           </div>

@@ -187,9 +187,4 @@ export const inventory: ServiceData = {
     'jasa-pembuatan-toko-online',
   ],
 
-  rating: {
-    ratingValue: '4.8',
-    ratingCount: '63',
-    reviewCount: '54',
-  },
 }

@@ -187,9 +187,4 @@ export const crmErp: ServiceData = {
     'jasa-pembuatan-toko-online',
   ],
 
-  rating: {
-    ratingValue: '4.9',
-    ratingCount: '52',
-    reviewCount: '45',
-  },
 }

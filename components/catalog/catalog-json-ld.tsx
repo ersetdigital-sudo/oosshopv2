@@ -30,8 +30,8 @@ export function CatalogJsonLd({ products }: { products: Product[] }) {
       'Katalog lengkap plugin & theme WordPress premium original OOS SHOP: page builder, SEO, cache, dynamic content, form builder, dan email marketing. Harga mulai Rp 25.000, lisensi resmi, bergaransi.',
     url: catalogUrl,
     inLanguage: 'id-ID',
-    isPartOf: { '@id': `${siteConfig.url}#website` },
-    provider: { '@id': `${siteConfig.url}#organization` },
+    isPartOf: { '@id': `${siteConfig.url}/#website` },
+    provider: { '@id': `${siteConfig.url}/#organization` },
   }
 
   const itemList = {
@@ -61,7 +61,7 @@ export function CatalogJsonLd({ products }: { products: Product[] }) {
             price: getActivePrice(product),
             availability: 'https://schema.org/InStock',
             itemCondition: 'https://schema.org/NewCondition',
-            seller: { '@id': `${siteConfig.url}#organization` },
+            seller: { '@id': `${siteConfig.url}/#organization` },
           },
         },
       }
