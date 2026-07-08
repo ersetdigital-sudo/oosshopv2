@@ -64,7 +64,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" suppressHydrationWarning className={`bg-background ${geistSans.variable}`}>
-      <head>
+            
  <script
  type="application/ld+json"
  dangerouslySetInnerHTML={{
@@ -107,52 +107,50 @@ export default function RootLayout({
  }),
  }}
  />
-      </head>
-      <head>
- <script
- type="application/ld+json"
- dangerouslySetInnerHTML={{
- __html: JSON.stringify({
- '@context': 'https://schema.org',
- '@graph': [
- {
- '@type': 'Organization',
- '@id': 'https://www.oos-shop.com/#organization',
- name: 'OOS SHOP',
- url: 'https://www.oos-shop.com',
- logo: {
- '@type': 'ImageObject',
- url: 'https://res.cloudinary.com/ddbq1mlsc/image/upload/v1782933784/Logo_OOS_SHOP_fied1z.png',
- },
- contactPoint: {
- '@type': 'ContactPoint',
- telephone: '+6285212150100',
- contactType: 'customer service',
- availableLanguage: ['Indonesian', 'English'],
- areaServed: 'ID',
- },
- sameAs: [
- 'https://www.instagram.com/oos.shop/',
- 'https://www.tiktok.com/@oos.shop',
- 'https://shopee.co.id/oos.shop',
- 'https://www.facebook.com/share/18ZRZ3XiBH/',
- 'https://t.me/Oos_shop',
- ],
- },
- {
- '@type': 'WebSite',
- '@id': 'https://www.oos-shop.com/#website',
- name: 'OOS SHOP',
- url: 'https://www.oos-shop.com',
- publisher: { '@id': 'https://www.oos-shop.com/#organization' },
- inLanguage: 'id-ID',
- },
- ],
- }),
- }}
- />
-      </head>
+      
       <body className="font-sans antialiased">
+ <script
+ type="application/ld+json"
+ dangerouslySetInnerHTML={{
+ __html: JSON.stringify({
+ '@context': 'https://schema.org',
+ '@graph': [
+ {
+ '@type': 'Organization',
+ '@id': 'https://www.oos-shop.com/#organization',
+ name: 'OOS SHOP',
+ url: 'https://www.oos-shop.com',
+ logo: {
+ '@type': 'ImageObject',
+ url: 'https://res.cloudinary.com/ddbq1mlsc/image/upload/v1782933784/Logo_OOS_SHOP_fied1z.png',
+ },
+ contactPoint: {
+ '@type': 'ContactPoint',
+ telephone: '+6285212150100',
+ contactType: 'customer service',
+ availableLanguage: ['Indonesian', 'English'],
+ areaServed: 'ID',
+ },
+ sameAs: [
+ 'https://www.instagram.com/oos.shop/',
+ 'https://www.tiktok.com/@oos.shop',
+ 'https://shopee.co.id/oos.shop',
+ 'https://www.facebook.com/share/18ZRZ3XiBH/',
+ 'https://t.me/Oos_shop',
+ ],
+ },
+ {
+ '@type': 'WebSite',
+ '@id': 'https://www.oos-shop.com/#website',
+ name: 'OOS SHOP',
+ url: 'https://www.oos-shop.com',
+ publisher: { '@id': 'https://www.oos-shop.com/#organization' },
+ inLanguage: 'id-ID',
+ },
+ ],
+ }),
+ }}
+ />
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <CartProvider>
             {children}
