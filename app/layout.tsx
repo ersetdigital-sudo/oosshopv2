@@ -64,93 +64,71 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" suppressHydrationWarning className={`bg-background ${geistSans.variable}`}>
-            
- <script
- type="application/ld+json"
- dangerouslySetInnerHTML={{
- __html: JSON.stringify({
- '@context': 'https://schema.org',
- '@graph': [
- {
- '@type': 'Organization',
- '@id': 'https://www.oos-shop.com/#organization',
- name: 'OOS SHOP',
- url: 'https://www.oos-shop.com',
- logo: {
- '@type': 'ImageObject',
- url: 'https://res.cloudinary.com/ddbq1mlsc/image/upload/v1782933784/Logo_OOS_SHOP_fied1z.png',
- },
- contactPoint: {
- '@type': 'ContactPoint',
- telephone: '+6285212150100',
- contactType: 'customer service',
- availableLanguage: ['Indonesian', 'English'],
- areaServed: 'ID',
- },
- sameAs: [
- 'https://www.instagram.com/oos.shop/',
- 'https://www.tiktok.com/@oos.shop',
- 'https://shopee.co.id/oos.shop',
- 'https://www.facebook.com/share/18ZRZ3XiBH/',
- 'https://t.me/Oos_shop',
- ],
- },
- {
- '@type': 'WebSite',
- '@id': 'https://www.oos-shop.com/#website',
- name: 'OOS SHOP',
- url: 'https://www.oos-shop.com',
- publisher: { '@id': 'https://www.oos-shop.com/#organization' },
- inLanguage: 'id-ID',
- },
- ],
- }),
- }}
- />
-      
       <body className="font-sans antialiased">
- <script
- type="application/ld+json"
- dangerouslySetInnerHTML={{
- __html: JSON.stringify({
- '@context': 'https://schema.org',
- '@graph': [
- {
- '@type': 'Organization',
- '@id': 'https://www.oos-shop.com/#organization',
- name: 'OOS SHOP',
- url: 'https://www.oos-shop.com',
- logo: {
- '@type': 'ImageObject',
- url: 'https://res.cloudinary.com/ddbq1mlsc/image/upload/v1782933784/Logo_OOS_SHOP_fied1z.png',
- },
- contactPoint: {
- '@type': 'ContactPoint',
- telephone: '+6285212150100',
- contactType: 'customer service',
- availableLanguage: ['Indonesian', 'English'],
- areaServed: 'ID',
- },
- sameAs: [
- 'https://www.instagram.com/oos.shop/',
- 'https://www.tiktok.com/@oos.shop',
- 'https://shopee.co.id/oos.shop',
- 'https://www.facebook.com/share/18ZRZ3XiBH/',
- 'https://t.me/Oos_shop',
- ],
- },
- {
- '@type': 'WebSite',
- '@id': 'https://www.oos-shop.com/#website',
- name: 'OOS SHOP',
- url: 'https://www.oos-shop.com',
- publisher: { '@id': 'https://www.oos-shop.com/#organization' },
- inLanguage: 'id-ID',
- },
- ],
- }),
- }}
- />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@graph': [
+                {
+                  '@type': 'Organization',
+                  '@id': 'https://www.oos-shop.com/#organization',
+                  name: 'OOS SHOP',
+                  url: 'https://www.oos-shop.com',
+                  description:
+                    'OOS SHOP adalah penyedia jasa instal plugin WordPress premium original berlisensi resmi dan jasa pembuatan website custom profesional di Indonesia.',
+                  logo: {
+                    '@type': 'ImageObject',
+                    '@id': 'https://www.oos-shop.com/#logo',
+                    url: 'https://res.cloudinary.com/ddbq1mlsc/image/upload/v1782933784/Logo_OOS_SHOP_fied1z.png',
+                    width: 512,
+                    height: 512,
+                    caption: 'OOS SHOP',
+                  },
+                  foundingDate: '2022',
+                  founder: {
+                    '@type': 'Person',
+                    '@id': 'https://www.oos-shop.com/#founder',
+                    name: 'Andri',
+                    url: 'https://www.oos-shop.com/tentang-kami',
+                  },
+                  address: {
+                    '@type': 'PostalAddress',
+                    streetAddress: 'Calangcang No.82, Legok Kidul',
+                    addressLocality: 'Paseh',
+                    addressRegion: 'Jawa Barat',
+                    postalCode: '45381',
+                    addressCountry: 'ID',
+                  },
+                  contactPoint: {
+                    '@type': 'ContactPoint',
+                    telephone: '+6285212150100',
+                    contactType: 'customer service',
+                    availableLanguage: ['Indonesian', 'English'],
+                    areaServed: 'ID',
+                  },
+                  sameAs: [
+                    'https://www.instagram.com/oos.shop/',
+                    'https://www.tiktok.com/@oos.shop',
+                    'https://shopee.co.id/oos.shop',
+                    'https://www.facebook.com/share/18ZRZ3XiBH/',
+                    'https://t.me/Oos_shop',
+                    'https://wa.me/6285212150100',
+                  ],
+                },
+                {
+                  '@type': 'WebSite',
+                  '@id': 'https://www.oos-shop.com/#website',
+                  name: 'OOS SHOP',
+                  url: 'https://www.oos-shop.com',
+                  publisher: { '@id': 'https://www.oos-shop.com/#organization' },
+                  inLanguage: 'id-ID',
+                },
+              ],
+            }),
+          }}
+        />
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <CartProvider>
             {children}
