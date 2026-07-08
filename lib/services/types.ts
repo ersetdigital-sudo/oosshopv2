@@ -57,12 +57,6 @@ export interface ServiceFAQ {
   answer: string
 }
 
-export interface ServiceRating {
-  ratingValue: string
-  ratingCount: string
-  reviewCount: string
-}
-
 export interface ServiceTrustStat {
   value: string
   label: string
@@ -120,7 +114,6 @@ export interface ServiceData {
   process: ServiceProcess[]
   faq: ServiceFAQ[]
   finalCta?: ServiceFinalCta
-  rating?: ServiceRating // optional — omit to skip aggregateRating in schema
   relatedServices?: string[] // slugs for internal linking
 
   // Extra visual/marketing sections — purely presentational, NOT read by

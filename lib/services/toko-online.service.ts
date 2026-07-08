@@ -215,9 +215,4 @@ export const tokoOnline: ServiceData = {
     'jasa-pembuatan-sistem-inventory',
   ],
 
-  rating: {
-    ratingValue: '4.9',
-    ratingCount: '247',
-    reviewCount: '218',
-  },
 }

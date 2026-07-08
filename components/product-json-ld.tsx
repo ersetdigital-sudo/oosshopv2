@@ -19,7 +19,7 @@ function returnPolicy(siteUrl: string) {
   return {
     '@context': 'https://schema.org',
     '@type': 'MerchantReturnPolicy' as const,
-    '@id': `${siteUrl}#return-policy`,
+    '@id': `${siteUrl}/#return-policy`,
     name: 'Garansi Refund 7 Hari',
     url: `${siteUrl}/syarat-ketentuan`,
     applicableCountry: 'ID',
@@ -42,10 +42,8 @@ export function ProductJsonLd({ product, activePrice, reviews, avgRating, faqIte
     category: product.category,
     image: product.image_url || `${siteConfig.url}/icon-512.png`,
     sku: product.id,
- brand: { '@type': 'Brand', name: 'OOS SHOP' },
- datePublished: product.created_at,
- dateModified: product.updated_at || product.created_at,
- url,
+    brand: { '@type': 'Brand', name: 'OOS SHOP' },
+    url,
     offers: {
       '@type': 'Offer',
       url,
@@ -54,8 +52,8 @@ export function ProductJsonLd({ product, activePrice, reviews, avgRating, faqIte
       priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
       availability: 'https://schema.org/InStock',
       itemCondition: 'https://schema.org/NewCondition',
-      seller: { '@id': `${siteConfig.url}#organization` },
-      hasMerchantReturnPolicy: { '@id': `${siteConfig.url}#return-policy` },
+      seller: { '@id': `${siteConfig.url}/#organization` },
+      hasMerchantReturnPolicy: { '@id': `${siteConfig.url}/#return-policy` },
     },
     ...(reviews.length > 0 && {
       aggregateRating: {
@@ -79,9 +77,25 @@ export function ProductJsonLd({ product, activePrice, reviews, avgRating, faqIte
     }),
   }
 
+  const webPageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: product.name,
+    description: product.description || product.name,
+    inLanguage: 'id-ID',
+    isPartOf: { '@id': `${siteConfig.url}/#website` },
+    datePublished: product.created_at,
+    dateModified: product.updated_at || product.created_at,
+    breadcrumb: { '@id': `${url}#breadcrumb` },
+    mainEntity: { '@id': `${url}#product` },
+  }
+
   const breadcrumb = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
+    '@id': `${url}#breadcrumb`,
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Beranda', item: siteConfig.url },
       { '@type': 'ListItem', position: 2, name: 'Katalog', item: `${siteConfig.url}/katalog` },
@@ -108,6 +122,7 @@ export function ProductJsonLd({ product, activePrice, reviews, avgRating, faqIte
 
   const schemas = [
     returnPolicy(siteConfig.url),
+    webPageSchema,
     productSchema,
     breadcrumb,
     ...(faqSchema ? [faqSchema] : []),
