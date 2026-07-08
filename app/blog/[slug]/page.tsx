@@ -87,22 +87,32 @@ export default async function BlogPostPage({
   const relatedArticles = await getRelatedArticles(article.id)
   const faqs = extractFAQ(article.content)
 
+  const publishedAt = article.published_at || article.created_at
+  const modifiedAt = article.updated_at || publishedAt
+  const postUrl = `${siteConfig.url}/blog/${article.slug}`
+
   const articleJsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
       {
-        '@type': 'Article',
-        '@id': `${siteConfig.url}/blog/${article.slug}#article`,
+        '@type': 'BlogPosting',
+        '@id': `${postUrl}#blogpost`,
+        url: postUrl,
         headline: article.title,
-        description: article.meta_description || '',
-        image: article.thumbnail || undefined,
+        description: article.meta_description || `Baca ${article.title} di OOS SHOP Blog.`,
+        image: article.thumbnail ? [article.thumbnail] : undefined,
+        author: {
+          '@type': 'Person',
+          name: 'Andri',
+          url: siteConfig.url,
+        },
         publisher: { '@id': `${siteConfig.url}#organization` },
-        datePublished: article.published_at,
-        dateModified: article.updated_at || article.published_at,
+        datePublished: publishedAt,
+        dateModified: modifiedAt,
         mainEntityOfPage: {
           '@type': 'WebPage',
-          '@id': `${siteConfig.url}/blog/${article.slug}#webpage`,
-          url: `${siteConfig.url}/blog/${article.slug}`,
+          '@id': `${postUrl}#webpage`,
+          url: postUrl,
           isPartOf: { '@id': `${siteConfig.url}#website` },
         },
         inLanguage: 'id-ID',
@@ -110,11 +120,11 @@ export default async function BlogPostPage({
       },
       {
         '@type': 'BreadcrumbList',
-        '@id': `${siteConfig.url}/blog/${article.slug}#breadcrumb`,
+        '@id': `${postUrl}#breadcrumb`,
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Beranda', item: siteConfig.url },
           { '@type': 'ListItem', position: 2, name: 'Blog', item: `${siteConfig.url}/blog` },
-          { '@type': 'ListItem', position: 3, name: article.title },
+          { '@type': 'ListItem', position: 3, name: article.title, item: postUrl },
         ],
       },
     ],
@@ -133,19 +143,14 @@ export default async function BlogPostPage({
         }
       : null
 
+  const articleJsonLdScript = JSON.stringify(articleJsonLd)
+  const faqJsonLdScript = faqJsonLd ? JSON.stringify(faqJsonLd) : null
+
   return (
     <>
-      <script
-        type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-      />
-      {faqJsonLd && (
-        <script
-          type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: articleJsonLdScript }} />
+      {faqJsonLdScript && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: faqJsonLdScript }} />
       )}
       <SiteHeader />
       <main className="pb-16">

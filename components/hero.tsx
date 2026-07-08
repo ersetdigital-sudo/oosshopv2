@@ -33,7 +33,7 @@ export function Hero() {
             Jasa Instal Plugin WordPress Premium Original &amp; Bergaransi
           </h1>
 
-          <p className="mt-4 max-w-xl text-pretty text-sm leading-relaxed text-muted-foreground sm:text-base md:mt-5 md:text-lg">
+          <p className="hero-description mt-4 max-w-xl text-pretty text-sm leading-relaxed text-muted-foreground sm:text-base md:mt-5 md:text-lg">
             Dapatkan plugin WordPress premium original berlisensi resmi langsung dari developer.
             Proses instal cepat 5–15 menit, update otomatis selamanya, dan harga mulai Rp 25.000.
             Tersedia 500+ plugin termasuk Elementor Pro, WP Rocket, Astra Pro, dan Crocoblock.

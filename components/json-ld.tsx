@@ -112,9 +112,8 @@ export function JsonLd() {
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: 'Katalog Plugin WordPress Premium',
-      itemListElement: allServices.map((s, i) => ({
+      itemListElement: allServices.map((s) => ({
         '@type': 'Offer',
-        position: i + 1,
         itemOffered: {
           '@type': 'Service',
           name: s.name,
@@ -142,9 +141,8 @@ export function JsonLd() {
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: 'Layanan Pembuatan Website',
-      itemListElement: websiteServices.map((s, i) => ({
+      itemListElement: websiteServices.map((s) => ({
         '@type': 'Offer',
-        position: i + 1,
         itemOffered: {
           '@type': 'Service',
           name: s.heroHeading,
