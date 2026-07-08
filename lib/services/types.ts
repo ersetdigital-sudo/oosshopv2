@@ -18,6 +18,7 @@ export interface ServiceHero {
   subheading: string
   icon: string // lucide icon name
   hook?: string // reflective question above the main heading
+  socialProof?: string // social proof text above badge (e.g. "Dipercaya 1.200+ bisnis")
 }
 
 export interface ServiceWhatIs {
@@ -111,6 +112,8 @@ export interface ServiceData {
   benefits: ServiceBenefit[]
   problemSection?: ServiceProblemSection
   solutionSection?: ServiceProblemSection
+  whyItMatters?: ServiceProblemSection
+  servicesOverview?: ServiceProblemSection
   useCases: string[]
   process: ServiceProcess[]
   faq: ServiceFAQ[]

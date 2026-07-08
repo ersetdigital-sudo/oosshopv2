@@ -31,10 +31,10 @@ export const companyProfile: ServiceData = {
 
   hero: {
     badge: 'Jasa Pembuatan Website Company Profile',
-    hook: 'Calon Klien Mencari Bisnis Anda di Google, Tapi Tidak Menemukan Website Resmi?',
-    heading: 'Jasa Pembuatan Website Company Profile Profesional, Siap Online dalam 5–14 Hari',
+    socialProof: '★★★★★ Dipercaya 1.200+ perusahaan & UMKM di Indonesia',
+    heading: 'Website Company Profile yang Menjual Bisnis Anda',
     subheading:
-      'Bangun kredibilitas bisnis Anda dengan website company profile yang modern, mobile responsive, dan SEO friendly. Cocok untuk perusahaan, UMKM, startup, hingga instansi — dengan desain custom sesuai brand, harga transparan mulai Rp 1.250.000, dan support aktif via WhatsApp.',
+      'Dapatkan website profesional dengan desain custom, loading cepat, responsif di semua perangkat, dan SEO-ready. Bisnis Anda akan terlihat lebih kredibel dan mudah ditemukan calon klien di Google — mulai dari Rp 1.250.000.',
     icon: 'Building2',
   },
 
@@ -142,68 +142,62 @@ export const companyProfile: ServiceData = {
     },
   ],
 
-  problemSection: {
-    title: 'Apakah Bisnis Anda Mengalami Masalah Ini?',
+  whyItMatters: {
+    title: 'Calon Klien Mengecek Website Anda dalam 8 Detik Pertama',
     intro:
-      'Banyak bisnis di Indonesia menghadapi kendala yang sebenarnya bisa diatasi dengan satu website company profile yang tepat.',
+      'Website company profile bukan sekadar tampilan. Dia adalah alat penjualan yang bekerja 24 jam membangun kredibilitas dan mempercepat keputusan pembelian.',
     items: [
       {
-        title: 'Calon klien ragu karena tidak ada website resmi',
+        title: 'Membangun Kredibilitas',
         description:
-          'Di era digital, perusahaan tanpa website sering dianggap kurang profesional. Calon klien cenderung memilih vendor yang sudah punya company profile online.',
+          'Website profesional membuat bisnis Anda terlihat lebih terpercaya di mata calon klien, mitra, dan investor sejak kunjungan pertama.',
       },
       {
-        title: 'Informasi bisnis tersebar dan tidak terstruktur',
+        title: 'Ditemukan di Google',
         description:
-          'Profil ada di WhatsApp, portofolio di Instagram, alamat di Google Maps. Calon klien harus bolak-balik platform untuk mengenal bisnis Anda.',
+          'Dengan struktur SEO yang tepat, website company profile Anda memiliki peluang lebih besar untuk muncul di halaman pencarian Google.',
       },
       {
-        title: 'Website lama tidak mobile friendly',
+        title: 'Mempercepat Closing',
         description:
-          'Lebih dari 70% pengunjung website di Indonesia mengakses melalui HP. Jika tampilan tidak responsif, pengunjung akan langsung keluar.',
-      },
-      {
-        title: 'Sulit ditemukan di Google',
-        description:
-          'Website ada, tapi tidak muncul di halaman pencarian. Padahal calon klien yang siap membeli biasanya mencari dulu di Google.',
-      },
-      {
-        title: 'Maintenance menyita waktu dan biaya',
-        description:
-          'Update kecil saja harus manggil developer dan bayar tambahan. Akhirnya website dibiarkan usang dan tidak relevan.',
+          'Informasi lengkap, portofolio, testimoni, dan kontak yang mudah diakses membuat calon klien lebih cepat yakin untuk menghubungi Anda.',
       },
     ],
   },
 
-  solutionSection: {
-    title: 'Solusi dari OOS SHOP',
-    intro:
-      'Kami tidak hanya membuat website. Kami membantu bisnis Anda memiliki company profile digital yang menjadi aset jangka panjang.',
+  servicesOverview: {
+    title: 'Satu Paket, Website Siap Online',
+    intro: 'Semua yang Anda butuhkan untuk memiliki website company profile profesional dalam satu layanan.',
     items: [
       {
-        title: 'Website resmi yang membangun kredibilitas',
+        title: 'Desain Website Custom',
         description:
-          'Buat bisnis Anda terlihat profesional dan terpercaya sejak kunjungan pertama dengan desain custom yang mencerminkan identitas brand.',
+          'Desain dibuat khusus sesuai identitas brand Anda, bukan template pasaran. Tampilan unik dan profesional.',
       },
       {
-        title: 'Semua informasi bisnis di satu tempat',
+        title: 'Responsif Semua Perangkat',
         description:
-          'Profil perusahaan, layanan, portofolio, testimoni, dan kontak tersentralisasi dalam satu website yang mudah diakses kapan saja.',
+          'Website tampil optimal di smartphone, tablet, dan desktop. Calon klien dari HP pun tetap nyaman browsing.',
       },
       {
-        title: 'Tampilan optimal di smartphone dan desktop',
+        title: 'SEO & Kecepatan',
         description:
-          'Website 100% mobile responsive sehingga calon klien yang browsing dari HP tetap mendapatkan pengalaman terbaik.',
+          'Struktur HTML semantik, schema markup, meta tag teroptimasi, dan loading di bawah 3 detik untuk performa terbaik.',
       },
       {
-        title: 'Siap bersaing di halaman pertama Google',
+        title: 'Domain & Hosting',
         description:
-          'Dibangun dengan struktur HTML semantik, schema markup, meta tag teroptimasi, dan loading cepat untuk performa SEO maksimal.',
+          'Paket sudah termasuk domain dan hosting sesuai pilihan paket. Kami urus konfigurasi hingga website benar-benar online.',
       },
       {
-        title: 'Mudah dikelola tanpa ribet',
+        title: 'Form & Integrasi Kontak',
         description:
-          'Dashboard CMS intuitif + pelatihan singkat + maintenance gratis 1 tahun. Update konten bisa dilakukan sendiri tanpa perlu developer.',
+          'Form kontak interaktif, tombol WhatsApp floating, Google Maps, dan email bisnis agar calon klien mudah menghubungi Anda.',
+      },
+      {
+        title: 'Maintenance & Support',
+        description:
+          'Gratis maintenance 1 tahun dan support teknis via WhatsApp. Update minor ditangani tanpa biaya tambahan.',
       },
     ],
   },
@@ -248,6 +242,24 @@ export const companyProfile: ServiceData = {
       title: 'Online, Serah Terima & Pelatihan',
       description:
         'Website dionlinekan di domain Anda. Kami berikan panduan penggunaan dashboard dan dukungan teknis 30 hari.',
+    },
+  ],
+
+  testimonials: [
+    {
+      text: 'Website company profile kami jadi lebih profesional dan calon klien langsung mengenal layanan kami dalam satu halaman. Order meningkat 30% dalam 2 bulan.',
+      name: 'Andi Wijaya',
+      role: 'Founder, PT Sinar Digital',
+    },
+    {
+      text: 'Proses pengerjaan cepat, komunikasi responsif, dan hasilnya SEO friendly. Website kami mulai muncul di halaman pertama Google untuk kata kunci utama.',
+      name: 'Dina Kusuma',
+      role: 'Marketing Manager, Kreasi Mandiri',
+    },
+    {
+      text: 'Desainnya custom sesuai brand dan mudah dikelola sendiri. Kami tidak perlu repot update kecil-kecilan ke developer lagi.',
+      name: 'Rudi Hartono',
+      role: 'Owner, UD Berkah Jaya',
     },
   ],
 

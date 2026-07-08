@@ -80,6 +80,8 @@ export default async function ServicePage({
   const toc: { id: string; label: string }[] = []
   if (service.problemSection) toc.push({ id: 'masalah', label: 'Masalah yang Sering Dihadapi' })
   if (service.solutionSection) toc.push({ id: 'solusi', label: 'Solusi dari OOS SHOP' })
+  if (service.whyItMatters) toc.push({ id: 'kenapa-penting', label: 'Kenapa Ini Penting' })
+  if (service.servicesOverview) toc.push({ id: 'layanan-kami', label: 'Layanan Kami' })
   toc.push({ id: 'apa-itu', label: `Apa Itu ${service.menuLabel}` })
   if (service.whyChooseUs?.length) toc.push({ id: 'kenapa-kami', label: 'Kenapa Memilih Kami' })
   if (service.features?.length) toc.push({ id: 'fitur', label: 'Fitur' })
@@ -114,6 +116,12 @@ export default async function ServicePage({
 
             <div className="mt-6 flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
               <div className="max-w-2xl">
+                {service.hero.socialProof && (
+                  <p className="mb-3 text-sm font-medium text-primary">
+                    {service.hero.socialProof}
+                  </p>
+                )}
+
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-primary">
                   <Sparkles className="size-3.5" aria-hidden />
                   {service.hero.badge}
@@ -233,6 +241,67 @@ export default async function ServicePage({
                     className="flex flex-col rounded-2xl border border-primary/20 bg-card p-5 shadow-sm"
                   >
                     <h3 className="text-base font-semibold tracking-tight text-primary">{item.title}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ═══ Why It Matters (optional) ═══ */}
+        {service.whyItMatters && (
+          <section className="border-b border-border bg-muted/30" id="kenapa-penting">
+            <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
+              <div className="mx-auto max-w-2xl text-center">
+                <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
+                  {service.whyItMatters.title}
+                </h2>
+                {service.whyItMatters.intro && (
+                  <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
+                    {service.whyItMatters.intro}
+                  </p>
+                )}
+              </div>
+              <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {service.whyItMatters.items.map((item) => (
+                  <div
+                    key={item.title}
+                    className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm"
+                  >
+                    <h3 className="text-base font-semibold tracking-tight">{item.title}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ═══ Services Overview (optional) ═══ */}
+        {service.servicesOverview && (
+          <section className="border-b border-border bg-accent/20" id="layanan-kami">
+            <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
+              <div className="mx-auto max-w-2xl text-center">
+                <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
+                  {service.servicesOverview.title}
+                </h2>
+                {service.servicesOverview.intro && (
+                  <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
+                    {service.servicesOverview.intro}
+                  </p>
+                )}
+              </div>
+              <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {service.servicesOverview.items.map((item, index) => (
+                  <div
+                    key={item.title}
+                    className="relative flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm"
+                  >
+                    <span className="absolute -top-3 -left-2 flex size-8 items-center justify-center rounded-lg bg-primary text-xs font-bold text-primary-foreground">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <h3 className="mt-2 text-base font-semibold tracking-tight">{item.title}</h3>
                     <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
                   </div>
                 ))}
