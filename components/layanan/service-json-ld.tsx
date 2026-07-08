@@ -44,7 +44,14 @@ export function ServiceJsonLd({ service }: { service: ServiceData }) {
         postalCode: '45381',
         addressCountry: 'ID',
       },
-      sameAs: ['https://wa.me/6285212150100'],
+      sameAs: [
+        'https://www.instagram.com/oos.shop/',
+        'https://www.tiktok.com/@oos.shop',
+        'https://shopee.co.id/oos.shop',
+        'https://www.facebook.com/share/18ZRZ3XiBH/',
+        'https://t.me/Oos_shop',
+        'https://wa.me/6285212150100',
+      ],
       founder: {
         '@type': 'Person',
         '@id': `${SITE_URL}/#founder`,
