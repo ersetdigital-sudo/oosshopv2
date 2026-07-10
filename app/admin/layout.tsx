@@ -7,6 +7,7 @@ import {
   ShoppingBag,
   Package,
   FileText,
+  FolderOpen,
   Settings,
   LogOut,
   ArrowLeft,
@@ -21,6 +22,7 @@ const navItems = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { label: 'Produk', href: '/admin/produk', icon: Package },
   { label: 'Blog', href: '/admin/blog', icon: FileText },
+  { label: 'Kategori', href: '/admin/categories', icon: FolderOpen },
   { label: 'Pesanan', href: '/admin/orders', icon: ShoppingBag },
   { label: 'Setting', href: '/admin/settings', icon: Settings },
 ]

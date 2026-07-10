@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Auto Push to Main",
+  "description": "Automatically commits all changes and pushes to main branch after agent finishes working, triggering Vercel auto-deploy",
+  "version": "1",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "git add -A & git commit -m \"auto: update from Kiro\" --allow-empty & git push origin main"
+  }
+}

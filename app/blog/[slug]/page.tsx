@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { ChevronRight } from 'lucide-react'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
-import { getArticleBySlug, getRelatedArticles } from '@/lib/blog'
+import { getArticleBySlug, getRelatedArticles, getArticleWithMeta, getRelatedArticlesByCategory } from '@/lib/blog'
 import { siteConfig } from '@/lib/data'
 import { organizationSchema, websiteSchema } from '@/lib/schema/organization'
 
@@ -82,10 +82,12 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const article = await getArticleBySlug(slug)
+  const article = await getArticleWithMeta(slug)
   if (!article) notFound()
 
-  const relatedArticles = await getRelatedArticles(article.id)
+  const relatedArticles = article.category
+    ? await getRelatedArticlesByCategory(article.id, article.category.id)
+    : await getRelatedArticles(article.id)
   const faqs = extractFAQ(article.content)
 
   const publishedAt = article.published_at || article.created_at
@@ -128,7 +130,10 @@ export default async function BlogPostPage({
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Beranda', item: siteConfig.url },
           { '@type': 'ListItem', position: 2, name: 'Blog', item: `${siteConfig.url}/blog` },
-          { '@type': 'ListItem', position: 3, name: article.title, item: postUrl },
+          ...(article.category
+            ? [{ '@type': 'ListItem', position: 3, name: article.category.name, item: `${siteConfig.url}/blog/category/${article.category.slug}` }]
+            : []),
+          { '@type': 'ListItem', position: article.category ? 4 : 3, name: article.title, item: postUrl },
         ],
       },
     ],
@@ -174,6 +179,16 @@ export default async function BlogPostPage({
                   Blog
                 </Link>
               </li>
+              {article.category && (
+                <>
+                  <ChevronRight className="size-4" aria-hidden />
+                  <li>
+                    <Link href={`/blog/category/${article.category.slug}`} className="transition-colors hover:text-foreground">
+                      {article.category.name}
+                    </Link>
+                  </li>
+                </>
+              )}
               <ChevronRight className="size-4" aria-hidden />
               <li className="line-clamp-1 font-medium text-foreground" aria-current="page">
                 {article.title}
@@ -183,6 +198,24 @@ export default async function BlogPostPage({
 
           {/* Article header */}
           <header className="mt-6 mb-8">
+            <div className="mb-3 flex flex-wrap items-center gap-2">
+              {article.category && (
+                <Link
+                  href={`/blog/category/${article.category.slug}`}
+                  className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary hover:bg-primary/20"
+                >
+                  {article.category.name}
+                </Link>
+              )}
+              {article.article_type && (
+                <span
+                  className="rounded-full px-3 py-1 text-xs font-medium"
+                  style={{ backgroundColor: `${article.article_type.color}15`, color: article.article_type.color }}
+                >
+                  {article.article_type.name}
+                </span>
+              )}
+            </div>
             <h1 className="text-2xl font-bold leading-tight tracking-tight sm:text-3xl md:text-4xl">
               {article.title}
             </h1>

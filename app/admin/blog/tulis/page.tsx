@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Sparkles, Wand2, ImagePlus, RefreshCw } from 'lucide-react'
@@ -23,6 +23,8 @@ type FormState = {
   meta_title: string
   meta_description: string
   status: 'draft' | 'published'
+  category_id: string
+  article_type_id: string
 }
 
 export default function TulisArtikelPage() {
@@ -35,6 +37,8 @@ export default function TulisArtikelPage() {
     meta_title: '',
     meta_description: '',
     status: 'draft',
+    category_id: '',
+    article_type_id: '',
   })
   const [saving, setSaving] = useState(false)
   const [autoSlug, setAutoSlug] = useState(true)
@@ -43,6 +47,21 @@ export default function TulisArtikelPage() {
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
   const [reviseInstruction, setReviseInstruction] = useState('')
   const [revising, setRevising] = useState(false)
+  const [categories, setCategories] = useState<{ id: string; name: string }[]>([])
+  const [articleTypes, setArticleTypes] = useState<{ id: string; name: string; color: string }[]>([])
+
+  useEffect(() => {
+    // Fetch categories and article types
+    async function fetchMeta() {
+      const [catRes, typeRes] = await Promise.all([
+        supabase.from('categories').select('id, name').eq('is_active', true).order('sort_order'),
+        supabase.from('article_types').select('id, name, color').order('name'),
+      ])
+      if (catRes.data) setCategories(catRes.data)
+      if (typeRes.data) setArticleTypes(typeRes.data)
+    }
+    fetchMeta()
+  }, [])
 
   function showToast(message: string, type: 'success' | 'error' = 'success') {
     setToast({ message, type })
@@ -168,13 +187,19 @@ export default function TulisArtikelPage() {
       meta_description: form.meta_description || '',
       status: form.status,
       published_at: form.status === 'published' ? new Date().toISOString() : null,
+      article_type_id: form.article_type_id || null,
     }
 
-    const { error } = await supabase.from('articles').insert([payload])
+    const { data: inserted, error } = await supabase.from('articles').insert([payload]).select('id').single()
     if (error) {
       showToast('Gagal menyimpan: ' + error.message, 'error')
       setSaving(false)
       return
+    }
+
+    // Insert category link
+    if (form.category_id && inserted?.id) {
+      await supabase.from('article_categories').insert({ article_id: inserted.id, category_id: form.category_id })
     }
 
     router.push('/admin/blog')
@@ -280,6 +305,40 @@ export default function TulisArtikelPage() {
               className="mt-2 h-20 w-32 rounded-lg object-cover"
             />
           )}
+        </div>
+
+        {/* Category & Article Type */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
+              Kategori *
+            </label>
+            <select
+              value={form.category_id}
+              onChange={(e) => setForm((prev) => ({ ...prev, category_id: e.target.value }))}
+              className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+            >
+              <option value="">Pilih kategori...</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>{cat.name}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
+              Article Type *
+            </label>
+            <select
+              value={form.article_type_id}
+              onChange={(e) => setForm((prev) => ({ ...prev, article_type_id: e.target.value }))}
+              className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+            >
+              <option value="">Pilih tipe artikel...</option>
+              {articleTypes.map((t) => (
+                <option key={t.id} value={t.id}>{t.name}</option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div>

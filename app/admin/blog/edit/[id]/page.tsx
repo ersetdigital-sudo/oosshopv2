@@ -23,6 +23,8 @@ type FormState = {
   meta_title: string
   meta_description: string
   status: 'draft' | 'published'
+  category_id: string
+  article_type_id: string
 }
 
 export default function EditArtikelPage() {
@@ -36,14 +38,35 @@ export default function EditArtikelPage() {
     meta_title: '',
     meta_description: '',
     status: 'draft',
+    category_id: '',
+    article_type_id: '',
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [categories, setCategories] = useState<{ id: string; name: string }[]>([])
+  const [articleTypes, setArticleTypes] = useState<{ id: string; name: string; color: string }[]>([])
 
   useEffect(() => {
     async function fetchArticle() {
-      const { data } = await supabase.from('articles').select('*').eq('id', params.id).single()
-      if (data) {
+      const [articleRes, catRes, typeRes] = await Promise.all([
+        supabase.from('articles').select('*').eq('id', params.id).single(),
+        supabase.from('categories').select('id, name').eq('is_active', true).order('sort_order'),
+        supabase.from('article_types').select('id, name, color').order('name'),
+      ])
+
+      if (catRes.data) setCategories(catRes.data)
+      if (typeRes.data) setArticleTypes(typeRes.data)
+
+      if (articleRes.data) {
+        const data = articleRes.data
+        // Get category for this article
+        const { data: catLink } = await supabase
+          .from('article_categories')
+          .select('category_id')
+          .eq('article_id', params.id)
+          .limit(1)
+          .single()
+
         setForm({
           title: data.title || '',
           slug: data.slug || '',
@@ -52,6 +75,8 @@ export default function EditArtikelPage() {
           meta_title: data.meta_title || '',
           meta_description: data.meta_description || '',
           status: data.status || 'draft',
+          category_id: catLink?.category_id || '',
+          article_type_id: data.article_type_id || '',
         })
       }
       setLoading(false)
@@ -76,6 +101,7 @@ export default function EditArtikelPage() {
       meta_description: form.meta_description || '',
       status: form.status,
       updated_at: new Date().toISOString(),
+      article_type_id: form.article_type_id || null,
     }
     if (form.status === 'published') {
       payload.published_at = new Date().toISOString()
@@ -87,6 +113,13 @@ export default function EditArtikelPage() {
       setSaving(false)
       return
     }
+
+    // Update category
+    await supabase.from('article_categories').delete().eq('article_id', params.id)
+    if (form.category_id) {
+      await supabase.from('article_categories').insert({ article_id: params.id, category_id: form.category_id })
+    }
+
     router.push('/admin/blog')
   }
 
@@ -158,6 +191,40 @@ export default function EditArtikelPage() {
               className="mt-2 h-20 w-32 rounded-lg object-cover"
             />
           )}
+        </div>
+
+        {/* Category & Article Type */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
+              Kategori *
+            </label>
+            <select
+              value={form.category_id}
+              onChange={(e) => setForm((prev) => ({ ...prev, category_id: e.target.value }))}
+              className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+            >
+              <option value="">Pilih kategori...</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>{cat.name}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
+              Article Type *
+            </label>
+            <select
+              value={form.article_type_id}
+              onChange={(e) => setForm((prev) => ({ ...prev, article_type_id: e.target.value }))}
+              className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+            >
+              <option value="">Pilih tipe artikel...</option>
+              {articleTypes.map((t) => (
+                <option key={t.id} value={t.id}>{t.name}</option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div>

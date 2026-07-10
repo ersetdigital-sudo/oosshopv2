@@ -5,6 +5,7 @@ import { ArrowRight, ChevronRight } from 'lucide-react'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { getPublishedArticles } from '@/lib/blog'
+import { getActiveCategories } from '@/lib/categories'
 import { siteConfig } from '@/lib/data'
 import { organizationSchema, websiteSchema } from '@/lib/schema/organization'
 
@@ -34,6 +35,7 @@ function formatDate(dateStr: string) {
 
 export default async function BlogPage() {
   const articles = await getPublishedArticles()
+  const categories = await getActiveCategories()
 
   const jsonLd =
     articles.length > 0
@@ -109,6 +111,25 @@ export default async function BlogPage() {
               bisnis digital di Indonesia.
             </p>
           </div>
+
+          {/* Category Navigation */}
+          {categories.length > 0 && (
+            <div className="mb-8 flex flex-wrap gap-2">
+              <span className="rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground">
+                Semua
+              </span>
+              {categories.map((cat) => (
+                <Link
+                  key={cat.id}
+                  href={`/blog/category/${cat.slug}`}
+                  className="rounded-full border border-border px-4 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                >
+                  {cat.icon && <span className="mr-1">{cat.icon}</span>}
+                  {cat.name}
+                </Link>
+              ))}
+            </div>
+          )}
 
           {articles.length === 0 ? (
             <div className="rounded-2xl border border-border bg-card p-12 text-center">
