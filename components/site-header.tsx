@@ -9,6 +9,7 @@ import {
   CalendarDays,
   ChevronDown,
   ClipboardList,
+  FileText,
   GraduationCap,
   HeartPulse,
   Home,
@@ -323,15 +324,16 @@ export function SiteHeader() {
             <span className="text-[10px] font-medium">Pesanan</span>
           </Link>
 
-          {/* Lainnya — opens bottom sheet */}
-          <button
-            type="button"
-            onClick={() => setLainnyaOpen(true)}
-            className="flex flex-col items-center gap-0.5 rounded-lg px-2 py-1 text-muted-foreground transition-colors"
+          {/* Artikel */}
+          <Link
+            href="/blog"
+            className={`flex flex-col items-center gap-0.5 rounded-lg px-2 py-1 transition-colors ${
+              pathname.startsWith('/blog') ? 'text-primary' : 'text-muted-foreground'
+            }`}
           >
-            <Menu className="size-5" aria-hidden />
-            <span className="text-[10px] font-medium">Lainnya</span>
-          </button>
+            <FileText className="size-5" aria-hidden />
+            <span className="text-[10px] font-medium">Artikel</span>
+          </Link>
         </div>
       </nav>
 
