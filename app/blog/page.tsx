@@ -13,14 +13,14 @@ import { organizationSchema, websiteSchema } from '@/lib/schema/organization'
 export const revalidate = 300
 
 export const metadata: Metadata = {
-  title: 'Blog - Tips WordPress, Plugin & Pembuatan Website | OOS SHOP',
+  title: 'Blog - Panduan WordPress, Elementor, WooCommerce & SEO | OOS SHOP',
   description:
-    'Baca artikel terbaru seputar tips WordPress, panduan plugin premium, tutorial pembuatan website, dan informasi digital marketing untuk bisnis Indonesia.',
-  keywords: ['blog wordpress', 'tips plugin wordpress', 'tutorial website', 'panduan digital marketing'],
+    'Panduan WordPress, Elementor, WooCommerce, plugin premium, SEO, AI, dan pengembangan website. Tutorial, review, perbandingan, troubleshooting, dan solusi praktis untuk website cepat, aman, dan profesional.',
+  keywords: ['blog wordpress', 'panduan elementor', 'tutorial woocommerce', 'plugin premium', 'seo website', 'ai website', 'pengembangan website'],
   alternates: { canonical: `${siteConfig.url}/blog` },
   openGraph: {
-    title: 'Blog - Tips WordPress & Pembuatan Website | OOS SHOP',
-    description: 'Artikel seputar WordPress, plugin premium, dan tips pembuatan website profesional.',
+    title: 'Blog - Panduan WordPress, Elementor & WooCommerce | OOS SHOP',
+    description: 'Panduan WordPress, Elementor, WooCommerce, plugin premium, SEO, AI, dan pengembangan website. Solusi praktis untuk website profesional.',
     url: `${siteConfig.url}/blog`,
     type: 'website',
   },
@@ -49,8 +49,8 @@ export default async function BlogPage() {
               '@type': 'CollectionPage',
               '@id': `${siteConfig.url}/blog#webpage`,
               url: `${siteConfig.url}/blog`,
-              name: 'Blog - Tips WordPress, Plugin & Pembuatan Website | OOS SHOP',
-              description: 'Artikel seputar WordPress, plugin premium, dan tips pembuatan website profesional.',
+              name: 'Blog - Panduan WordPress, Elementor, WooCommerce & SEO | OOS SHOP',
+              description: 'Panduan WordPress, Elementor, WooCommerce, plugin premium, SEO, AI, dan pengembangan website. Tutorial, review, perbandingan, troubleshooting, dan solusi praktis untuk website cepat, aman, dan profesional.',
               isPartOf: { '@id': `${siteConfig.url}/#website` },
               inLanguage: 'id-ID',
             },
@@ -108,8 +108,7 @@ export default async function BlogPage() {
           <div className="mt-6 mb-10">
             <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Blog OOS SHOP</h1>
             <p className="mt-3 max-w-2xl text-base text-muted-foreground">
-              Tips WordPress, panduan plugin premium, tutorial pembuatan website, dan informasi seputar
-              bisnis digital di Indonesia.
+              Panduan WordPress, Elementor, WooCommerce, plugin premium, SEO, AI, dan pengembangan website. Temukan tutorial, review, perbandingan, troubleshooting, checklist, serta solusi praktis untuk membantu Anda membangun website yang cepat, aman, dan profesional.
             </p>
           </div>
 
