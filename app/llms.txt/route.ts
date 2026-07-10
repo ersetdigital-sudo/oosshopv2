@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import summary from '@/public/data/summary.json'
 import faqs from '@/public/data/faq.json'
 import { getAllProducts } from '@/lib/products'
+import { getPublishedArticles } from '@/lib/blog'
 
 // Dynamic llms.txt — pulls live product/pricing data from Supabase so AI crawlers
 // (ChatGPT, Perplexity, Claude, Google AI Overview) always see accurate, up-to-date info.
@@ -9,6 +10,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const products = await getAllProducts()
+  const articles = await getPublishedArticles()
 
   const serviceList = products.length
     ? products
@@ -55,9 +57,15 @@ Data harga lengkap dan real-time: ${summary.url}/api/ai/services
 - Homepage: ${summary.url}
 - Katalog Plugin (live data): ${summary.url}/katalog
 - Layanan Website: ${summary.url}/layanan
+- Blog: ${summary.url}/blog
 - API data produk (JSON): ${summary.url}/api/ai/services
 - Kontak WhatsApp: ${summary.contact.whatsappUrl}
 
+## Blog & Artikel (${articles.length} artikel published)
+
+${articles.slice(0, 50).map((a) => `- [${a.title}](${summary.url}/blog/${a.slug})${a.meta_description ? ` — ${a.meta_description}` : ''}`).join('\n')}
+
+${articles.length > 50 ? `\n...dan ${articles.length - 50} artikel lainnya. Lihat selengkapnya: ${summary.url}/blog\n` : ''}
 ## FAQ
 
 ${faqList}
