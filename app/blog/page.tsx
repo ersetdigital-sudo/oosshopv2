@@ -6,6 +6,7 @@ import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { getPublishedArticles } from '@/lib/blog'
 import { getActiveCategories } from '@/lib/categories'
+import { CategoryIcon } from '@/lib/category-icons'
 import { siteConfig } from '@/lib/data'
 import { organizationSchema, websiteSchema } from '@/lib/schema/organization'
 
@@ -115,16 +116,16 @@ export default async function BlogPage() {
           {/* Category Navigation */}
           {categories.length > 0 && (
             <div className="mb-8 flex flex-wrap gap-2">
-              <span className="rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground">
                 Semua
               </span>
               {categories.map((cat) => (
                 <Link
                   key={cat.id}
                   href={`/blog/category/${cat.slug}`}
-                  className="rounded-full border border-border px-4 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-primary hover:text-primary"
                 >
-                  {cat.icon && <span className="mr-1">{cat.icon}</span>}
+                  <CategoryIcon slug={cat.slug} className="size-3.5" />
                   {cat.name}
                 </Link>
               ))}

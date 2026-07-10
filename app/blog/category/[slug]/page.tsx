@@ -6,6 +6,7 @@ import { ArrowRight, ChevronRight } from 'lucide-react'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { getCategoryBySlug, getArticlesByCategory, getActiveCategories } from '@/lib/categories'
+import { CategoryIcon } from '@/lib/category-icons'
 import { siteConfig } from '@/lib/data'
 import { organizationSchema, websiteSchema } from '@/lib/schema/organization'
 
@@ -147,19 +148,25 @@ export default async function CategoryPage({
                   priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                <div className="absolute bottom-6 left-6">
+                <div className="absolute bottom-6 left-6 flex items-center gap-3">
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
+                    <CategoryIcon slug={category.slug} className="size-5 text-white" />
+                  </div>
                   <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                    {category.icon && <span className="mr-2">{category.icon}</span>}
                     {category.name}
                   </h1>
                 </div>
               </div>
             )}
             {!category.cover_image && (
-              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                {category.icon && <span className="mr-2">{category.icon}</span>}
-                {category.name}
-              </h1>
+              <div className="flex items-center gap-3">
+                <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10">
+                  <CategoryIcon slug={category.slug} className="size-6 text-primary" />
+                </div>
+                <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                  {category.name}
+                </h1>
+              </div>
             )}
             {category.description && (
               <p className="mt-3 max-w-2xl text-base text-muted-foreground">
@@ -175,7 +182,7 @@ export default async function CategoryPage({
           <div className="mb-8 flex flex-wrap gap-2">
             <Link
               href="/blog"
-              className="rounded-full border border-border px-4 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+              className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-primary hover:text-primary"
             >
               Semua
             </Link>
@@ -183,13 +190,13 @@ export default async function CategoryPage({
               <Link
                 key={cat.id}
                 href={`/blog/category/${cat.slug}`}
-                className={`rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
+                className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
                   cat.slug === category.slug
                     ? 'bg-primary text-primary-foreground'
                     : 'border border-border text-muted-foreground hover:border-primary hover:text-primary'
                 }`}
               >
-                {cat.icon && <span className="mr-1">{cat.icon}</span>}
+                <CategoryIcon slug={cat.slug} className="size-3.5" />
                 {cat.name}
               </Link>
             ))}
