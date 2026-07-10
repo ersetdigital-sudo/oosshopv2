@@ -25,6 +25,7 @@ type FormState = {
   status: 'draft' | 'published'
   category_id: string
   article_type_id: string
+  product_id: string
 }
 
 export default function TulisArtikelPage() {
@@ -39,6 +40,7 @@ export default function TulisArtikelPage() {
     status: 'draft',
     category_id: '',
     article_type_id: '',
+    product_id: '',
   })
   const [saving, setSaving] = useState(false)
   const [autoSlug, setAutoSlug] = useState(true)
@@ -49,16 +51,18 @@ export default function TulisArtikelPage() {
   const [revising, setRevising] = useState(false)
   const [categories, setCategories] = useState<{ id: string; name: string }[]>([])
   const [articleTypes, setArticleTypes] = useState<{ id: string; name: string; color: string }[]>([])
+  const [products, setProducts] = useState<{ id: string; name: string; category: string }[]>([])
 
   useEffect(() => {
-    // Fetch categories and article types
     async function fetchMeta() {
-      const [catRes, typeRes] = await Promise.all([
+      const [catRes, typeRes, prodRes] = await Promise.all([
         supabase.from('categories').select('id, name').eq('is_active', true).order('sort_order'),
         supabase.from('article_types').select('id, name, color').order('name'),
+        supabase.from('products').select('id, name, category').order('name'),
       ])
       if (catRes.data) setCategories(catRes.data)
       if (typeRes.data) setArticleTypes(typeRes.data)
+      if (prodRes.data) setProducts(prodRes.data)
     }
     fetchMeta()
   }, [])
@@ -188,6 +192,7 @@ export default function TulisArtikelPage() {
       status: form.status,
       published_at: form.status === 'published' ? new Date().toISOString() : null,
       article_type_id: form.article_type_id || null,
+      product_id: form.product_id || null,
     }
 
     const { data: inserted, error } = await supabase.from('articles').insert([payload]).select('id').single()
@@ -315,7 +320,7 @@ export default function TulisArtikelPage() {
             </label>
             <select
               value={form.category_id}
-              onChange={(e) => setForm((prev) => ({ ...prev, category_id: e.target.value }))}
+              onChange={(e) => setForm((prev) => ({ ...prev, category_id: e.target.value, product_id: '' }))}
               className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
             >
               <option value="">Pilih kategori...</option>
@@ -339,6 +344,23 @@ export default function TulisArtikelPage() {
               ))}
             </select>
           </div>
+        </div>
+
+        {/* Product (optional) */}
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
+            Product (opsional — plugin/layanan yang dibahas)
+          </label>
+          <select
+            value={form.product_id}
+            onChange={(e) => setForm((prev) => ({ ...prev, product_id: e.target.value }))}
+            className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+          >
+            <option value="">Tidak terkait produk spesifik</option>
+            {products.map((p) => (
+              <option key={p.id} value={p.id}>{p.name}</option>
+            ))}
+          </select>
         </div>
 
         <div>

@@ -13,6 +13,7 @@ export type Article = {
   updated_at: string | null
   created_at: string
   article_type_id: string | null
+  product_id: string | null
 }
 
 export type ArticleWithMeta = Article & {

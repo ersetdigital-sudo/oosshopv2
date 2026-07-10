@@ -25,6 +25,7 @@ type FormState = {
   status: 'draft' | 'published'
   category_id: string
   article_type_id: string
+  product_id: string
 }
 
 export default function EditArtikelPage() {
@@ -45,17 +46,20 @@ export default function EditArtikelPage() {
   const [saving, setSaving] = useState(false)
   const [categories, setCategories] = useState<{ id: string; name: string }[]>([])
   const [articleTypes, setArticleTypes] = useState<{ id: string; name: string; color: string }[]>([])
+  const [products, setProducts] = useState<{ id: string; name: string; category: string }[]>([])
 
   useEffect(() => {
     async function fetchArticle() {
-      const [articleRes, catRes, typeRes] = await Promise.all([
+      const [articleRes, catRes, typeRes, prodRes] = await Promise.all([
         supabase.from('articles').select('*').eq('id', params.id).single(),
         supabase.from('categories').select('id, name').eq('is_active', true).order('sort_order'),
         supabase.from('article_types').select('id, name, color').order('name'),
+        supabase.from('products').select('id, name, category').order('name'),
       ])
 
       if (catRes.data) setCategories(catRes.data)
       if (typeRes.data) setArticleTypes(typeRes.data)
+      if (prodRes.data) setProducts(prodRes.data)
 
       if (articleRes.data) {
         const data = articleRes.data
@@ -77,6 +81,7 @@ export default function EditArtikelPage() {
           status: data.status || 'draft',
           category_id: catLink?.category_id || '',
           article_type_id: data.article_type_id || '',
+          product_id: data.product_id || '',
         })
       }
       setLoading(false)
@@ -102,6 +107,7 @@ export default function EditArtikelPage() {
       status: form.status,
       updated_at: new Date().toISOString(),
       article_type_id: form.article_type_id || null,
+      product_id: form.product_id || null,
     }
     if (form.status === 'published') {
       payload.published_at = new Date().toISOString()
@@ -201,7 +207,7 @@ export default function EditArtikelPage() {
             </label>
             <select
               value={form.category_id}
-              onChange={(e) => setForm((prev) => ({ ...prev, category_id: e.target.value }))}
+              onChange={(e) => setForm((prev) => ({ ...prev, category_id: e.target.value, product_id: '' }))}
               className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
             >
               <option value="">Pilih kategori...</option>
@@ -225,6 +231,23 @@ export default function EditArtikelPage() {
               ))}
             </select>
           </div>
+        </div>
+
+        {/* Product */}
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
+            Product (opsional — plugin/layanan yang dibahas)
+          </label>
+          <select
+            value={form.product_id}
+            onChange={(e) => setForm((prev) => ({ ...prev, product_id: e.target.value }))}
+            className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+          >
+            <option value="">Tidak terkait produk spesifik</option>
+            {products.map((p) => (
+              <option key={p.id} value={p.id}>{p.name}</option>
+            ))}
+          </select>
         </div>
 
         <div>
