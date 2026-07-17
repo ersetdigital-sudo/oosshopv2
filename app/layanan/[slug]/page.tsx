@@ -97,8 +97,12 @@ export default async function ServicePage({
       <SiteHeader />
       <main>
         {/* ═══ Hero Section ═══ */}
-        <section className="border-b border-border bg-accent/30">
-          <div className="mx-auto max-w-6xl px-4 py-10 md:px-6 md:py-16">
+        <section className="relative overflow-hidden border-b border-border bg-gradient-to-br from-primary/5 via-background to-accent/30">
+          {/* Decorative blobs */}
+          <div className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-primary/10 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-32 -left-32 size-96 rounded-full bg-primary/5 blur-3xl" />
+
+          <div className="relative mx-auto max-w-6xl px-4 py-12 md:px-6 md:py-20">
             {/* Breadcrumb */}
             <nav aria-label="Breadcrumb">
               <ol className="flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
@@ -114,60 +118,65 @@ export default async function ServicePage({
               </ol>
             </nav>
 
-            <div className="mt-6 flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+            <div className="mt-8 flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
               <div className="max-w-2xl">
                 {service.hero.socialProof && (
-                  <p className="mb-3 text-sm font-medium text-primary">
+                  <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-semibold text-primary">
+                    <Sparkles className="size-3" aria-hidden />
                     {service.hero.socialProof}
                   </p>
                 )}
 
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-primary">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1.5 text-xs font-semibold text-primary">
                   <Sparkles className="size-3.5" aria-hidden />
                   {service.hero.badge}
                 </span>
 
                 {service.hero.hook && (
-                  <h2 className="mt-4 text-balance text-xl font-semibold tracking-tight text-foreground md:text-2xl">
+                  <h2 className="mt-5 text-balance text-xl font-semibold tracking-tight text-foreground/80 md:text-2xl">
                     {service.hero.hook}
                   </h2>
                 )}
 
-                <h1 className={`text-balance text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl ${service.hero.hook ? 'mt-3' : 'mt-4'}`}>
+                <h1 className={`text-balance text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl ${service.hero.hook ? 'mt-2' : 'mt-4'} bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent`}>
                   {service.hero.heading}
                 </h1>
 
-                <p className="mt-4 text-pretty leading-relaxed text-muted-foreground md:text-lg">
+                <p className="mt-5 max-w-xl text-pretty leading-relaxed text-muted-foreground md:text-lg">
                   {service.hero.subheading}
                 </p>
 
-                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                  <Button size="lg" nativeButton={false} render={<a href={waHref} target="_blank" rel="noopener noreferrer" />}>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <Button size="lg" className="shadow-lg shadow-primary/20" nativeButton={false} render={<a href={waHref} target="_blank" rel="noopener noreferrer" />}>
                     <MessageCircle className="size-4" aria-hidden />
                     Konsultasi Gratis
                   </Button>
-                  <Button size="lg" variant="outline" nativeButton={false} render={<Link href="/katalog" />}>
+                  <Button size="lg" variant="outline" className="border-primary/20" nativeButton={false} render={<Link href="/katalog" />}>
                     Lihat Katalog Plugin
                     <ArrowRight className="size-4" aria-hidden />
                   </Button>
                 </div>
               </div>
 
-              <span className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm md:size-20">
-                <Icon className="size-8 md:size-10" aria-hidden />
-              </span>
+              {/* Floating icon card */}
+              <div className="relative flex shrink-0 items-center justify-center">
+                <div className="absolute size-32 rounded-full bg-primary/20 blur-2xl md:size-40" />
+                <span className="relative flex size-20 items-center justify-center rounded-3xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-xl shadow-primary/30 md:size-24">
+                  <Icon className="size-10 md:size-12" aria-hidden />
+                </span>
+              </div>
             </div>
           </div>
         </section>
 
         {/* ═══ Trust Stats Bar (optional) ═══ */}
         {service.trustStats && service.trustStats.length > 0 && (
-          <section className="border-b border-border bg-muted/30">
+          <section className="border-b border-border bg-gradient-to-r from-primary/5 via-background to-primary/5">
             <div className="mx-auto max-w-6xl px-4 py-8 md:px-6">
               <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
                 {service.trustStats.map((stat) => (
                   <div key={stat.label} className="flex flex-col items-center text-center">
-                    <p className="text-2xl font-bold sm:text-3xl">{stat.value}</p>
+                    <p className="bg-gradient-to-br from-primary to-primary/70 bg-clip-text text-2xl font-bold text-transparent sm:text-3xl">{stat.value}</p>
                     <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
                   </div>
                 ))}
@@ -194,7 +203,7 @@ export default async function ServicePage({
                 {service.problemSection.items.map((item) => (
                   <div
                     key={item.title}
-                    className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm"
+                    className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
                   >
                     <h3 className="text-base font-semibold tracking-tight">{item.title}</h3>
                     <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
@@ -207,7 +216,7 @@ export default async function ServicePage({
 
         {/* ═══ Solution Section (optional) ═══ */}
         {service.solutionSection && (
-          <section className="border-b border-border bg-accent/20" id="solusi">
+          <section className="border-b border-border bg-gradient-to-br from-primary/5 via-background to-accent/20" id="solusi">
             <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
               <div className="mx-auto max-w-2xl text-center">
                 <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
@@ -223,7 +232,7 @@ export default async function ServicePage({
                 {service.solutionSection.items.map((item) => (
                   <div
                     key={item.title}
-                    className="flex flex-col rounded-2xl border border-primary/20 bg-card p-5 shadow-sm"
+                    className="flex flex-col rounded-2xl border border-primary/20 bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md"
                   >
                     <h3 className="text-base font-semibold tracking-tight text-primary">{item.title}</h3>
                     <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
@@ -252,7 +261,7 @@ export default async function ServicePage({
                 {service.whyItMatters.items.map((item) => (
                   <div
                     key={item.title}
-                    className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm"
+                    className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
                   >
                     <h3 className="text-base font-semibold tracking-tight">{item.title}</h3>
                     <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
@@ -265,7 +274,7 @@ export default async function ServicePage({
 
         {/* ═══ Services Overview (optional) ═══ */}
         {service.servicesOverview && (
-          <section className="border-b border-border bg-accent/20" id="layanan-kami">
+          <section className="border-b border-border bg-gradient-to-br from-primary/5 via-background to-accent/20" id="layanan-kami">
             <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
               <div className="mx-auto max-w-2xl text-center">
                 <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
@@ -281,9 +290,9 @@ export default async function ServicePage({
                 {service.servicesOverview.items.map((item, index) => (
                   <div
                     key={item.title}
-                    className="relative flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm"
+                    className="group relative flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
                   >
-                    <span className="absolute -top-3 -left-2 flex size-8 items-center justify-center rounded-lg bg-primary text-xs font-bold text-primary-foreground">
+                    <span className="absolute -top-3 -left-2 flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/80 text-xs font-bold text-primary-foreground shadow-sm">
                       {String(index + 1).padStart(2, '0')}
                     </span>
                     <h3 className="mt-2 text-base font-semibold tracking-tight">{item.title}</h3>
@@ -297,7 +306,7 @@ export default async function ServicePage({
 
         {/* ═══ TOC (Table of Contents) ═══ */}
         <nav className="mx-auto max-w-3xl px-4 py-6 md:px-6" aria-label="Daftar isi">
-          <details className="group rounded-xl border border-border bg-card p-4">
+          <details className="group rounded-xl border border-border/60 bg-card/50 p-4 backdrop-blur-sm">
             <summary className="flex cursor-pointer items-center gap-2 text-sm font-medium text-foreground [&::-webkit-details-marker]:hidden">
               <ChevronRight className="size-4 text-muted-foreground transition-transform group-open:rotate-90" aria-hidden />
               Daftar Isi
@@ -316,7 +325,7 @@ export default async function ServicePage({
 
         {/* ═══ AEO Section — "Apa Itu" ═══ */}
         <section className="mx-auto max-w-3xl px-4 py-12 md:px-6 md:py-16" id="apa-itu">
-          <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
+          <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm md:p-8">
             <h2 className="text-xl font-semibold tracking-tight md:text-2xl">{service.whatIs.title}</h2>
             <div className="mt-3 space-y-3 text-pretty leading-relaxed text-muted-foreground">
               {service.whatIs.answer.split('\n\n').map((paragraph, i) => (
@@ -324,11 +333,11 @@ export default async function ServicePage({
               ))}
             </div>
             <dl className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="rounded-xl bg-accent/50 p-4">
+              <div className="rounded-xl border border-primary/10 bg-gradient-to-br from-primary/5 to-transparent p-4">
                 <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Biaya</dt>
                 <dd className="mt-1 text-sm font-semibold text-foreground">{service.whatIs.priceNote}</dd>
               </div>
-              <div className="rounded-xl bg-accent/50 p-4">
+              <div className="rounded-xl border border-primary/10 bg-gradient-to-br from-primary/5 to-transparent p-4">
                 <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Waktu Pengerjaan</dt>
                 <dd className="mt-1 text-sm font-semibold text-foreground">{service.whatIs.timelineNote}</dd>
               </div>
@@ -350,8 +359,8 @@ export default async function ServicePage({
               </div>
               <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {service.whyChooseUs.map((item) => (
-                  <div key={item.title} className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
-                    <span className="flex size-10 items-center justify-center rounded-xl bg-accent text-primary">
+                  <div key={item.title} className="group flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
+                    <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 text-primary transition-transform duration-300 group-hover:scale-110">
                       <Star className="size-5" aria-hidden />
                     </span>
                     <h3 className="mt-4 text-base font-semibold tracking-tight">{item.title}</h3>
@@ -376,8 +385,8 @@ export default async function ServicePage({
             </div>
             <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
               {service.features.map((feature) => (
-                <div key={feature} className="flex items-center gap-3 rounded-xl border border-border bg-card p-4">
-                  <CheckCircle2 className="size-4 shrink-0 text-primary" aria-hidden />
+                <div key={feature} className="group flex items-center gap-3 rounded-xl border border-border/60 bg-card p-4 transition-all duration-200 hover:border-primary/20 hover:bg-primary/5">
+                  <CheckCircle2 className="size-4 shrink-0 text-primary transition-transform duration-200 group-hover:scale-110" aria-hidden />
                   <span className="text-sm font-medium text-foreground">{feature}</span>
                 </div>
               ))}
@@ -414,8 +423,9 @@ export default async function ServicePage({
                 </ul>
               </div>
               <div className="flex justify-center lg:justify-end">
-                <div className="flex size-40 items-center justify-center rounded-3xl border border-border bg-card shadow-sm sm:size-48">
-                  <QrCode className="size-20 text-primary/70 sm:size-24" aria-hidden />
+                <div className="relative flex size-40 items-center justify-center rounded-3xl border border-border bg-card shadow-sm sm:size-48">
+                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/10 to-transparent" />
+                  <QrCode className="relative size-20 text-primary/70 sm:size-24" aria-hidden />
                 </div>
               </div>
             </div>
@@ -424,7 +434,7 @@ export default async function ServicePage({
 
         {/* ═══ Notification Preview (optional) ═══ */}
         {service.notificationPreview && service.notificationPreview.length > 0 && (
-          <section className="border-y border-border bg-muted/30">
+          <section className="border-y border-border bg-gradient-to-br from-emerald-500/5 via-background to-emerald-500/5">
             <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
               <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
                 <div>
@@ -448,12 +458,12 @@ export default async function ServicePage({
                   </ul>
                 </div>
                 <div className="flex justify-center">
-                  <div className="w-full max-w-xs rounded-2xl border border-border bg-card p-4 shadow-sm">
+                  <div className="w-full max-w-xs rounded-2xl border border-border bg-card p-4 shadow-md">
                     <div className="flex flex-col gap-2.5">
                       {service.notificationPreview.slice(0, 3).map((item) => (
                         <div
                           key={item}
-                          className="ml-auto max-w-[85%] rounded-xl rounded-tr-sm bg-emerald-600 px-3 py-2 text-white shadow-sm"
+                          className="ml-auto max-w-[85%] rounded-xl rounded-tr-sm bg-gradient-to-br from-emerald-600 to-emerald-700 px-3 py-2 text-white shadow-sm"
                         >
                           <p className="text-xs leading-relaxed">{item}</p>
                         </div>
@@ -468,7 +478,7 @@ export default async function ServicePage({
         )}
 
         {/* ═══ Keunggulan / Benefits ═══ */}
-        <section className={`border-y border-border ${service.features?.length ? 'bg-muted/30' : 'bg-muted/30'}`} id="keunggulan">
+        <section className="border-y border-border bg-muted/30" id="keunggulan">
           <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
@@ -480,8 +490,8 @@ export default async function ServicePage({
             </div>
             <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {service.benefits.map((benefit) => (
-                <div key={benefit.title} className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
-                  <span className="flex size-10 items-center justify-center rounded-xl bg-accent text-primary">
+                <div key={benefit.title} className="group flex flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">
+                  <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 text-primary transition-transform duration-300 group-hover:scale-110">
                     <CheckCircle2 className="size-5" aria-hidden />
                   </span>
                   <h3 className="mt-4 text-base font-semibold tracking-tight">{benefit.title}</h3>
@@ -505,7 +515,7 @@ export default async function ServicePage({
               </p>
               <ul className="mt-6 flex flex-col gap-3">
                 {service.useCases.map((useCase) => (
-                  <li key={useCase} className="flex items-start gap-3 rounded-xl border border-border bg-card p-4">
+                  <li key={useCase} className="flex items-start gap-3 rounded-xl border border-border/60 bg-card p-4 transition-colors hover:border-primary/20">
                     <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden />
                     <span className="text-sm leading-relaxed text-foreground/90">{useCase}</span>
                   </li>
@@ -513,7 +523,7 @@ export default async function ServicePage({
               </ul>
             </div>
 
-            {/* Process */}
+            {/* Process — Timeline Style */}
             <div id="proses">
               <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
                 Cara Kerja Jasa {service.menuLabel}
@@ -521,13 +531,18 @@ export default async function ServicePage({
               <p className="mt-3 leading-relaxed text-muted-foreground">
                 Proses yang jelas dan transparan dari konsultasi hingga selesai.
               </p>
-              <ol className="mt-6 flex flex-col gap-4">
-                {service.process.map((item) => (
-                  <li key={item.step} className="flex gap-4">
-                    <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+              <ol className="mt-6 flex flex-col">
+                {service.process.map((item, index) => (
+                  <li key={item.step} className="relative flex gap-5 pb-8 last:pb-0">
+                    {/* Timeline line */}
+                    {index < service.process.length - 1 && (
+                      <div className="absolute left-[17px] top-9 h-full w-px bg-gradient-to-b from-primary/30 to-transparent" />
+                    )}
+                    {/* Step number */}
+                    <span className="relative z-10 flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/80 text-sm font-semibold text-primary-foreground shadow-sm shadow-primary/20">
                       {item.step}
                     </span>
-                    <div>
+                    <div className="pt-0.5">
                       <h3 className="text-base font-semibold tracking-tight">{item.title}</h3>
                       <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
                     </div>
@@ -539,7 +554,7 @@ export default async function ServicePage({
         </section>
 
         {/* ═══ Social Proof ═══ */}
-        <section className="border-y border-border bg-accent/20">
+        <section className="border-y border-border bg-gradient-to-r from-primary/5 via-background to-primary/5">
           <div className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
@@ -550,22 +565,17 @@ export default async function ServicePage({
               </p>
             </div>
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              <div className="rounded-2xl border border-border bg-card p-5 text-center">
-                <p className="text-3xl font-bold text-primary">1.200+</p>
-                <p className="mt-1 text-sm text-muted-foreground">Website Dikerjakan</p>
-              </div>
-              <div className="rounded-2xl border border-border bg-card p-5 text-center">
-                <p className="text-3xl font-bold text-primary">4.9/5</p>
-                <p className="mt-1 text-sm text-muted-foreground">Rating Kepuasan</p>
-              </div>
-              <div className="rounded-2xl border border-border bg-card p-5 text-center">
-                <p className="text-3xl font-bold text-primary">30 Hari</p>
-                <p className="mt-1 text-sm text-muted-foreground">Garansi Support</p>
-              </div>
-              <div className="rounded-2xl border border-border bg-card p-5 text-center">
-                <p className="text-3xl font-bold text-primary">5–14 Hari</p>
-                <p className="mt-1 text-sm text-muted-foreground">Waktu Pengerjaan</p>
-              </div>
+              {[
+                { value: '1.200+', label: 'Website Dikerjakan' },
+                { value: '4.9/5', label: 'Rating Kepuasan' },
+                { value: '30 Hari', label: 'Garansi Support' },
+                { value: '5–14 Hari', label: 'Waktu Pengerjaan' },
+              ].map((stat) => (
+                <div key={stat.label} className="rounded-2xl border border-border/60 bg-card p-5 text-center transition-all hover:border-primary/20 hover:shadow-sm">
+                  <p className="bg-gradient-to-br from-primary to-primary/70 bg-clip-text text-3xl font-bold text-transparent">{stat.value}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -574,14 +584,14 @@ export default async function ServicePage({
         {service.promoPricing && (
           <section className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
             <div className="mx-auto max-w-lg overflow-hidden rounded-3xl border-2 border-primary bg-card shadow-xl shadow-primary/10">
-              <div className="bg-primary px-6 py-3 text-center">
+              <div className="bg-gradient-to-r from-primary to-primary/90 px-6 py-3 text-center">
                 <p className="text-sm font-bold text-primary-foreground">{service.promoPricing.badge}</p>
               </div>
               <div className="p-8">
                 <p className="text-sm text-muted-foreground line-through">{service.promoPricing.originalPrice}</p>
                 <p className="mt-1 text-4xl font-bold sm:text-5xl">{service.promoPricing.price}</p>
                 <p className="mt-2 text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-                  ✓ {service.promoPricing.savingsLabel}
+                  {service.promoPricing.savingsLabel}
                 </p>
 
                 <ul className="mt-7 flex flex-col gap-3">
@@ -595,7 +605,7 @@ export default async function ServicePage({
 
                 <Button
                   size="lg"
-                  className="mt-8 w-full"
+                  className="mt-8 w-full shadow-lg shadow-primary/20"
                   nativeButton={false}
                   render={
                     <a
@@ -630,7 +640,7 @@ export default async function ServicePage({
               </div>
               <div className="mt-10 grid gap-5 sm:grid-cols-3">
                 {service.testimonials.map((t) => (
-                  <div key={t.name} className="rounded-2xl border border-border bg-card p-5">
+                  <div key={t.name} className="rounded-2xl border border-border/60 bg-card p-5 transition-all hover:border-primary/20 hover:shadow-sm">
                     <Quote className="size-5 text-primary/40" aria-hidden />
                     <p className="mt-3 text-sm italic leading-relaxed text-foreground/90">&ldquo;{t.text}&rdquo;</p>
                     <div className="mt-4">
@@ -657,15 +667,15 @@ export default async function ServicePage({
             </div>
             <div className="mt-10 grid gap-6 md:grid-cols-3">
               {packages.map((pkg) => (
-                <div key={pkg.name} className={`relative flex flex-col rounded-2xl border p-6 shadow-sm transition-all hover:shadow-md ${pkg.popular ? 'border-primary bg-card shadow-primary/10' : 'border-border bg-card'}`}>
+                <div key={pkg.name} className={`relative flex flex-col rounded-2xl border p-6 shadow-sm transition-all hover:shadow-md ${pkg.popular ? 'border-primary bg-card shadow-primary/10' : 'border-border/60 bg-card'}`}>
                   {pkg.popular && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-xs font-bold text-primary-foreground">
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-primary to-primary/90 px-4 py-1 text-xs font-bold text-primary-foreground shadow-sm">
                       PALING POPULER
                     </span>
                   )}
                   <h3 className="text-lg font-bold">{pkg.name}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">{pkg.description}</p>
-                  <p className="mt-4 text-3xl font-bold text-primary">{pkg.price}</p>
+                  <p className="mt-4 bg-gradient-to-br from-primary to-primary/70 bg-clip-text text-3xl font-bold text-transparent">{pkg.price}</p>
                   {pkg.renewal && <p className="mt-1 text-xs text-muted-foreground">{pkg.renewal}</p>}
                   <ul className="mt-5 flex flex-1 flex-col gap-2">
                     {pkg.features.map((feature) => (
@@ -675,7 +685,7 @@ export default async function ServicePage({
                       </li>
                     ))}
                   </ul>
-                  <Button size="lg" className="mt-6 w-full" variant={pkg.popular ? 'default' : 'outline'} nativeButton={false} render={<a href={`${siteConfig.whatsapp}?text=${encodeURIComponent(`Halo, saya tertarik dengan ${pkg.name} untuk ${service.menuLabel}. Bisa info lebih lanjut?`)}`} target="_blank" rel="noopener noreferrer" />}>
+                  <Button size="lg" className={`mt-6 w-full ${pkg.popular ? 'shadow-lg shadow-primary/20' : ''}`} variant={pkg.popular ? 'default' : 'outline'} nativeButton={false} render={<a href={`${siteConfig.whatsapp}?text=${encodeURIComponent(`Halo, saya tertarik dengan ${pkg.name} untuk ${service.menuLabel}. Bisa info lebih lanjut?`)}`} target="_blank" rel="noopener noreferrer" />}>
                     <MessageCircle className="size-4" aria-hidden />
                     Pilih {pkg.name}
                   </Button>
@@ -698,10 +708,10 @@ export default async function ServicePage({
             </div>
             <div className="mt-8 flex flex-col gap-3">
               {service.faq.map((item) => (
-                <details key={item.question} className="group rounded-2xl border border-border bg-card p-5 [&_summary::-webkit-details-marker]:hidden">
+                <details key={item.question} className="group rounded-2xl border border-border/60 bg-card p-5 shadow-sm transition-all [&_summary::-webkit-details-marker]:hidden [&[open]]:border-primary/20 [&[open]]:shadow-md">
                   <summary className="flex cursor-pointer items-center justify-between gap-3 font-medium text-foreground">
                     <span className="text-sm md:text-base">{item.question}</span>
-                    <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-90" aria-hidden />
+                    <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-90" aria-hidden />
                   </summary>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">{item.answer}</p>
                 </details>
@@ -719,8 +729,8 @@ export default async function ServicePage({
                 const rel = services[relSlug]
                 if (!rel) return null
                 return (
-                  <Link key={relSlug} href={`/layanan/${relSlug}`} className="group rounded-xl border border-border bg-card p-5 transition-all hover:border-primary/30 hover:shadow-sm">
-                    <h3 className="text-sm font-semibold text-foreground group-hover:text-primary">{rel.menuLabel}</h3>
+                  <Link key={relSlug} href={`/layanan/${relSlug}`} className="group rounded-xl border border-border/60 bg-card p-5 transition-all hover:border-primary/30 hover:shadow-md">
+                    <h3 className="text-sm font-semibold text-foreground transition-colors group-hover:text-primary">{rel.menuLabel}</h3>
                     <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{rel.menuDescription}</p>
                   </Link>
                 )
@@ -731,42 +741,46 @@ export default async function ServicePage({
 
         {/* ═══ Final CTA ═══ */}
         <section className="mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20">
-          <div className="rounded-3xl border border-primary/30 bg-accent/40 p-8 text-center md:p-12">
-            {service.finalCta ? (
-              <>
-                <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
-                  {service.finalCta.title}
-                </h2>
-                <div className="mx-auto mt-5 max-w-2xl space-y-1 text-pretty leading-relaxed text-muted-foreground">
-                  {service.finalCta.lines.map((line, i) => (
-                    <p key={i}>{line}</p>
-                  ))}
-                </div>
-                <p className="mt-5 text-base font-medium text-foreground">
-                  {service.finalCta.question}
-                </p>
-                <p className="mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-muted-foreground">
-                  {service.finalCta.closing}
-                </p>
-              </>
-            ) : (
-              <>
-                <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
-                  Siap Membangun {service.menuLabel} Anda?
-                </h2>
-                <p className="mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-muted-foreground">
-                  Konsultasikan kebutuhan Anda secara gratis. Kami bantu rancang solusi terbaik sesuai tujuan dan anggaran bisnis Anda. Tanpa commitment, tanpa biaya konsultasi.
-                </p>
-              </>
-            )}
-            <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-              <Button size="lg" nativeButton={false} render={<a href={waHref} target="_blank" rel="noopener noreferrer" />}>
-                <MessageCircle className="size-4" aria-hidden />
-                Konsultasi Gratis
-              </Button>
-              <Button size="lg" variant="outline" nativeButton={false} render={<Link href="/#layanan" />}>
-                Lihat Layanan Lain
-              </Button>
+          <div className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/10 via-background to-primary/5 p-8 text-center md:p-12">
+            <div className="pointer-events-none absolute -top-20 -right-20 size-40 rounded-full bg-primary/10 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-20 -left-20 size-40 rounded-full bg-primary/10 blur-3xl" />
+            <div className="relative">
+              {service.finalCta ? (
+                <>
+                  <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
+                    {service.finalCta.title}
+                  </h2>
+                  <div className="mx-auto mt-5 max-w-2xl space-y-1 text-pretty leading-relaxed text-muted-foreground">
+                    {service.finalCta.lines.map((line, i) => (
+                      <p key={i}>{line}</p>
+                    ))}
+                  </div>
+                  <p className="mt-5 text-base font-medium text-foreground">
+                    {service.finalCta.question}
+                  </p>
+                  <p className="mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-muted-foreground">
+                    {service.finalCta.closing}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
+                    Siap Membangun {service.menuLabel} Anda?
+                  </h2>
+                  <p className="mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-muted-foreground">
+                    Konsultasikan kebutuhan Anda secara gratis. Kami bantu rancang solusi terbaik sesuai tujuan dan anggaran bisnis Anda. Tanpa commitment, tanpa biaya konsultasi.
+                  </p>
+                </>
+              )}
+              <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+                <Button size="lg" className="shadow-lg shadow-primary/20" nativeButton={false} render={<a href={waHref} target="_blank" rel="noopener noreferrer" />}>
+                  <MessageCircle className="size-4" aria-hidden />
+                  Konsultasi Gratis
+                </Button>
+                <Button size="lg" variant="outline" className="border-primary/20" nativeButton={false} render={<Link href="/#layanan" />}>
+                  Lihat Layanan Lain
+                </Button>
+              </div>
             </div>
           </div>
         </section>
