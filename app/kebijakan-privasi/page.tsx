@@ -10,6 +10,21 @@ export const metadata: Metadata = {
   description:
     'Kebijakan privasi OOS SHOP menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi data pribadi pelanggan.',
   alternates: { canonical: `${siteConfig.url}/kebijakan-privasi` },
+  openGraph: {
+    title: 'Kebijakan Privasi | OOS SHOP',
+    description:
+      'Kebijakan privasi OOS SHOP menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi data pribadi pelanggan.',
+    type: 'website',
+    locale: 'id_ID',
+    siteName: 'OOS SHOP',
+    url: `${siteConfig.url}/kebijakan-privasi`,
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Kebijakan Privasi | OOS SHOP',
+    description:
+      'Kebijakan privasi OOS SHOP menjelaskan bagaimana kami mengumpulkan, menggunakan, dan melindungi data pribadi pelanggan.',
+  },
 }
 
 export default function KebijakanPrivasiPage() {

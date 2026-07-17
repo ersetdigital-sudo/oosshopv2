@@ -10,6 +10,21 @@ export const metadata: Metadata = {
   description:
     'Syarat dan ketentuan penggunaan layanan OOS SHOP. Ketahui hak dan kewajiban Anda sebagai pelanggan.',
   alternates: { canonical: `${siteConfig.url}/syarat-ketentuan` },
+  openGraph: {
+    title: 'Syarat & Ketentuan | OOS SHOP',
+    description:
+      'Syarat dan ketentuan penggunaan layanan OOS SHOP. Ketahui hak dan kewajiban Anda sebagai pelanggan.',
+    type: 'website',
+    locale: 'id_ID',
+    siteName: 'OOS SHOP',
+    url: `${siteConfig.url}/syarat-ketentuan`,
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Syarat & Ketentuan | OOS SHOP',
+    description:
+      'Syarat dan ketentuan penggunaan layanan OOS SHOP. Ketahui hak dan kewajiban Anda sebagai pelanggan.',
+  },
 }
 
 export default function SyaratKetentuanPage() {

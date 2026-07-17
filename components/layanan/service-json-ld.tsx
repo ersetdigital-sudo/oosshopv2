@@ -86,7 +86,7 @@ export function ServiceJsonLd({ service }: { service: ServiceData }) {
       '@id': `${pageUrl}#breadcrumb`,
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Beranda', item: SITE_URL },
-        { '@type': 'ListItem', position: 2, name: 'Layanan', item: `${SITE_URL}/#layanan` },
+        { '@type': 'ListItem', position: 2, name: 'Layanan', item: `${SITE_URL}/layanan` },
         { '@type': 'ListItem', position: 3, name: service.menuLabel, item: pageUrl },
       ],
     },

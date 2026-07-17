@@ -36,6 +36,12 @@ export const metadata: Metadata = {
     siteName: 'OOS SHOP',
     url: `${siteConfig.url}/katalog`,
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Katalog 500+ Plugin & Theme WordPress Premium Original | OOS SHOP',
+    description:
+      'Plugin & theme WordPress premium original berlisensi resmi. Harga mulai Rp 25.000, instal cepat, bergaransi.',
+  },
 }
 
 const highlights = [

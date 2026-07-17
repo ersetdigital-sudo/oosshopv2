@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/dashboard', '/checkout', '/api/'],
+        disallow: ['/dashboard', '/checkout', '/api/', '/admin'],
       },
       // Explicitly allow known AI crawlers to access llms.txt and AI data endpoints
       {

@@ -71,7 +71,15 @@ export async function generateMetadata({
       description,
       url: `${siteConfig.url}/blog/${article.slug}`,
       type: 'article',
+      locale: 'id_ID',
+      siteName: 'OOS SHOP',
       images: article.thumbnail ? [{ url: article.thumbnail, width: 1200, height: 630 }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: article.thumbnail ? [article.thumbnail] : [],
     },
   }
 }

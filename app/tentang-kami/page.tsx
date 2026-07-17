@@ -23,6 +23,21 @@ export const metadata: Metadata = {
   description:
     'Kenali lebih dekat OOS SHOP — penyedia jasa instal plugin WordPress original berlisensi resmi dan layanan pembuatan website profesional di Indonesia.',
   alternates: { canonical: `${siteConfig.url}/tentang-kami` },
+  openGraph: {
+    title: 'Tentang Kami | OOS SHOP',
+    description:
+      'Kenali lebih dekat OOS SHOP — penyedia jasa instal plugin WordPress original berlisensi resmi dan layanan pembuatan website profesional di Indonesia.',
+    type: 'website',
+    locale: 'id_ID',
+    siteName: 'OOS SHOP',
+    url: `${siteConfig.url}/tentang-kami`,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Tentang Kami | OOS SHOP',
+    description:
+      'Kenali lebih dekat OOS SHOP — penyedia jasa instal plugin WordPress original berlisensi resmi dan layanan pembuatan website profesional di Indonesia.',
+  },
 }
 
 const stats = [

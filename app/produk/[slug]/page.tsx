@@ -125,11 +125,17 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      type: 'website',
+      type: 'product',
       locale: 'id_ID',
       siteName: 'OOS SHOP',
       url: `${siteConfig.url}/produk/${product.slug || slug}`,
       images: product.image_url ? [{ url: product.image_url, width: 800, height: 600 }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: product.image_url ? [product.image_url] : [],
     },
   }
 }
