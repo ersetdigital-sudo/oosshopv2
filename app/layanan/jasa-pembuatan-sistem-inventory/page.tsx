@@ -1,4 +1,6 @@
-import type { Metadata } from 'next'
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
 import {
   ArrowRight,
@@ -6,171 +8,331 @@ import {
   ChevronRight,
   MessageCircle,
   Package,
-  QrCode,
-  Quote,
   Star,
 } from 'lucide-react'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
-import { ServiceJsonLd } from '@/components/layanan/service-json-ld'
 import { Button } from '@/components/ui/button'
 import { services } from '@/lib/services'
-import { inventory } from '@/lib/services/inventory.service'
 import { siteConfig } from '@/lib/data'
 
-const service = inventory
-const waHref = `${siteConfig.whatsapp}?text=${encodeURIComponent('Halo, saya tertarik dengan layanan Sistem Inventory. Bisa konsultasi gratis?')}`
-
-export const metadata: Metadata = {
-  title: service.seo.title,
-  description: service.seo.description,
-  keywords: service.seo.keywords,
-  alternates: { canonical: `${siteConfig.url}/layanan/${service.slug}` },
-  openGraph: {
-    title: service.seo.title,
-    description: service.seo.description,
-    type: 'website',
-    locale: 'id_ID',
-    siteName: 'OOS SHOP',
-    url: `${siteConfig.url}/layanan/${service.slug}`,
+const service = {
+  slug: 'jasa-pembuatan-sistem-inventory',
+  menuLabel: 'Sistem Inventory',
+  updatedAt: '2025-07-01',
+  hero: {
+    badge: 'Sistem Inventory & Stok',
+    heading: 'Jasa Pembuatan Sistem Inventory & Manajemen Stok',
+    subheading: 'Kelola stok barang secara akurat dan real-time. Pantau keluar-masuk barang, multi gudang, dan laporan stok dalam satu sistem yang dirancang sesuai kebutuhan operasional bisnis Anda.',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: service.seo.title,
-    description: service.seo.description,
+  whatIs: {
+    title: 'Apa Itu Jasa Pembuatan Sistem Inventory?',
+    answer: 'Sistem inventory adalah aplikasi web untuk memantau dan mengelola stok barang, mencatat transaksi keluar-masuk, dan menghasilkan laporan stok secara real-time. Jika bisnis Anda masih mengandalkan pencatatan manual di Excel atau buku — saatnya upgrade ke sistem digital yang lebih akurat dan efisien.\n\nOOS SHOP membuat sistem inventory custom dengan pencatatan stok akurat, dukungan multi gudang/cabang, alert stok minimum, dan laporan pergerakan barang. Sistem dirancang sesuai alur operasional gudang Anda sehingga adopsi tim lebih mudah dan data lebih terpercaya.\n\nDengan sistem inventory digital, Anda terhindar dari kehabisan stok yang kehilangan penjualan atau kelebihan stok yang mengikat modal. Setiap transaksi tercatat otomatis dan bisa ditelusuri, memudahkan audit dan pengambilan keputusan pengadaan barang.',
+    priceNote: 'Harga disesuaikan kompleksitas fitur dan skala gudang',
+    timelineNote: '14–30 hari kerja, menyesuaikan kebutuhan',
   },
+  whyChooseUs: [
+    { title: 'Stok Akurat & Real-Time', description: 'Setiap transaksi keluar-masuk langsung memperbarui jumlah stok. Tidak ada lagi selisih antara data dan fisik barang.' },
+    { title: 'Multi Gudang / Cabang', description: 'Kelola stok di beberapa gudang atau cabang sekaligus dalam satu dashboard terpusat. Transfer antar gudang pun tercatat.' },
+    { title: 'Custom Sesuai Alur Gudang', description: 'Sistem disesuaikan dengan alur operasional gudang Anda — bukan template kaku. Dari penerimaan barang, penyimpanan, hingga pengiriman.' },
+    { title: 'Integrasi dengan Penjualan', description: 'Sistem bisa dihubungkan dengan toko online atau POS Anda sehingga stok otomatis berkurang saat terjadi transaksi penjualan.' },
+  ],
+  features: [
+    'Stok real-time & akurat', 'Keluar-masuk barang tercatat', 'Multi gudang / cabang', 'Transfer antar gudang',
+    'Alert stok minimum', 'Barcode / QR code support', 'Kategori & SKU management', 'Laporan stok & pergerakan barang',
+    'History transaksi (audit trail)', 'Multi-user & hak akses', 'Export data (Excel, PDF)', 'Dashboard ringkasan visual',
+    'Pencarian & filter barang', 'Mobile accessible', 'API integration (POS, toko online)', 'Support & maintenance',
+  ],
+  benefits: [
+    { title: 'Stok Real-Time & Akurat', description: 'Pantau jumlah stok secara akurat dan real-time. Setiap transaksi langsung memperbarui data untuk menghindari kehabisan atau kelebihan barang.' },
+    { title: 'Pencatatan Keluar-Masuk Barang', description: 'Catat setiap transaksi masuk (pembelian, return) dan keluar (penjualan, rusak) secara rapi, terstruktur, dan bisa ditelusuri.' },
+    { title: 'Multi Gudang Terpusat', description: 'Kelola stok di beberapa gudang atau cabang dalam satu dashboard. Transfer antar gudang tercatat dan stok masing-masing terlihat jelas.' },
+    { title: 'Laporan & Analisis Stok', description: 'Laporan stok, pergerakan barang, dan barang fast/slow-moving untuk membantu keputusan pengadaan dan manajemen modal.' },
+    { title: 'Alert Stok Minimum', description: 'Notifikasi otomatis ketika stok barang mencapai batas minimum. Anda bisa segera restock sebelum kehabisan.' },
+    { title: 'Terintegrasi dengan Penjualan', description: 'Stok otomatis berkurang saat terjadi penjualan dari toko online atau POS. Tidak perlu lagi update manual.' },
+  ],
+  useCases: [
+    'Toko retail dan distributor yang ingin stok tercatat akurat secara digital',
+    'Bisnis dengan beberapa gudang atau cabang yang perlu monitoring stok terpusat',
+    'Produsen dan manufaktur yang perlu memantau bahan baku, WIP, dan barang jadi',
+    'Bisnis yang ingin menggantikan pencatatan stok manual di Excel ke sistem online',
+    'E-commerce yang butuh sinkronisasi stok antara gudang dan toko online',
+    'F&B dan restoran yang perlu tracking bahan baku dan inventory dapur',
+  ],
+  process: [
+    { step: '1', title: 'Analisis Alur Gudang', description: 'Kami pelajari alur stok, kategori barang, jumlah gudang, dan laporan yang Anda butuhkan dari sistem inventory.' },
+    { step: '2', title: 'Rancang Struktur Data', description: 'Kami desain struktur data barang, gudang, transaksi, dan relasi antar modul. Anda review sebelum development.' },
+    { step: '3', title: 'Pengembangan & Uji Coba', description: 'Kami bangun fitur bertahap lalu uji coba bersama tim gudang untuk memastikan data akurat dan alur sesuai.' },
+    { step: '4', title: 'Deployment & Pelatihan', description: 'Sistem dionlinekan, data awal dimigrasi, dan pelatihan diberikan untuk tim gudang/warehouse agar langsung bisa dipakai.' },
+  ],
+  faq: [
+    { question: 'Apakah sistem bisa memantau stok secara real-time?', answer: 'Ya. Setiap transaksi keluar-masuk barang langsung memperbarui jumlah stok secara otomatis. Anda selalu melihat data stok terkini dan akurat tanpa harus stock opname manual setiap saat.' },
+    { question: 'Apakah mendukung banyak gudang atau cabang?', answer: 'Bisa. Sistem dirancang untuk mengelola stok di beberapa gudang atau cabang sekaligus dalam satu dashboard terpusat. Transfer barang antar gudang pun tercatat dengan history yang bisa ditelusuri.' },
+    { question: 'Apakah bisa terhubung dengan sistem penjualan?', answer: 'Bisa. Sistem inventory dapat diintegrasikan dengan toko online atau POS (Point of Sale) agar stok otomatis berkurang saat terjadi transaksi penjualan. Tidak perlu input manual lagi.' },
+    { question: 'Apakah ada notifikasi saat stok menipis?', answer: 'Ya. Anda bisa mengatur batas stok minimum per barang. Ketika stok mencapai batas tersebut, sistem mengirim notifikasi/alert agar Anda bisa segera melakukan restock.' },
+    { question: 'Apakah bisa scan barcode/QR code?', answer: 'Bisa. Sistem mendukung input barang via barcode scanner atau QR code untuk mempercepat proses penerimaan dan pengeluaran barang di gudang.' },
+    { question: 'Berapa biaya pembuatan sistem inventory?', answer: 'Harga bergantung pada skala gudang, jumlah fitur, dan integrasi yang dibutuhkan. Kami perlu memahami kebutuhan Anda terlebih dulu untuk memberikan estimasi akurat. Konsultasi awal gratis.' },
+  ],
+  relatedServices: ['jasa-pembuatan-dashboard-admin', 'jasa-pembuatan-crm-erp', 'jasa-pembuatan-toko-online'],
 }
 
-const toc = [
-  { id: 'apa-itu', label: 'Apa Itu Sistem Inventory' },
-  { id: 'kenapa-kami', label: 'Kenapa Memilih Kami' },
-  { id: 'fitur', label: 'Fitur' },
-  { id: 'keunggulan', label: 'Keunggulan' },
-  { id: 'cocok-untuk', label: 'Cocok Untuk' },
-  { id: 'proses', label: 'Proses Kerja' },
-  { id: 'faq', label: 'FAQ' },
+const packages = [
+  {
+    name: 'Starter',
+    description: 'Untuk bisnis kecil dengan 1 gudang & maks 500 SKU',
+    price: 'Rp 8 Juta',
+    renewal: 'Maintenance Rp 500rb/bulan',
+    popular: false,
+    features: ['1 gudang', 'Maks 500 SKU', 'Dashboard stok real-time', 'Keluar-masuk barang', 'Alert stok minimum', 'Export Excel', 'Support 30 hari'],
+  },
+  {
+    name: 'Professional',
+    description: 'Untuk bisnis menengah dengan multi gudang & integrasi',
+    price: 'Rp 18 Juta',
+    renewal: 'Maintenance Rp 1 Juta/bulan',
+    popular: true,
+    features: ['Multi gudang (maks 5)', 'Unlimited SKU', 'Barcode/QR scanner', 'Transfer antar gudang', 'Integrasi POS/toko online', 'Laporan & analisis', 'Multi-user & hak akses', 'Export Excel & PDF', 'Support 60 hari'],
+  },
+  {
+    name: 'Enterprise',
+    description: 'Untuk korporat dengan kebutuhan custom & API',
+    price: 'Custom',
+    renewal: 'Sesuai kebutuhan',
+    popular: false,
+    features: ['Unlimited gudang & SKU', 'Custom workflow', 'API integration', 'Advanced analytics', 'Dedicated support', 'Pelatihan tim', 'SLA uptime', 'White-label option'],
+  },
 ]
 
+const waHref = `${siteConfig.whatsapp}?text=${encodeURIComponent('Halo, saya tertarik dengan layanan Sistem Inventory. Bisa konsultasi gratis?')}`
+
 export default function InventoryPage() {
+  const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly')
+
   return (
     <>
-      <ServiceJsonLd service={service} />
       <SiteHeader />
-      <main>
+
+      {/* ═══ Tally Design Tokens (scoped) ═══ */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .tally-page {
+          --tp: oklch(98.4% 0.005 258);
+          --tp1: oklch(96.2% 0.010 258);
+          --tp2: oklch(93.0% 0.015 258);
+          --tp3: oklch(89.0% 0.020 258);
+          --ti0: oklch(18.0% 0.030 258);
+          --ti1: oklch(35.0% 0.025 258);
+          --ti2: oklch(52.0% 0.018 258);
+          --ti3: oklch(70.0% 0.012 258);
+          --accent: oklch(54.0% 0.220 268);
+          --accent-soft: oklch(72.0% 0.140 268);
+          --accent-tint: oklch(94.0% 0.040 268);
+          --companion: oklch(82.0% 0.180 130);
+          --success: oklch(68% 0.150 145);
+          --rule-hair: 1px solid oklch(18% 0.030 258 / 0.08);
+          --rule-soft: 1px solid oklch(18% 0.030 258 / 0.14);
+          font-family: var(--font-sans);
+          color: var(--ti0);
+          background: var(--tp);
+          -webkit-font-smoothing: antialiased;
+        }
+        .tally-page .t-btn {
+          display: inline-flex; align-items: center; gap: 8px;
+          padding: 14px 22px; border-radius: 999px;
+          font-weight: 500; font-size: 1rem;
+          border: 1px solid transparent; cursor: pointer;
+          transition: transform 140ms cubic-bezier(0.22,0.61,0.36,1), background 140ms, border-color 140ms, box-shadow 140ms;
+        }
+        .tally-page .t-btn:active { transform: translateY(0) !important; }
+        .tally-page .t-btn-primary {
+          background: var(--ti0); color: var(--tp);
+          border-color: var(--ti0);
+          box-shadow: 0 1px 0 oklch(100% 0 0 / 0.16) inset, 0 8px 24px -10px oklch(18% 0.030 258 / 0.4);
+        }
+        .tally-page .t-btn-primary:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
+        .tally-page .t-btn-ghost {
+          background: transparent; color: var(--ti0);
+          border-color: oklch(18% 0.030 258 / 0.16);
+        }
+        .tally-page .t-btn-ghost:hover { background: var(--tp2); border-color: oklch(18% 0.030 258 / 0.22); }
+        .tally-page .t-card {
+          background: var(--tp); border: var(--rule-soft);
+          border-radius: 20px; padding: 2rem;
+          transition: transform 240ms cubic-bezier(0.22,0.61,0.36,1), box-shadow 240ms;
+        }
+        .tally-page .t-card:hover { box-shadow: 0 20px 60px -30px oklch(18% 0.030 258 / 0.28); }
+        .tally-page .t-eyebrow {
+          font-family: var(--font-mono, monospace); font-size: 0.75rem;
+          letter-spacing: 0.08em; text-transform: uppercase; color: var(--ti2);
+          display: inline-flex; align-items: center; gap: 0.5rem;
+        }
+        .tally-page .t-section-title {
+          font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700;
+          letter-spacing: -0.025em; line-height: 1.1; margin: 0.5rem 0 0;
+        }
+        .tally-page .t-section-title em {
+          font-family: var(--font-instrument, Georgia, serif);
+          font-style: italic; font-weight: 400; color: var(--accent);
+        }
+        .tally-page .t-section-desc {
+          font-size: 1.125rem; color: var(--ti1); max-width: 50ch; line-height: 1.6;
+        }
+        .tally-page .t-section-head {
+          display: grid; grid-template-columns: 1fr 1fr;
+          gap: 3rem; align-items: end; margin-bottom: 3rem;
+        }
+        @media (max-width: 768px) {
+          .tally-page .t-section-head { grid-template-columns: 1fr; gap: 1rem; }
+        }
+      `}} />
+
+      <main className="tally-page">
         {/* ═══ Hero ═══ */}
-        <section className="border-b border-border">
-          <div className="mx-auto max-w-6xl px-4 py-12 md:px-6 md:py-20">
+        <section className="relative overflow-hidden border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', paddingTop: '6rem', paddingBottom: '5rem' }}>
+          {/* Grid pattern */}
+          <div className="pointer-events-none absolute inset-0" style={{
+            backgroundImage: 'linear-gradient(to right, oklch(18% 0.030 258 / 0.06) 1px, transparent 1px), linear-gradient(to bottom, oklch(18% 0.030 258 / 0.06) 1px, transparent 1px)',
+            backgroundSize: '64px 64px',
+            maskImage: 'radial-gradient(ellipse 80% 60% at 50% 35%, black 30%, transparent 70%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 35%, black 30%, transparent 70%)',
+          }} />
+
+          <div className="relative mx-auto max-w-6xl px-6">
+            {/* Breadcrumb */}
             <nav aria-label="Breadcrumb">
-              <ol className="flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
+              <ol className="flex flex-wrap items-center gap-1.5 text-sm" style={{ color: 'var(--ti2)' }}>
                 <li><Link href="/" className="transition-colors hover:text-foreground">Beranda</Link></li>
                 <ChevronRight className="size-4" aria-hidden />
                 <li><Link href="/#layanan" className="transition-colors hover:text-foreground">Layanan</Link></li>
                 <ChevronRight className="size-4" aria-hidden />
-                <li className="font-medium text-foreground" aria-current="page">{service.menuLabel}</li>
+                <li className="font-medium" style={{ color: 'var(--ti0)' }} aria-current="page">Sistem Inventory</li>
               </ol>
             </nav>
 
-            <div className="mt-8 flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
+            <div className="mt-8 flex flex-col gap-12 md:flex-row md:items-center md:justify-between">
               <div className="max-w-2xl">
-                <span className="eyebrow">◇ {service.hero.badge}</span>
+                <span className="t-eyebrow">◇ {service.hero.badge}</span>
 
-                <h1 className="mt-4 text-balance text-4xl font-bold tracking-tight md:text-5xl lg:text-[3.5rem]">
-                  Jasa Pembuatan Sistem Inventory &amp; Manajemen <em className="font-serif italic">Stok</em>
+                <h1 className="mt-5 text-balance font-bold tracking-tight" style={{ fontSize: 'clamp(2rem, 10vw, 5rem)', lineHeight: 0.96, letterSpacing: '-0.03em', maxWidth: '16ch' }}>
+                  Jasa Pembuatan Sistem Inventory &amp; Manajemen <em style={{ fontFamily: 'var(--font-instrument, Georgia, serif)', fontStyle: 'italic', fontWeight: 400, color: 'var(--accent)' }}>Stok</em>
                 </h1>
 
-                <p className="mt-5 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
+                <p className="mt-6 max-w-lg text-pretty" style={{ fontSize: '1.125rem', color: 'var(--ti1)', lineHeight: 1.5 }}>
                   {service.hero.subheading}
                 </p>
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Button size="lg" nativeButton={false} render={<a href={waHref} target="_blank" rel="noopener noreferrer" />}>
+                  <a href={waHref} target="_blank" rel="noopener noreferrer" className="t-btn t-btn-primary">
                     <MessageCircle className="size-4" aria-hidden />
                     Konsultasi Gratis
-                  </Button>
-                  <Button size="lg" variant="outline" nativeButton={false} render={<Link href="/katalog" />}>
+                  </a>
+                  <Link href="/katalog" className="t-btn t-btn-ghost">
                     Lihat Katalog Plugin
                     <ArrowRight className="size-4" aria-hidden />
-                  </Button>
+                  </Link>
                 </div>
 
-                <div className="mt-6 flex flex-wrap gap-4 text-xs text-muted-foreground">
+                <div className="mt-6 flex flex-wrap gap-4 font-mono text-xs" style={{ color: 'var(--ti2)' }}>
                   <span>no commitment</span>
-                  <span className="text-border">·</span>
+                  <span style={{ color: 'var(--ti3)' }}>·</span>
                   <span>konsultasi gratis</span>
-                  <span className="text-border">·</span>
+                  <span style={{ color: 'var(--ti3)' }}>·</span>
                   <span>respon &lt; 1 jam</span>
                 </div>
               </div>
 
-              <div className="flex shrink-0 items-center justify-center">
-                <div className="flex size-20 items-center justify-center rounded-2xl border border-border bg-card shadow-sm md:size-24">
-                  <Package className="size-10 text-foreground/80 md:size-12" aria-hidden />
+              {/* Invoice-style card */}
+              <div className="hidden md:block" style={{ transform: 'rotate(0.5deg)', maxWidth: 420, marginLeft: 'auto' }}>
+                <div style={{
+                  background: 'var(--tp)', border: 'var(--rule-soft)', borderRadius: 20, padding: '1.5rem',
+                  boxShadow: '0 1px 0 oklch(100% 0 0 / 0.7) inset, 0 24px 60px -28px oklch(18% 0.030 258 / 0.25), 0 4px 12px -4px oklch(18% 0.030 258 / 0.08)',
+                  fontFamily: 'var(--font-mono, monospace)', fontSize: '0.875rem',
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '0.75rem', borderBottom: 'var(--rule-hair)' }}>
+                    <div>
+                      <div style={{ fontWeight: 600, color: 'var(--ti0)' }}>Dashboard Preview</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--ti2)', marginTop: 2 }}>OOS SHOP · Inventory System</div>
+                    </div>
+                    <span style={{ fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--success)', background: 'oklch(68% 0.150 145 / 0.18)', padding: '3px 8px', borderRadius: 999 }}>live</span>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: '0.75rem 0' }}>
+                    {[
+                      { label: 'Total SKU', value: '2,847' },
+                      { label: 'Stok Masuk (bulan ini)', value: '1,240' },
+                      { label: 'Stok Keluar (bulan ini)', value: '986' },
+                      { label: 'Alert stok minimum', value: '12 item' },
+                    ].map((row) => (
+                      <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--ti1)' }}>
+                        <span>{row.label}</span>
+                        <strong style={{ color: 'var(--ti0)', fontWeight: 500 }}>{row.value}</strong>
+                      </div>
+                    ))}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '0.5rem', borderTop: 'var(--rule-hair)', fontSize: '0.875rem', color: 'var(--success)' }}>
+                      <span>Akurasi stok</span>
+                      <span style={{ fontWeight: 600 }}>99.8%</span>
+                    </div>
+                  </div>
+                  <div style={{ height: 6, background: 'var(--tp3)', borderRadius: 999, marginTop: '1rem', overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: '72%', background: 'linear-gradient(90deg, var(--accent), var(--companion))', borderRadius: 'inherit' }} />
+                  </div>
+                  <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ti2)', marginTop: 8 }}>
+                    72% kapasitas gudang · 14 SKU perlu restock
+                  </div>
                 </div>
               </div>
             </div>
+
+            {/* Marquee strip */}
+            <div className="mt-16 overflow-hidden border-t border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', padding: '1rem 0', maskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)' }}>
+              <div className="flex gap-12" style={{ animation: 'marquee 38s linear infinite', width: 'max-content', fontFamily: 'var(--font-mono, monospace)', fontSize: '0.875rem', color: 'var(--ti2)', textTransform: 'uppercase', letterSpacing: '0.18em' }}>
+                {['STOK REAL-TIME', 'MULTI GUDANG', 'BARCODE SCANNER', 'LAPORAN OTOMATIS', 'INTEGRASI POS', 'ALERT STOK MINIMUM', 'STOK REAL-TIME', 'MULTI GUDANG', 'BARCODE SCANNER', 'LAPORAN OTOMATIS'].map((item, i) => (
+                  <span key={i} className="inline-flex items-center gap-3">{item} <span style={{ color: 'var(--accent)' }}>✦</span></span>
+                ))}
+              </div>
+            </div>
+            <style dangerouslySetInnerHTML={{ __html: `@keyframes marquee { to { transform: translateX(-50%); } }` }} />
           </div>
         </section>
 
-        {/* ═══ TOC ═══ */}
-        <nav className="mx-auto max-w-3xl px-4 py-6 md:px-6" aria-label="Daftar isi">
-          <details className="group rounded-xl border border-border bg-card p-4">
-            <summary className="flex cursor-pointer items-center gap-2 text-sm font-medium text-foreground [&::-webkit-details-marker]:hidden">
-              <ChevronRight className="size-4 text-muted-foreground transition-transform group-open:rotate-90" aria-hidden />
-              Daftar Isi
-            </summary>
-            <ol className="mt-3 flex flex-col gap-1.5 pl-6">
-              {toc.map((item) => (
-                <li key={item.id}>
-                  <a href={`#${item.id}`} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </details>
-        </nav>
-
         {/* ═══ Apa Itu ═══ */}
-        <section className="mx-auto max-w-3xl px-4 py-12 md:px-6 md:py-16" id="apa-itu">
-          <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
-            <span className="eyebrow">◇ penjelasan</span>
-            <h2 className="mt-3 text-xl font-semibold tracking-tight md:text-2xl">{service.whatIs.title}</h2>
-            <div className="mt-4 space-y-4 text-pretty leading-relaxed text-muted-foreground">
-              {service.whatIs.answer.split('\n\n').map((paragraph, i) => (
-                <p key={i}>{paragraph}</p>
-              ))}
+        <section className="mx-auto max-w-3xl px-6 py-16 md:py-24" id="apa-itu">
+          <div style={{ background: 'var(--tp)', border: 'var(--rule-soft)', borderRadius: 20, padding: '2rem' }}>
+            <span className="t-eyebrow">◇ penjelasan</span>
+            <h2 className="mt-3" style={{ fontSize: '1.375rem', fontWeight: 600, letterSpacing: '-0.02em' }}>{service.whatIs.title}</h2>
+            <div className="mt-4 space-y-4 text-pretty" style={{ color: 'var(--ti1)', lineHeight: 1.7 }}>
+              {service.whatIs.answer.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
             </div>
             <dl className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="rounded-xl border border-border p-4">
-                <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Biaya</dt>
-                <dd className="mt-1 text-sm font-semibold text-foreground">{service.whatIs.priceNote}</dd>
-              </div>
-              <div className="rounded-xl border border-border p-4">
-                <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Waktu Pengerjaan</dt>
-                <dd className="mt-1 text-sm font-semibold text-foreground">{service.whatIs.timelineNote}</dd>
-              </div>
+              {[
+                { label: 'Biaya', value: service.whatIs.priceNote },
+                { label: 'Waktu Pengerjaan', value: service.whatIs.timelineNote },
+              ].map((item) => (
+                <div key={item.label} style={{ borderRadius: 12, border: 'var(--rule-soft)', padding: '1rem' }}>
+                  <dt className="font-mono text-xs uppercase tracking-wide" style={{ color: 'var(--ti2)' }}>{item.label}</dt>
+                  <dd className="mt-1 text-sm font-semibold">{item.value}</dd>
+                </div>
+              ))}
             </dl>
           </div>
         </section>
 
         {/* ═══ Kenapa Memilih Kami ═══ */}
-        <section className="border-y border-border bg-muted/30" id="kenapa-kami">
-          <div className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24">
-            <div className="section-head">
+        <section className="border-t border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', background: 'var(--tp1)' }} id="kenapa-kami">
+          <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+            <div className="t-section-head">
               <div>
-                <span className="eyebrow">◇ keunggulan</span>
-                <h2 className="section-title">Kenapa Memilih OOS SHOP untuk <em className="font-serif italic">Sistem Inventory</em>?</h2>
+                <span className="t-eyebrow">◇ keunggulan</span>
+                <h2 className="t-section-title">Kenapa Memilih OOS SHOP untuk <em>Sistem Inventory</em>?</h2>
               </div>
-              <p className="section-desc">Pendekatan kami yang membedakan dari penyedia jasa lain.</p>
+              <p className="t-section-desc">Pendekatan kami yang membedakan dari penyedia jasa lain.</p>
             </div>
-            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {service.whyChooseUs.map((item) => (
-                <div key={item.title} className="card">
-                  <span className="flex size-10 items-center justify-center rounded-xl bg-muted text-foreground/70">
+                <div key={item.title} className="t-card">
+                  <span style={{ display: 'flex', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 12, background: 'var(--tp2)', color: 'var(--ti1)' }}>
                     <Star className="size-5" aria-hidden />
                   </span>
                   <h3 className="mt-4 text-base font-semibold tracking-tight">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+                  <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--ti1)' }}>{item.description}</p>
                 </div>
               ))}
             </div>
@@ -178,42 +340,42 @@ export default function InventoryPage() {
         </section>
 
         {/* ═══ Fitur ═══ */}
-        <section className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24" id="fitur">
-          <div className="section-head">
+        <section className="mx-auto max-w-6xl px-6 py-20 md:py-28" id="fitur">
+          <div className="t-section-head">
             <div>
-              <span className="eyebrow">◇ fitur</span>
-              <h2 className="section-title">Fitur Sistem Inventory yang Anda <em className="font-serif italic">Dapatkan</em></h2>
+              <span className="t-eyebrow">◇ fitur</span>
+              <h2 className="t-section-title">Fitur Sistem Inventory yang Anda <em>Dapatkan</em></h2>
             </div>
-            <p className="section-desc">Semua yang Anda butuhkan untuk hasil profesional dan maksimal.</p>
+            <p className="t-section-desc">Semua yang Anda butuhkan untuk hasil profesional dan maksimal.</p>
           </div>
-          <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {service.features.map((feature) => (
-              <div key={feature} className="flex items-center gap-3 rounded-xl border border-border bg-card p-4 transition-colors hover:border-foreground/20">
-                <CheckCircle2 className="size-4 shrink-0 text-primary" aria-hidden />
-                <span className="text-sm font-medium text-foreground">{feature}</span>
+              <div key={feature} className="flex items-center gap-3 rounded-xl border p-4 transition-colors" style={{ borderColor: 'oklch(18% 0.030 258 / 0.14)', background: 'var(--tp)' }}>
+                <CheckCircle2 className="size-4 shrink-0" style={{ color: 'var(--accent)' }} aria-hidden />
+                <span className="text-sm font-medium">{feature}</span>
               </div>
             ))}
           </div>
         </section>
 
-        {/* ═══ Keunggulan ═══ */}
-        <section className="border-y border-border bg-muted/30" id="keunggulan">
-          <div className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24">
-            <div className="section-head">
+        {/* ═══ Keunggulan / Benefits ═══ */}
+        <section className="border-t border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', background: 'var(--tp1)' }} id="keunggulan">
+          <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+            <div className="t-section-head">
               <div>
-                <span className="eyebrow">◇ manfaat</span>
-                <h2 className="section-title">Keunggulan <em className="font-serif italic">Sistem Inventory</em> dari OOS SHOP</h2>
+                <span className="t-eyebrow">◇ manfaat</span>
+                <h2 className="t-section-title">Keunggulan <em>Sistem Inventory</em> dari OOS SHOP</h2>
               </div>
-              <p className="section-desc">Dibangun dengan standar profesional agar hasil tidak hanya tampil bagus, tetapi juga bekerja untuk pertumbuhan bisnis Anda.</p>
+              <p className="t-section-desc">Dibangun dengan standar profesional agar hasil tidak hanya tampil bagus, tetapi juga bekerja untuk pertumbuhan bisnis Anda.</p>
             </div>
-            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {service.benefits.map((benefit) => (
-                <div key={benefit.title} className="card">
-                  <span className="flex size-10 items-center justify-center rounded-xl bg-muted text-foreground/70">
+                <div key={benefit.title} className="t-card">
+                  <span style={{ display: 'flex', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 12, background: 'var(--tp2)', color: 'var(--ti1)' }}>
                     <CheckCircle2 className="size-5" aria-hidden />
                   </span>
                   <h3 className="mt-4 text-base font-semibold tracking-tight">{benefit.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{benefit.description}</p>
+                  <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--ti1)' }}>{benefit.description}</p>
                 </div>
               ))}
             </div>
@@ -221,46 +383,42 @@ export default function InventoryPage() {
         </section>
 
         {/* ═══ Cocok Untuk + Proses ═══ */}
-        <section className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24" id="cocok-untuk">
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+        <section className="mx-auto max-w-6xl px-6 py-20 md:py-28" id="cocok-untuk">
+          <div className="grid gap-16 lg:grid-cols-2">
             <div>
-              <span className="eyebrow">◇ cocok untuk</span>
-              <h2 className="mt-3 text-balance text-2xl font-bold tracking-tight md:text-3xl">
-                Siapa yang Cocok Menggunakan <em className="font-serif italic">Layanan</em> Ini?
+              <span className="t-eyebrow">◇ cocok untuk</span>
+              <h2 className="mt-3 text-balance font-bold tracking-tight" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', letterSpacing: '-0.025em', lineHeight: 1.1 }}>
+                Siapa yang Cocok Menggunakan <em style={{ fontFamily: 'var(--font-instrument, Georgia, serif)', fontStyle: 'italic', fontWeight: 400, color: 'var(--accent)' }}>Layanan</em> Ini?
               </h2>
-              <p className="mt-4 leading-relaxed text-muted-foreground">
-                Beberapa contoh kebutuhan sistem inventory yang paling sering kami kerjakan.
-              </p>
+              <p className="mt-4 leading-relaxed" style={{ color: 'var(--ti1)' }}>Beberapa contoh kebutuhan sistem inventory yang paling sering kami kerjakan.</p>
               <ul className="mt-8 flex flex-col gap-3">
-                {service.useCases.map((useCase) => (
-                  <li key={useCase} className="flex items-start gap-3 rounded-xl border border-border bg-card p-4">
-                    <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden />
-                    <span className="text-sm leading-relaxed text-foreground/90">{useCase}</span>
+                {service.useCases.map((uc) => (
+                  <li key={uc} className="flex items-start gap-3 rounded-xl border p-4" style={{ borderColor: 'oklch(18% 0.030 258 / 0.14)', background: 'var(--tp)' }}>
+                    <CheckCircle2 className="mt-0.5 size-5 shrink-0" style={{ color: 'var(--accent)' }} aria-hidden />
+                    <span className="text-sm leading-relaxed" style={{ color: 'oklch(18% 0.030 258 / 0.9)' }}>{uc}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
             <div id="proses">
-              <span className="eyebrow">◇ proses kerja</span>
-              <h2 className="mt-3 text-balance text-2xl font-bold tracking-tight md:text-3xl">
-                Cara Kerja Jasa <em className="font-serif italic">Sistem Inventory</em>
+              <span className="t-eyebrow">◇ proses kerja</span>
+              <h2 className="mt-3 text-balance font-bold tracking-tight" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', letterSpacing: '-0.025em', lineHeight: 1.1 }}>
+                Cara Kerja Jasa <em style={{ fontFamily: 'var(--font-instrument, Georgia, serif)', fontStyle: 'italic', fontWeight: 400, color: 'var(--accent)' }}>Sistem Inventory</em>
               </h2>
-              <p className="mt-4 leading-relaxed text-muted-foreground">
-                Proses yang jelas dan transparan dari konsultasi hingga selesai.
-              </p>
+              <p className="mt-4 leading-relaxed" style={{ color: 'var(--ti1)' }}>Proses yang jelas dan transparan dari konsultasi hingga selesai.</p>
               <ol className="mt-8 flex flex-col">
                 {service.process.map((item, index) => (
                   <li key={item.step} className="relative flex gap-5 pb-8 last:pb-0">
                     {index < service.process.length - 1 && (
-                      <div className="absolute left-[17px] top-9 h-full w-px bg-border" />
+                      <div className="absolute left-[17px] top-9 h-full w-px" style={{ background: 'oklch(18% 0.030 258 / 0.08)' }} />
                     )}
-                    <span className="relative z-10 flex size-9 shrink-0 items-center justify-center rounded-full bg-foreground text-sm font-semibold text-background">
+                    <span className="relative z-10 flex size-9 shrink-0 items-center justify-center rounded-full text-sm font-semibold" style={{ background: 'var(--ti0)', color: 'var(--tp)' }}>
                       {item.step}
                     </span>
                     <div className="pt-0.5">
                       <h3 className="text-base font-semibold tracking-tight">{item.title}</h3>
-                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+                      <p className="mt-1 text-sm leading-relaxed" style={{ color: 'var(--ti1)' }}>{item.description}</p>
                     </div>
                   </li>
                 ))}
@@ -269,53 +427,132 @@ export default function InventoryPage() {
           </div>
         </section>
 
-        {/* ═══ Social Proof ═══ */}
-        <section className="border-y border-border bg-muted/30">
-          <div className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24">
-            <div className="section-head">
+        {/* ═══ Stats ═══ */}
+        <section className="border-t border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', background: 'var(--tp1)' }}>
+          <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+            <div className="t-section-head">
               <div>
-                <span className="eyebrow">◇ bukti</span>
-                <h2 className="section-title">Dipercaya 1.200+ Pemilik Website di <em className="font-serif italic">Indonesia</em></h2>
+                <span className="t-eyebrow">◇ bukti</span>
+                <h2 className="t-section-title">Dipercaya 1.200+ Pemilik Website di <em>Indonesia</em></h2>
               </div>
-              <p className="section-desc">Kami telah membantu ribuan bisnis, UMKM, dan instansi memiliki website profesional yang menghasilkan.</p>
+              <p className="t-section-desc">Kami telah membantu ribuan bisnis, UMKM, dan instansi memiliki website profesional yang menghasilkan.</p>
             </div>
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {[
                 { value: '1.200+', label: 'Website Dikerjakan', note: 'Sejak 2020, setiap project ditangani tim berpengalaman.' },
-                { value: '4.9/5', label: 'Rating Kepuasan', note: 'Dari 500+ review verified pelanggan di Google & WhatsApp.' },
-                { value: '30 Hari', label: 'Garansi Support', note: 'Gratis revisi & support teknis setelah project selesai.' },
-                { value: '5–14 Hari', label: 'Waktu Pengerjaan', note: 'Tergantung kompleksitas, selalu ada estimasi di awal.' },
-              ].map((stat) => (
-                <div key={stat.label} className="rounded-2xl border border-border bg-card p-6">
-                  <p className="text-3xl font-bold tracking-tight">{stat.value}</p>
-                  <p className="mt-1 text-sm font-medium text-foreground">{stat.label}</p>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{stat.note}</p>
+                { value: '4.9/5', label: 'Rating Kepuasan', note: 'Dari 500+ review verified pelanggan.' },
+                { value: '30 Hari', label: 'Garansi Support', note: 'Gratis revisi & support teknis.' },
+                { value: '5–14 Hari', label: 'Waktu Pengerjaan', note: 'Selalu ada estimasi di awal.' },
+              ].map((stat, i) => (
+                <div key={stat.label} className="rounded-2xl border p-8" style={{
+                  borderColor: 'oklch(18% 0.030 258 / 0.14)',
+                  background: i === 0 ? 'linear-gradient(160deg, var(--accent-tint), var(--tp) 60%)' :
+                    i === 1 ? 'linear-gradient(160deg, oklch(82% 0.180 130 / 0.35), var(--tp) 60%)' :
+                    'var(--tp)',
+                }}>
+                  <p className="font-bold" style={{ fontSize: 'clamp(2.8rem, 6vw, 4.5rem)', letterSpacing: '-0.04em', lineHeight: 1 }}>{stat.value}</p>
+                  <p className="mt-4 font-mono text-xs uppercase" style={{ letterSpacing: '0.12em', color: 'var(--ti1)' }}>{stat.label}</p>
+                  <p className="mt-2 text-sm" style={{ color: 'var(--ti1)', maxWidth: '28ch' }}>{stat.note}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
+        {/* ═══ Pricing ═══ */}
+        <section className="mx-auto max-w-6xl px-6 py-20 md:py-28" id="harga">
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <span className="t-eyebrow">◇ harga</span>
+            <h2 className="mt-3 mx-auto" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, maxWidth: '20ch' }}>
+              Pilih Paket Sesuai <em style={{ fontFamily: 'var(--font-instrument, Georgia, serif)', fontStyle: 'italic', fontWeight: 400, color: 'var(--accent)' }}>Kebutuhan</em>
+            </h2>
+
+            {/* Toggle */}
+            <div className="mt-4 inline-flex rounded-full p-1" style={{ background: 'var(--tp2)', border: 'var(--rule-soft)' }}>
+              <button
+                onClick={() => setBilling('monthly')}
+                className="rounded-full px-4 py-2 text-sm font-medium transition-all"
+                style={billing === 'monthly' ? { background: 'var(--tp)', color: 'var(--ti0)', boxShadow: '0 2px 6px -2px oklch(18% 0.030 258 / 0.14)' } : { color: 'var(--ti1)' }}
+              >
+                Sekali Bayar
+              </button>
+              <button
+                onClick={() => setBilling('annual')}
+                className="rounded-full px-4 py-2 text-sm font-medium transition-all"
+                style={billing === 'annual' ? { background: 'var(--tp)', color: 'var(--ti0)', boxShadow: '0 2px 6px -2px oklch(18% 0.030 258 / 0.14)' } : { color: 'var(--ti1)' }}
+              >
+                + Maintenance <span className="font-mono text-xs" style={{ color: 'var(--success)', marginLeft: 4 }}>hemat 20%</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {packages.map((pkg) => {
+              const isFeatured = pkg.popular
+              return (
+                <div key={pkg.name} className="relative flex flex-col rounded-2xl border p-6" style={{
+                  borderColor: isFeatured ? 'var(--ti0)' : 'oklch(18% 0.030 258 / 0.14)',
+                  background: isFeatured ? 'var(--ti0)' : 'var(--tp)',
+                  color: isFeatured ? 'var(--tp)' : 'inherit',
+                  transform: isFeatured ? 'scale(1.02)' : undefined,
+                  boxShadow: isFeatured ? '0 24px 60px -30px oklch(18% 0.030 258 / 0.5)' : undefined,
+                }}>
+                  {isFeatured && (
+                    <span className="absolute -top-3 left-6 rounded-full px-3 py-1 font-mono text-xs font-bold uppercase" style={{ background: 'var(--companion)', color: 'var(--ti0)', letterSpacing: '0.12em' }}>
+                      Paling Populer
+                    </span>
+                  )}
+                  <div className="font-mono text-xs uppercase" style={{ letterSpacing: '0.12em', color: isFeatured ? 'oklch(98% 0 0 / 0.7)' : 'var(--ti2)' }}>{pkg.name}</div>
+                  <div className="mt-3 font-bold" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', letterSpacing: '-0.03em' }}>
+                    {billing === 'annual' && pkg.price !== 'Custom' ? pkg.renewal?.split('/')[0] : pkg.price}
+                  </div>
+                  {billing === 'monthly' && pkg.renewal && (
+                    <div className="text-xs" style={{ color: isFeatured ? 'oklch(98% 0 0 / 0.6)' : 'var(--ti2)' }}>{pkg.renewal}</div>
+                  )}
+                  <p className="mt-2 text-sm" style={{ color: isFeatured ? 'oklch(98% 0 0 / 0.75)' : 'var(--ti1)' }}>{pkg.description}</p>
+                  <ul className="mt-5 flex flex-1 flex-col gap-2">
+                    {pkg.features.map((f) => (
+                      <li key={f} className="flex items-center gap-2 text-sm" style={{ color: isFeatured ? 'oklch(98% 0 0 / 0.75)' : 'var(--ti1)' }}>
+                        <span style={{ color: isFeatured ? 'var(--companion)' : 'var(--accent)', fontWeight: 700 }}>✓</span> {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <a
+                    href={`${siteConfig.whatsapp}?text=${encodeURIComponent(`Halo, saya tertarik dengan paket ${pkg.name} untuk Sistem Inventory. Bisa info lebih lanjut?`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="t-btn mt-6 w-full justify-center"
+                    style={isFeatured ? { background: 'var(--companion)', color: 'var(--ti0)', borderColor: 'var(--companion)' } : { borderColor: 'oklch(18% 0.030 258 / 0.16)' }}
+                  >
+                    <MessageCircle className="size-4" aria-hidden />
+                    Pilih {pkg.name}
+                  </a>
+                </div>
+              )
+            })}
+          </div>
+        </section>
+
         {/* ═══ FAQ ═══ */}
-        <section className="border-b border-border" id="faq">
-          <div className="mx-auto max-w-3xl px-4 py-16 md:px-6 md:py-24">
+        <section className="border-t" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', background: 'var(--tp1)' }} id="faq">
+          <div className="mx-auto max-w-3xl px-6 py-20 md:py-28">
             <div className="text-center">
-              <span className="eyebrow">◇ faq</span>
-              <h2 className="mt-3 text-balance text-2xl font-bold tracking-tight md:text-3xl">
-                Pertanyaan Seputar <em className="font-serif italic">Sistem Inventory</em>
+              <span className="t-eyebrow">◇ faq</span>
+              <h2 className="mt-3 mx-auto" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>
+                Pertanyaan Seputar <em style={{ fontFamily: 'var(--font-instrument, Georgia, serif)', fontStyle: 'italic', fontWeight: 400, color: 'var(--accent)' }}>Sistem Inventory</em>
               </h2>
-              <p className="mt-4 leading-relaxed text-muted-foreground">
+              <p className="mt-4 mx-auto max-w-lg leading-relaxed" style={{ color: 'var(--ti1)' }}>
                 Jawaban lengkap untuk pertanyaan yang sering diajukan tentang layanan sistem inventory di OOS SHOP.
               </p>
             </div>
             <div className="mt-10 flex flex-col gap-3">
               {service.faq.map((item) => (
-                <details key={item.question} className="group rounded-2xl border border-border bg-card p-5 [&_summary::-webkit-details-marker]:hidden [&[open]]:shadow-sm">
-                  <summary className="flex cursor-pointer items-center justify-between gap-3 font-medium text-foreground">
+                <details key={item.question} className="group rounded-2xl border p-5" style={{ borderColor: 'oklch(18% 0.030 258 / 0.14)', background: 'var(--tp)' }} {...{ open: undefined }}>
+                  <summary className="flex cursor-pointer items-center justify-between gap-3 font-medium [&::-webkit-details-marker]:hidden">
                     <span className="text-sm md:text-base">{item.question}</span>
-                    <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-90" aria-hidden />
+                    <ChevronRight className="size-4 shrink-0 transition-transform duration-200 group-open:rotate-90" style={{ color: 'var(--ti2)' }} aria-hidden />
                   </summary>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">{item.answer}</p>
+                  <p className="mt-3 text-sm leading-relaxed md:text-base" style={{ color: 'var(--ti1)' }}>{item.answer}</p>
                 </details>
               ))}
             </div>
@@ -323,47 +560,59 @@ export default function InventoryPage() {
         </section>
 
         {/* ═══ Related Services ═══ */}
-        <section className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-20">
-          <span className="eyebrow">◇ terkait</span>
+        <section className="mx-auto max-w-6xl px-6 py-20 md:py-24">
+          <span className="t-eyebrow">◇ terkait</span>
           <h2 className="mt-3 text-xl font-bold tracking-tight md:text-2xl">Layanan Lainnya</h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {service.relatedServices.map((relSlug) => {
               const rel = services[relSlug]
               if (!rel) return null
               return (
-                <Link key={relSlug} href={`/layanan/${relSlug}`} className="group rounded-xl border border-border bg-card p-5 transition-colors hover:border-foreground/20">
-                  <h3 className="text-sm font-semibold text-foreground transition-colors group-hover:text-primary">{rel.menuLabel}</h3>
-                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{rel.menuDescription}</p>
+                <Link key={relSlug} href={`/layanan/${relSlug}`} className="group rounded-xl border p-5 transition-colors" style={{ borderColor: 'oklch(18% 0.030 258 / 0.14)', background: 'var(--tp)' }}>
+                  <h3 className="text-sm font-semibold transition-colors group-hover:text-primary">{rel.menuLabel}</h3>
+                  <p className="mt-1 text-xs leading-relaxed" style={{ color: 'var(--ti1)' }}>{rel.menuDescription}</p>
                 </Link>
               )
             })}
           </div>
         </section>
 
-        {/* ═══ Final CTA ═══ */}
-        <section className="mx-auto max-w-6xl px-4 py-16 md:px-6 md:py-24">
-          <div className="rounded-2xl border border-border bg-card p-8 text-center md:p-12">
-            <h2 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
-              Siap Membangun <em className="font-serif italic">Sistem Inventory</em> Anda?
+        {/* ═══ CTA ═══ */}
+        <section className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+          <div className="relative overflow-hidden rounded-2xl p-12 text-center md:p-16" style={{ background: 'var(--ti0)', color: 'var(--tp)', isolation: 'isolate' }}>
+            {/* Gradient overlay */}
+            <div className="pointer-events-none absolute inset-0" style={{
+              background: 'radial-gradient(600px 200px at 20% 110%, oklch(54% 0.220 268 / 0.6), transparent 70%), radial-gradient(500px 220px at 90% -10%, oklch(82% 0.180 130 / 0.5), transparent 70%)',
+              zIndex: -1,
+            }} />
+            {/* Grid pattern */}
+            <div className="pointer-events-none absolute inset-0" style={{
+              backgroundImage: 'linear-gradient(to right, oklch(100% 0 0 / 0.05) 1px, transparent 1px), linear-gradient(to bottom, oklch(100% 0 0 / 0.05) 1px, transparent 1px)',
+              backgroundSize: '48px 48px',
+              zIndex: -1,
+            }} />
+
+            <h2 className="mx-auto font-bold" style={{ fontSize: 'clamp(2.4rem, 6vw, 5rem)', letterSpacing: '-0.035em', lineHeight: 1, maxWidth: '16ch' }}>
+              Siap Membangun <em style={{ fontFamily: 'var(--font-instrument, Georgia, serif)', fontWeight: 400, fontStyle: 'italic', color: 'var(--companion)' }}>Sistem Inventory</em>?
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-muted-foreground">
-              Konsultasikan kebutuhan Anda secara gratis. Kami bantu rancang solusi terbaik sesuai tujuan dan anggaran bisnis Anda. Tanpa commitment, tanpa biaya konsultasi.
+            <p className="mx-auto mt-4 max-w-xl text-pretty" style={{ color: 'oklch(98% 0 0 / 0.75)', fontSize: '1.125rem' }}>
+              Konsultasikan kebutuhan Anda secara gratis. Kami bantu rancang solusi terbaik sesuai tujuan dan anggaran bisnis Anda.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <Button size="lg" nativeButton={false} render={<a href={waHref} target="_blank" rel="noopener noreferrer" />}>
+              <a href={waHref} target="_blank" rel="noopener noreferrer" className="t-btn" style={{ background: 'var(--tp)', color: 'var(--ti0)', borderColor: 'var(--tp)' }}>
                 <MessageCircle className="size-4" aria-hidden />
                 Konsultasi Gratis
-              </Button>
-              <Button size="lg" variant="outline" nativeButton={false} render={<Link href="/#layanan" />}>
+              </a>
+              <Link href="/#layanan" className="t-btn" style={{ color: 'var(--tp)', borderColor: 'oklch(100% 0 0 / 0.18)' }}>
                 Lihat Layanan Lain
-              </Button>
+              </Link>
             </div>
           </div>
         </section>
 
         {/* ═══ Last Updated ═══ */}
-        <div className="mx-auto max-w-6xl px-4 pb-8 text-right md:px-6">
-          <time dateTime={service.updatedAt} className="text-xs text-muted-foreground">
+        <div className="mx-auto max-w-6xl px-6 pb-8 text-right">
+          <time dateTime={service.updatedAt} className="font-mono text-xs" style={{ color: 'var(--ti2)' }}>
             Terakhir diperbarui: {new Date(service.updatedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
           </time>
         </div>
