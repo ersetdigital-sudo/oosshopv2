@@ -12,7 +12,6 @@ import {
 } from 'lucide-react'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
-import { Button } from '@/components/ui/button'
 import { services } from '@/lib/services'
 import { siteConfig } from '@/lib/data'
 
@@ -106,13 +105,12 @@ const packages = [
 const waHref = `${siteConfig.whatsapp}?text=${encodeURIComponent('Halo, saya tertarik dengan layanan Sistem Inventory. Bisa konsultasi gratis?')}`
 
 export default function InventoryPage() {
-  const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly')
+  const [billing, setBilling] = useState<'once' | 'maintenance'>('once')
 
   return (
     <>
       <SiteHeader />
 
-      {/* ═══ Tally Design Tokens (scoped) ═══ */}
       <style dangerouslySetInnerHTML={{ __html: `
         .tally-page {
           --tp: oklch(98.4% 0.005 258);
@@ -126,166 +124,173 @@ export default function InventoryPage() {
           --accent: oklch(54.0% 0.220 268);
           --accent-soft: oklch(72.0% 0.140 268);
           --accent-tint: oklch(94.0% 0.040 268);
-          --companion: oklch(82.0% 0.180 130);
+          --companion: oklch(82% 0.180 130);
           --success: oklch(68% 0.150 145);
-          --rule-hair: 1px solid oklch(18% 0.030 258 / 0.08);
-          --rule-soft: 1px solid oklch(18% 0.030 258 / 0.14);
+          --r-hair: 1px solid oklch(18% 0.030 258 / 0.08);
+          --r-soft: 1px solid oklch(18% 0.030 258 / 0.12);
+          --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
           font-family: var(--font-sans);
           color: var(--ti0);
           background: var(--tp);
           -webkit-font-smoothing: antialiased;
         }
+        /* Buttons */
         .tally-page .t-btn {
-          display: inline-flex; align-items: center; gap: 8px;
-          padding: 14px 22px; border-radius: 999px;
-          font-weight: 500; font-size: 1rem;
-          border: 1px solid transparent; cursor: pointer;
-          transition: transform 140ms cubic-bezier(0.22,0.61,0.36,1), background 140ms, border-color 140ms, box-shadow 140ms;
+          display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+          padding: 12px 20px; border-radius: 999px;
+          font-weight: 500; font-size: 0.875rem; letter-spacing: -0.01em;
+          border: 1px solid transparent; cursor: pointer; text-decoration: none;
+          transition: all 200ms var(--ease); white-space: nowrap;
         }
-        .tally-page .t-btn:active { transform: translateY(0) !important; }
-        .tally-page .t-btn-primary {
-          background: var(--ti0); color: var(--tp);
-          border-color: var(--ti0);
-          box-shadow: 0 1px 0 oklch(100% 0 0 / 0.16) inset, 0 8px 24px -10px oklch(18% 0.030 258 / 0.4);
+        @media (min-width: 640px) { .tally-page .t-btn { padding: 13px 24px; font-size: 0.9375rem; } }
+        .tally-page .t-btn:active { transform: scale(0.97) !important; }
+        .tally-page .t-btn-p {
+          background: var(--ti0); color: var(--tp); border-color: var(--ti0);
+          box-shadow: 0 1px 0 oklch(100% 0 0 / 0.15) inset, 0 6px 20px -8px oklch(18% 0.030 258 / 0.35);
         }
-        .tally-page .t-btn-primary:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
-        .tally-page .t-btn-ghost {
-          background: transparent; color: var(--ti0);
-          border-color: oklch(18% 0.030 258 / 0.16);
+        .tally-page .t-btn-p:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 8px 28px -8px oklch(54% 0.220 268 / 0.45); }
+        .tally-page .t-btn-g {
+          background: transparent; color: var(--ti0); border-color: oklch(18% 0.030 258 / 0.15);
         }
-        .tally-page .t-btn-ghost:hover { background: var(--tp2); border-color: oklch(18% 0.030 258 / 0.22); }
+        .tally-page .t-btn-g:hover { background: var(--tp2); border-color: oklch(18% 0.030 258 / 0.22); }
+        /* Cards */
         .tally-page .t-card {
-          background: var(--tp); border: var(--rule-soft);
-          border-radius: 12px; padding: 1.25rem;
-          transition: transform 240ms cubic-bezier(0.22,0.61,0.36,1), box-shadow 240ms;
+          background: var(--tp); border: var(--r-soft); border-radius: 12px;
+          padding: 1.25rem; transition: all 250ms var(--ease);
         }
-        .tally-page .t-card:hover { box-shadow: 0 20px 60px -30px oklch(18% 0.030 258 / 0.28); }
+        .tally-page .t-card:hover { border-color: oklch(18% 0.030 258 / 0.2); box-shadow: 0 12px 40px -16px oklch(18% 0.030 258 / 0.2); transform: translateY(-2px); }
+        /* Section helpers */
         .tally-page .t-eyebrow {
-          font-family: var(--font-mono, monospace); font-size: 0.75rem;
+          font-family: var(--font-mono, monospace); font-size: 0.6875rem;
           letter-spacing: 0.08em; text-transform: uppercase; color: var(--ti2);
-          display: inline-flex; align-items: center; gap: 0.5rem;
+          display: inline-flex; align-items: center; gap: 0.375rem;
         }
-        .tally-page .t-section-title {
-          font-size: clamp(1.25rem, 2.5vw, 1.75rem); font-weight: 700;
-          letter-spacing: -0.025em; line-height: 1.15; margin: 0.5rem 0 0;
+        .tally-page .t-st {
+          font-size: clamp(1.125rem, 2.5vw, 1.625rem); font-weight: 700;
+          letter-spacing: -0.025em; line-height: 1.2; margin: 0.375rem 0 0;
         }
-        .tally-page .t-section-title em {
+        .tally-page .t-st em {
           font-family: var(--font-instrument, Georgia, serif);
           font-style: italic; font-weight: 400; color: var(--accent);
         }
-        .tally-page .t-section-desc {
-          font-size: 0.9375rem; color: var(--ti1); max-width: 50ch; line-height: 1.6;
+        .tally-page .t-sd { font-size: 0.875rem; color: var(--ti1); max-width: 48ch; line-height: 1.6; margin-top: 0.5rem; }
+        .tally-page .t-sh {
+          display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;
         }
-        .tally-page .t-section-head {
-          display: grid; grid-template-columns: 1fr 1fr;
-          gap: 2rem; align-items: end; margin-bottom: 2rem;
+        @media (min-width: 768px) {
+          .tally-page .t-sh { display: grid; grid-template-columns: auto 1fr; gap: 2rem; align-items: end; }
         }
-        @media (max-width: 768px) {
-          .tally-page .t-section-head { grid-template-columns: 1fr; gap: 1rem; }
-        }
+        /* Smooth scroll */
+        .tally-page { scroll-behavior: smooth; }
+        /* Focus ring */
+        .tally-page *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
       `}} />
 
       <main className="tally-page">
         {/* ═══ Hero ═══ */}
-        <section className="relative overflow-hidden border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', paddingTop: '4rem', paddingBottom: '3rem' }}>
-          {/* Grid pattern */}
+        <section className="relative overflow-hidden border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)' }}>
+          {/* Grid bg */}
           <div className="pointer-events-none absolute inset-0" style={{
-            backgroundImage: 'linear-gradient(to right, oklch(18% 0.030 258 / 0.06) 1px, transparent 1px), linear-gradient(to bottom, oklch(18% 0.030 258 / 0.06) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-            maskImage: 'radial-gradient(ellipse 80% 60% at 50% 35%, black 30%, transparent 70%)',
-            WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 35%, black 30%, transparent 70%)',
+            backgroundImage: 'linear-gradient(to right, oklch(18% 0.030 258 / 0.05) 1px, transparent 1px), linear-gradient(to bottom, oklch(18% 0.030 258 / 0.05) 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+            maskImage: 'radial-gradient(ellipse 70% 50% at 50% 30%, black 20%, transparent 70%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 70% 50% at 50% 30%, black 20%, transparent 70%)',
           }} />
+          {/* Gradient blob */}
+          <div className="pointer-events-none absolute -top-32 -right-32 size-96 rounded-full opacity-30 blur-3xl" style={{ background: 'var(--accent-tint)' }} />
 
-          <div className="relative mx-auto max-w-6xl px-6">
-            {/* Breadcrumb */}
-            <nav aria-label="Breadcrumb">
-              <ol className="flex flex-wrap items-center gap-1.5 text-sm" style={{ color: 'var(--ti2)' }}>
-                <li><Link href="/" className="transition-colors hover:text-foreground">Beranda</Link></li>
-                <ChevronRight className="size-4" aria-hidden />
-                <li><Link href="/#layanan" className="transition-colors hover:text-foreground">Layanan</Link></li>
-                <ChevronRight className="size-4" aria-hidden />
+          <div className="relative mx-auto max-w-6xl px-4 sm:px-6 pt-16 pb-10 sm:pt-24 sm:pb-14 md:pt-28 md:pb-16">
+            <nav aria-label="Breadcrumb" className="mb-6 sm:mb-8">
+              <ol className="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm" style={{ color: 'var(--ti2)' }}>
+                <li><Link href="/" className="transition-colors hover:opacity-70">Beranda</Link></li>
+                <ChevronRight className="size-3.5" aria-hidden />
+                <li><Link href="/#layanan" className="transition-colors hover:opacity-70">Layanan</Link></li>
+                <ChevronRight className="size-3.5" aria-hidden />
                 <li className="font-medium" style={{ color: 'var(--ti0)' }} aria-current="page">Sistem Inventory</li>
               </ol>
             </nav>
 
-            <div className="mt-8 flex flex-col gap-12 md:flex-row md:items-center md:justify-between">
-              <div className="max-w-2xl">
+            <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between md:gap-12">
+              <div className="max-w-xl">
                 <span className="t-eyebrow">◇ {service.hero.badge}</span>
 
-                <h1 className="mt-5 text-balance font-bold tracking-tight" style={{ fontSize: 'clamp(1.75rem, 8vw, 3.5rem)', lineHeight: 1.05, letterSpacing: '-0.03em', maxWidth: '18ch' }}>
+                <h1 className="mt-3 sm:mt-4 font-bold tracking-tight" style={{ fontSize: 'clamp(1.625rem, 5vw, 2.75rem)', lineHeight: 1.1, letterSpacing: '-0.03em', maxWidth: '20ch' }}>
                   Jasa Pembuatan Sistem Inventory &amp; Manajemen <em style={{ fontFamily: 'var(--font-instrument, Georgia, serif)', fontStyle: 'italic', fontWeight: 400, color: 'var(--accent)' }}>Stok</em>
                 </h1>
 
-                <p className="mt-4 max-w-lg text-pretty" style={{ fontSize: '1rem', color: 'var(--ti1)', lineHeight: 1.6 }}>
+                <p className="mt-3 sm:mt-4 max-w-lg text-pretty" style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1rem)', color: 'var(--ti1)', lineHeight: 1.65 }}>
                   {service.hero.subheading}
                 </p>
 
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <a href={waHref} target="_blank" rel="noopener noreferrer" className="t-btn t-btn-primary">
+                <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row gap-2.5 sm:gap-3">
+                  <a href={waHref} target="_blank" rel="noopener noreferrer" className="t-btn t-btn-p">
                     <MessageCircle className="size-4" aria-hidden />
                     Konsultasi Gratis
                   </a>
-                  <Link href="/katalog" className="t-btn t-btn-ghost">
-                    Lihat Katalog Plugin
-                    <ArrowRight className="size-4" aria-hidden />
+                  <Link href="/katalog" className="t-btn t-btn-g">
+                    Lihat Katalog
+                    <ArrowRight className="size-3.5" aria-hidden />
                   </Link>
                 </div>
 
-                <div className="mt-6 flex flex-wrap gap-4 font-mono text-xs" style={{ color: 'var(--ti2)' }}>
+                <div className="mt-4 sm:mt-5 flex flex-wrap gap-x-3 gap-y-1 font-mono text-[0.6875rem]" style={{ color: 'var(--ti3)' }}>
                   <span>no commitment</span>
-                  <span style={{ color: 'var(--ti3)' }}>·</span>
+                  <span>·</span>
                   <span>konsultasi gratis</span>
-                  <span style={{ color: 'var(--ti3)' }}>·</span>
+                  <span>·</span>
                   <span>respon &lt; 1 jam</span>
                 </div>
               </div>
 
-              {/* Invoice-style card */}
-              <div className="hidden md:block" style={{ transform: 'rotate(0.5deg)', maxWidth: 420, marginLeft: 'auto' }}>
+              {/* Dashboard preview card */}
+              <div className="hidden md:block flex-shrink-0" style={{ width: 360, transform: 'rotate(0.5deg)' }}>
                 <div style={{
-                  background: 'var(--tp)', border: 'var(--rule-soft)', borderRadius: 20, padding: '1.5rem',
-                  boxShadow: '0 1px 0 oklch(100% 0 0 / 0.7) inset, 0 24px 60px -28px oklch(18% 0.030 258 / 0.25), 0 4px 12px -4px oklch(18% 0.030 258 / 0.08)',
-                  fontFamily: 'var(--font-mono, monospace)', fontSize: '0.875rem',
+                  background: 'var(--tp)', border: 'var(--r-soft)', borderRadius: 14, padding: '1.25rem',
+                  boxShadow: '0 1px 0 oklch(100% 0 0 / 0.7) inset, 0 20px 50px -24px oklch(18% 0.030 258 / 0.22)',
+                  fontFamily: 'var(--font-mono, monospace)', fontSize: '0.8125rem',
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '0.75rem', borderBottom: 'var(--rule-hair)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '0.625rem', borderBottom: 'var(--r-hair)' }}>
                     <div>
-                      <div style={{ fontWeight: 600, color: 'var(--ti0)' }}>Dashboard Preview</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--ti2)', marginTop: 2 }}>OOS SHOP · Inventory System</div>
+                      <div style={{ fontWeight: 600, fontSize: '0.8125rem' }}>Dashboard Preview</div>
+                      <div style={{ fontSize: '0.6875rem', color: 'var(--ti2)', marginTop: 1 }}>OOS SHOP · Inventory</div>
                     </div>
-                    <span style={{ fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--success)', background: 'oklch(68% 0.150 145 / 0.18)', padding: '3px 8px', borderRadius: 999 }}>live</span>
+                    <span style={{ fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--success)', background: 'oklch(68% 0.150 145 / 0.15)', padding: '2px 7px', borderRadius: 999 }}>live</span>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: '0.75rem 0' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '0.625rem 0' }}>
                     {[
                       { label: 'Total SKU', value: '2,847' },
-                      { label: 'Stok Masuk (bulan ini)', value: '1,240' },
-                      { label: 'Stok Keluar (bulan ini)', value: '986' },
-                      { label: 'Alert stok minimum', value: '12 item' },
+                      { label: 'Stok Masuk', value: '1,240' },
+                      { label: 'Stok Keluar', value: '986' },
+                      { label: 'Alert minimum', value: '12 item' },
                     ].map((row) => (
-                      <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--ti1)' }}>
+                      <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.6875rem', color: 'var(--ti1)' }}>
                         <span>{row.label}</span>
                         <strong style={{ color: 'var(--ti0)', fontWeight: 500 }}>{row.value}</strong>
                       </div>
                     ))}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '0.5rem', borderTop: 'var(--rule-hair)', fontSize: '0.875rem', color: 'var(--success)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '0.375rem', borderTop: 'var(--r-hair)', fontSize: '0.8125rem', color: 'var(--success)' }}>
                       <span>Akurasi stok</span>
                       <span style={{ fontWeight: 600 }}>99.8%</span>
                     </div>
                   </div>
-                  <div style={{ height: 6, background: 'var(--tp3)', borderRadius: 999, marginTop: '1rem', overflow: 'hidden' }}>
+                  <div style={{ height: 5, background: 'var(--tp3)', borderRadius: 999, marginTop: '0.75rem', overflow: 'hidden' }}>
                     <div style={{ height: '100%', width: '72%', background: 'linear-gradient(90deg, var(--accent), var(--companion))', borderRadius: 'inherit' }} />
                   </div>
-                  <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ti2)', marginTop: 8 }}>
-                    72% kapasitas gudang · 14 SKU perlu restock
+                  <div style={{ fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ti2)', marginTop: 6 }}>
+                    72% kapasitas · 14 SKU perlu restock
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Marquee strip */}
-            <div className="mt-16 overflow-hidden border-t border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', padding: '1rem 0', maskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)' }}>
-              <div className="flex gap-12" style={{ animation: 'marquee 38s linear infinite', width: 'max-content', fontFamily: 'var(--font-mono, monospace)', fontSize: '0.875rem', color: 'var(--ti2)', textTransform: 'uppercase', letterSpacing: '0.18em' }}>
-                {['STOK REAL-TIME', 'MULTI GUDANG', 'BARCODE SCANNER', 'LAPORAN OTOMATIS', 'INTEGRASI POS', 'ALERT STOK MINIMUM', 'STOK REAL-TIME', 'MULTI GUDANG', 'BARCODE SCANNER', 'LAPORAN OTOMATIS'].map((item, i) => (
-                  <span key={i} className="inline-flex items-center gap-3">{item} <span style={{ color: 'var(--accent)' }}>✦</span></span>
+            {/* Marquee */}
+            <div className="mt-10 sm:mt-14 overflow-hidden border-t border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.06)', padding: '0.625rem 0', maskImage: 'linear-gradient(90deg, transparent, black 10%, black 90%, transparent)', WebkitMaskImage: 'linear-gradient(90deg, transparent, black 10%, black 90%, transparent)' }}>
+              <div className="flex gap-8 sm:gap-12" style={{ animation: 'marquee 35s linear infinite', width: 'max-content', fontFamily: 'var(--font-mono, monospace)', fontSize: '0.6875rem', color: 'var(--ti3)', textTransform: 'uppercase', letterSpacing: '0.16em' }}>
+                {[...'ABCDEFGHIJ'].map((_, i) => (
+                  <span key={i} className="inline-flex items-center gap-2 sm:gap-3 shrink-0">
+                    {['STOK REAL-TIME', 'MULTI GUDANG', 'BARCODE SCANNER', 'LAPORAN OTOMATIS', 'INTEGRASI POS'][i % 5]}
+                    <span style={{ color: 'var(--accent)' }}>✦</span>
+                  </span>
                 ))}
               </div>
             </div>
@@ -294,20 +299,20 @@ export default function InventoryPage() {
         </section>
 
         {/* ═══ Apa Itu ═══ */}
-        <section className="mx-auto max-w-3xl px-6 py-12 md:py-16" id="apa-itu">
-          <div style={{ background: 'var(--tp)', border: 'var(--rule-soft)', borderRadius: 12, padding: '1.5rem' }}>
+        <section className="mx-auto max-w-3xl px-4 sm:px-6 py-10 sm:py-14" id="apa-itu">
+          <div style={{ background: 'var(--tp)', border: 'var(--r-soft)', borderRadius: 12, padding: 'clamp(1rem, 3vw, 1.5rem)' }}>
             <span className="t-eyebrow">◇ penjelasan</span>
-            <h2 className="mt-3" style={{ fontSize: '1.375rem', fontWeight: 600, letterSpacing: '-0.02em' }}>{service.whatIs.title}</h2>
-            <div className="mt-4 space-y-4 text-pretty" style={{ color: 'var(--ti1)', lineHeight: 1.7 }}>
+            <h2 className="mt-2" style={{ fontSize: 'clamp(1.0625rem, 2vw, 1.25rem)', fontWeight: 600, letterSpacing: '-0.02em' }}>{service.whatIs.title}</h2>
+            <div className="mt-3 space-y-3 text-pretty" style={{ color: 'var(--ti1)', lineHeight: 1.7, fontSize: 'clamp(0.8125rem, 1.3vw, 0.9375rem)' }}>
               {service.whatIs.answer.split('\n\n').map((p, i) => <p key={i}>{p}</p>)}
             </div>
-            <dl className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <dl className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
                 { label: 'Biaya', value: service.whatIs.priceNote },
                 { label: 'Waktu Pengerjaan', value: service.whatIs.timelineNote },
               ].map((item) => (
-                <div key={item.label} style={{ borderRadius: 12, border: 'var(--rule-soft)', padding: '1rem' }}>
-                  <dt className="font-mono text-xs uppercase tracking-wide" style={{ color: 'var(--ti2)' }}>{item.label}</dt>
+                <div key={item.label} style={{ borderRadius: 10, border: 'var(--r-hair)', padding: '0.875rem' }}>
+                  <dt className="font-mono text-[0.625rem] uppercase tracking-wide" style={{ color: 'var(--ti2)' }}>{item.label}</dt>
                   <dd className="mt-1 text-sm font-semibold">{item.value}</dd>
                 </div>
               ))}
@@ -316,23 +321,23 @@ export default function InventoryPage() {
         </section>
 
         {/* ═══ Kenapa Memilih Kami ═══ */}
-        <section className="border-t border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', background: 'var(--tp1)' }} id="kenapa-kami">
-          <div className="mx-auto max-w-6xl px-6 py-14 md:py-20">
-            <div className="t-section-head">
+        <section className="border-t border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.06)', background: 'var(--tp1)' }} id="kenapa-kami">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 md:py-20">
+            <div className="t-sh">
               <div>
                 <span className="t-eyebrow">◇ keunggulan</span>
-                <h2 className="t-section-title">Kenapa Memilih OOS SHOP untuk <em>Sistem Inventory</em>?</h2>
+                <h2 className="t-st">Kenapa Memilih OOS SHOP untuk <em>Sistem Inventory</em>?</h2>
               </div>
-              <p className="t-section-desc">Pendekatan kami yang membedakan dari penyedia jasa lain.</p>
+              <p className="t-sd">Pendekatan kami yang membedakan dari penyedia jasa lain.</p>
             </div>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {service.whyChooseUs.map((item) => (
                 <div key={item.title} className="t-card">
-                  <span style={{ display: 'flex', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 12, background: 'var(--tp2)', color: 'var(--ti1)' }}>
-                    <Star className="size-5" aria-hidden />
+                  <span style={{ display: 'inline-flex', width: 36, height: 36, alignItems: 'center', justifyContent: 'center', borderRadius: 10, background: 'var(--tp2)', color: 'var(--ti1)' }}>
+                    <Star className="size-4" aria-hidden />
                   </span>
-                  <h3 className="mt-4 text-base font-semibold tracking-tight">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--ti1)' }}>{item.description}</p>
+                  <h3 className="mt-3 text-sm font-semibold tracking-tight">{item.title}</h3>
+                  <p className="mt-1.5 text-[0.8125rem] leading-relaxed" style={{ color: 'var(--ti1)' }}>{item.description}</p>
                 </div>
               ))}
             </div>
@@ -340,62 +345,62 @@ export default function InventoryPage() {
         </section>
 
         {/* ═══ Fitur ═══ */}
-        <section className="mx-auto max-w-6xl px-6 py-14 md:py-20" id="fitur">
-          <div className="t-section-head">
+        <section className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 md:py-20" id="fitur">
+          <div className="t-sh">
             <div>
               <span className="t-eyebrow">◇ fitur</span>
-              <h2 className="t-section-title">Fitur Sistem Inventory yang Anda <em>Dapatkan</em></h2>
+              <h2 className="t-st">Fitur Sistem Inventory yang Anda <em>Dapatkan</em></h2>
             </div>
-            <p className="t-section-desc">Semua yang Anda butuhkan untuk hasil profesional dan maksimal.</p>
+            <p className="t-sd">Semua yang Anda butuhkan untuk hasil profesional dan maksimal.</p>
           </div>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
             {service.features.map((feature) => (
-              <div key={feature} className="flex items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-colors" style={{ borderColor: 'oklch(18% 0.030 258 / 0.10)', background: 'var(--tp)' }}>
-                <CheckCircle2 className="size-4 shrink-0" style={{ color: 'var(--accent)' }} aria-hidden />
-                <span className="text-sm font-medium">{feature}</span>
+              <div key={feature} className="flex items-center gap-2.5 rounded-lg border px-3 py-2.5 transition-colors hover:border-[oklch(18%_0.030_258/0.18)]" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', background: 'var(--tp)' }}>
+                <CheckCircle2 className="size-3.5 shrink-0" style={{ color: 'var(--accent)' }} aria-hidden />
+                <span className="text-[0.8125rem] font-medium">{feature}</span>
               </div>
             ))}
           </div>
         </section>
 
-        {/* ═══ Keunggulan / Benefits ═══ */}
-        <section className="border-t border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', background: 'var(--tp1)' }} id="keunggulan">
-          <div className="mx-auto max-w-6xl px-6 py-14 md:py-20">
-            <div className="t-section-head">
+        {/* ═══ Benefits ═══ */}
+        <section className="border-t border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.06)', background: 'var(--tp1)' }} id="keunggulan">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 md:py-20">
+            <div className="t-sh">
               <div>
                 <span className="t-eyebrow">◇ manfaat</span>
-                <h2 className="t-section-title">Keunggulan <em>Sistem Inventory</em> dari OOS SHOP</h2>
+                <h2 className="t-st">Keunggulan <em>Sistem Inventory</em> dari OOS SHOP</h2>
               </div>
-              <p className="t-section-desc">Dibangun dengan standar profesional agar hasil tidak hanya tampil bagus, tetapi juga bekerja untuk pertumbuhan bisnis Anda.</p>
+              <p className="t-sd">Dibangun dengan standar profesional agar hasil tidak hanya tampil bagus, tetapi juga bekerja untuk pertumbuhan bisnis Anda.</p>
             </div>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {service.benefits.map((benefit) => (
                 <div key={benefit.title} className="t-card">
-                  <span style={{ display: 'flex', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 12, background: 'var(--tp2)', color: 'var(--ti1)' }}>
-                    <CheckCircle2 className="size-5" aria-hidden />
+                  <span style={{ display: 'inline-flex', width: 36, height: 36, alignItems: 'center', justifyContent: 'center', borderRadius: 10, background: 'var(--tp2)', color: 'var(--ti1)' }}>
+                    <CheckCircle2 className="size-4" aria-hidden />
                   </span>
-                  <h3 className="mt-4 text-base font-semibold tracking-tight">{benefit.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--ti1)' }}>{benefit.description}</p>
+                  <h3 className="mt-3 text-sm font-semibold tracking-tight">{benefit.title}</h3>
+                  <p className="mt-1.5 text-[0.8125rem] leading-relaxed" style={{ color: 'var(--ti1)' }}>{benefit.description}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ═══ Cocok Untuk + Proses ═══ */}
-        <section className="mx-auto max-w-6xl px-6 py-14 md:py-20" id="cocok-untuk">
-          <div className="grid gap-12 lg:grid-cols-2">
+        {/* ═══ Use Cases + Process ═══ */}
+        <section className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 md:py-20" id="cocok-untuk">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12">
             <div>
               <span className="t-eyebrow">◇ cocok untuk</span>
-              <h2 className="mt-3 text-balance font-bold tracking-tight" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', letterSpacing: '-0.025em', lineHeight: 1.1 }}>
+              <h2 className="mt-2 font-bold tracking-tight" style={{ fontSize: 'clamp(1.125rem, 2.5vw, 1.625rem)', letterSpacing: '-0.025em', lineHeight: 1.2 }}>
                 Siapa yang Cocok Menggunakan <em style={{ fontFamily: 'var(--font-instrument, Georgia, serif)', fontStyle: 'italic', fontWeight: 400, color: 'var(--accent)' }}>Layanan</em> Ini?
               </h2>
-              <p className="mt-4 leading-relaxed" style={{ color: 'var(--ti1)' }}>Beberapa contoh kebutuhan sistem inventory yang paling sering kami kerjakan.</p>
-              <ul className="mt-8 flex flex-col gap-3">
+              <p className="mt-3 text-[0.875rem] leading-relaxed" style={{ color: 'var(--ti1)' }}>Beberapa contoh kebutuhan sistem inventory yang paling sering kami kerjakan.</p>
+              <ul className="mt-6 flex flex-col gap-2">
                 {service.useCases.map((uc) => (
-                  <li key={uc} className="flex items-start gap-3 rounded-xl border p-4" style={{ borderColor: 'oklch(18% 0.030 258 / 0.14)', background: 'var(--tp)' }}>
-                    <CheckCircle2 className="mt-0.5 size-5 shrink-0" style={{ color: 'var(--accent)' }} aria-hidden />
-                    <span className="text-sm leading-relaxed" style={{ color: 'oklch(18% 0.030 258 / 0.9)' }}>{uc}</span>
+                  <li key={uc} className="flex items-start gap-2.5 rounded-lg border px-3 py-3" style={{ borderColor: 'oklch(18% 0.030 258 / 0.10)', background: 'var(--tp)' }}>
+                    <CheckCircle2 className="mt-0.5 size-4 shrink-0" style={{ color: 'var(--accent)' }} aria-hidden />
+                    <span className="text-[0.8125rem] leading-relaxed" style={{ color: 'oklch(18% 0.030 258 / 0.85)' }}>{uc}</span>
                   </li>
                 ))}
               </ul>
@@ -403,22 +408,22 @@ export default function InventoryPage() {
 
             <div id="proses">
               <span className="t-eyebrow">◇ proses kerja</span>
-              <h2 className="mt-3 text-balance font-bold tracking-tight" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', letterSpacing: '-0.025em', lineHeight: 1.1 }}>
+              <h2 className="mt-2 font-bold tracking-tight" style={{ fontSize: 'clamp(1.125rem, 2.5vw, 1.625rem)', letterSpacing: '-0.025em', lineHeight: 1.2 }}>
                 Cara Kerja Jasa <em style={{ fontFamily: 'var(--font-instrument, Georgia, serif)', fontStyle: 'italic', fontWeight: 400, color: 'var(--accent)' }}>Sistem Inventory</em>
               </h2>
-              <p className="mt-4 leading-relaxed" style={{ color: 'var(--ti1)' }}>Proses yang jelas dan transparan dari konsultasi hingga selesai.</p>
-              <ol className="mt-8 flex flex-col">
+              <p className="mt-3 text-[0.875rem] leading-relaxed" style={{ color: 'var(--ti1)' }}>Proses yang jelas dan transparan dari konsultasi hingga selesai.</p>
+              <ol className="mt-6 flex flex-col">
                 {service.process.map((item, index) => (
-                  <li key={item.step} className="relative flex gap-5 pb-8 last:pb-0">
+                  <li key={item.step} className="relative flex gap-4 pb-6 last:pb-0">
                     {index < service.process.length - 1 && (
-                      <div className="absolute left-[17px] top-9 h-full w-px" style={{ background: 'oklch(18% 0.030 258 / 0.08)' }} />
+                      <div className="absolute left-[15px] top-8 h-full w-px" style={{ background: 'oklch(18% 0.030 258 / 0.08)' }} />
                     )}
-                    <span className="relative z-10 flex size-9 shrink-0 items-center justify-center rounded-full text-sm font-semibold" style={{ background: 'var(--ti0)', color: 'var(--tp)' }}>
+                    <span className="relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold" style={{ background: 'var(--ti0)', color: 'var(--tp)' }}>
                       {item.step}
                     </span>
-                    <div className="pt-0.5">
-                      <h3 className="text-base font-semibold tracking-tight">{item.title}</h3>
-                      <p className="mt-1 text-sm leading-relaxed" style={{ color: 'var(--ti1)' }}>{item.description}</p>
+                    <div>
+                      <h3 className="text-sm font-semibold tracking-tight">{item.title}</h3>
+                      <p className="mt-1 text-[0.8125rem] leading-relaxed" style={{ color: 'var(--ti1)' }}>{item.description}</p>
                     </div>
                   </li>
                 ))}
@@ -428,31 +433,31 @@ export default function InventoryPage() {
         </section>
 
         {/* ═══ Stats ═══ */}
-        <section className="border-t border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', background: 'var(--tp1)' }}>
-          <div className="mx-auto max-w-6xl px-6 py-14 md:py-20">
-            <div className="t-section-head">
+        <section className="border-t border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.06)', background: 'var(--tp1)' }}>
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 md:py-20">
+            <div className="t-sh">
               <div>
                 <span className="t-eyebrow">◇ bukti</span>
-                <h2 className="t-section-title">Dipercaya 1.200+ Pemilik Website di <em>Indonesia</em></h2>
+                <h2 className="t-st">Dipercaya 1.200+ Pemilik Website di <em>Indonesia</em></h2>
               </div>
-              <p className="t-section-desc">Kami telah membantu ribuan bisnis, UMKM, dan instansi memiliki website profesional.</p>
+              <p className="t-sd">Kami telah membantu ribuan bisnis, UMKM, dan instansi memiliki website profesional.</p>
             </div>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
               {[
                 { value: '1.200+', label: 'Website dikerjakan', note: 'Sejak 2020, setiap project ditangani tim berpengalaman.' },
                 { value: '4.9/5', label: 'Rating kepuasan', note: 'Dari 500+ review verified pelanggan.' },
                 { value: '30 hari', label: 'Garansi support', note: 'Gratis revisi & support teknis.' },
                 { value: '5–14 hari', label: 'Waktu pengerjaan', note: 'Selalu ada estimasi di awal.' },
               ].map((stat, i) => (
-                <div key={stat.label} className="rounded-xl border p-5" style={{
-                  borderColor: 'oklch(18% 0.030 258 / 0.10)',
-                  background: i === 0 ? 'linear-gradient(160deg, var(--accent-tint), var(--tp) 60%)' :
-                    i === 1 ? 'linear-gradient(160deg, oklch(82% 0.180 130 / 0.2), var(--tp) 60%)' :
+                <div key={stat.label} className="rounded-xl border p-4 sm:p-5" style={{
+                  borderColor: 'oklch(18% 0.030 258 / 0.08)',
+                  background: i === 0 ? 'linear-gradient(160deg, var(--accent-tint), var(--tp) 50%)' :
+                    i === 1 ? 'linear-gradient(160deg, oklch(82% 0.180 130 / 0.15), var(--tp) 50%)' :
                     'var(--tp)',
                 }}>
-                  <p className="font-bold" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', letterSpacing: '-0.03em', lineHeight: 1.1 }}>{stat.value}</p>
-                  <p className="mt-2 text-sm font-medium" style={{ color: 'var(--ti1)' }}>{stat.label}</p>
-                  <p className="mt-1 text-xs" style={{ color: 'var(--ti2)', maxWidth: '28ch' }}>{stat.note}</p>
+                  <p className="font-bold" style={{ fontSize: 'clamp(1.25rem, 3vw, 1.75rem)', letterSpacing: '-0.03em', lineHeight: 1.1 }}>{stat.value}</p>
+                  <p className="mt-1.5 text-[0.8125rem] font-medium" style={{ color: 'var(--ti1)' }}>{stat.label}</p>
+                  <p className="mt-1 text-[0.6875rem] leading-relaxed hidden sm:block" style={{ color: 'var(--ti2)' }}>{stat.note}</p>
                 </div>
               ))}
             </div>
@@ -460,71 +465,63 @@ export default function InventoryPage() {
         </section>
 
         {/* ═══ Pricing ═══ */}
-        <section className="mx-auto max-w-6xl px-6 py-14 md:py-20" id="harga">
-          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+        <section className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 md:py-20" id="harga">
+          <div className="text-center mb-6 sm:mb-8">
             <span className="t-eyebrow">◇ harga</span>
-            <h2 className="mt-3 mx-auto" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, maxWidth: '20ch' }}>
+            <h2 className="mt-2 mx-auto" style={{ fontSize: 'clamp(1.125rem, 2.5vw, 1.625rem)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.2, maxWidth: '22ch' }}>
               Pilih Paket Sesuai <em style={{ fontFamily: 'var(--font-instrument, Georgia, serif)', fontStyle: 'italic', fontWeight: 400, color: 'var(--accent)' }}>Kebutuhan</em>
             </h2>
-
-            {/* Toggle */}
-            <div className="mt-4 inline-flex rounded-full p-1" style={{ background: 'var(--tp2)', border: 'var(--rule-soft)' }}>
-              <button
-                onClick={() => setBilling('monthly')}
-                className="rounded-full px-4 py-2 text-sm font-medium transition-all"
-                style={billing === 'monthly' ? { background: 'var(--tp)', color: 'var(--ti0)', boxShadow: '0 2px 6px -2px oklch(18% 0.030 258 / 0.14)' } : { color: 'var(--ti1)' }}
-              >
-                Sekali Bayar
-              </button>
-              <button
-                onClick={() => setBilling('annual')}
-                className="rounded-full px-4 py-2 text-sm font-medium transition-all"
-                style={billing === 'annual' ? { background: 'var(--tp)', color: 'var(--ti0)', boxShadow: '0 2px 6px -2px oklch(18% 0.030 258 / 0.14)' } : { color: 'var(--ti1)' }}
-              >
-                + Maintenance <span className="font-mono text-xs" style={{ color: 'var(--success)', marginLeft: 4 }}>hemat 20%</span>
-              </button>
+            <div className="mt-3 sm:mt-4 inline-flex rounded-full p-0.5" style={{ background: 'var(--tp2)', border: 'var(--r-hair)' }}>
+              {(['once', 'maintenance'] as const).map((mode) => (
+                <button
+                  key={mode}
+                  onClick={() => setBilling(mode)}
+                  className="rounded-full px-3 sm:px-4 py-1.5 text-xs sm:text-sm font-medium transition-all duration-200"
+                  style={billing === mode ? { background: 'var(--tp)', color: 'var(--ti0)', boxShadow: '0 1px 4px -1px oklch(18% 0.030 258 / 0.12)' } : { color: 'var(--ti2)' }}
+                >
+                  {mode === 'once' ? 'Sekali Bayar' : <><span className="hidden sm:inline">+ </span>Maintenance <span className="font-mono text-[0.625rem]" style={{ color: 'var(--success)' }}>-20%</span></>}
+                </button>
+              ))}
             </div>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {packages.map((pkg) => {
-              const isFeatured = pkg.popular
+              const f = pkg.popular
               return (
-                <div key={pkg.name} className="relative flex flex-col rounded-xl border p-5" style={{
-                  borderColor: isFeatured ? 'var(--ti0)' : 'oklch(18% 0.030 258 / 0.14)',
-                  background: isFeatured ? 'var(--ti0)' : 'var(--tp)',
-                  color: isFeatured ? 'var(--tp)' : 'inherit',
-                  transform: isFeatured ? 'scale(1.02)' : undefined,
-                  boxShadow: isFeatured ? '0 24px 60px -30px oklch(18% 0.030 258 / 0.5)' : undefined,
+                <div key={pkg.name} className="relative flex flex-col rounded-xl border p-4 sm:p-5 transition-all duration-200" style={{
+                  borderColor: f ? 'var(--ti0)' : 'oklch(18% 0.030 258 / 0.12)',
+                  background: f ? 'var(--ti0)' : 'var(--tp)',
+                  color: f ? 'var(--tp)' : 'inherit',
+                  ...(f ? { boxShadow: '0 20px 50px -24px oklch(18% 0.030 258 / 0.45)' } : {}),
                 }}>
-                  {isFeatured && (
-                    <span className="absolute -top-3 left-6 rounded-full px-3 py-1 font-mono text-xs font-bold uppercase" style={{ background: 'var(--companion)', color: 'var(--ti0)', letterSpacing: '0.12em' }}>
-                      Paling Populer
+                  {f && (
+                    <span className="absolute -top-2.5 left-5 rounded-full px-2.5 py-0.5 font-mono text-[0.625rem] font-bold uppercase" style={{ background: 'var(--companion)', color: 'var(--ti0)', letterSpacing: '0.1em' }}>
+                      Populer
                     </span>
                   )}
-                  <div className="font-mono text-xs uppercase" style={{ letterSpacing: '0.12em', color: isFeatured ? 'oklch(98% 0 0 / 0.7)' : 'var(--ti2)' }}>{pkg.name}</div>
-                  <div className="mt-3 font-bold" style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', letterSpacing: '-0.03em' }}>
-                    {billing === 'annual' && pkg.price !== 'Custom' ? pkg.renewal?.split('/')[0] : pkg.price}
+                  <div className="font-mono text-[0.625rem] uppercase" style={{ letterSpacing: '0.1em', color: f ? 'oklch(98% 0 0 / 0.6)' : 'var(--ti2)' }}>{pkg.name}</div>
+                  <div className="mt-2 font-bold" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', letterSpacing: '-0.03em' }}>
+                    {billing === 'maintenance' && pkg.price !== 'Custom' ? pkg.renewal?.split('/')[0] : pkg.price}
                   </div>
-                  {billing === 'monthly' && pkg.renewal && (
-                    <div className="text-xs" style={{ color: isFeatured ? 'oklch(98% 0 0 / 0.6)' : 'var(--ti2)' }}>{pkg.renewal}</div>
+                  {billing === 'once' && pkg.renewal && (
+                    <div className="text-[0.6875rem]" style={{ color: f ? 'oklch(98% 0 0 / 0.5)' : 'var(--ti2)' }}>{pkg.renewal}</div>
                   )}
-                  <p className="mt-2 text-sm" style={{ color: isFeatured ? 'oklch(98% 0 0 / 0.75)' : 'var(--ti1)' }}>{pkg.description}</p>
-                  <ul className="mt-5 flex flex-1 flex-col gap-2">
-                    {pkg.features.map((f) => (
-                      <li key={f} className="flex items-center gap-2 text-sm" style={{ color: isFeatured ? 'oklch(98% 0 0 / 0.75)' : 'var(--ti1)' }}>
-                        <span style={{ color: isFeatured ? 'var(--companion)' : 'var(--accent)', fontWeight: 700 }}>✓</span> {f}
+                  <p className="mt-1.5 text-[0.8125rem]" style={{ color: f ? 'oklch(98% 0 0 / 0.7)' : 'var(--ti1)' }}>{pkg.description}</p>
+                  <ul className="mt-4 flex flex-1 flex-col gap-1.5">
+                    {pkg.features.map((feat) => (
+                      <li key={feat} className="flex items-center gap-2 text-[0.8125rem]" style={{ color: f ? 'oklch(98% 0 0 / 0.7)' : 'var(--ti1)' }}>
+                        <span style={{ color: f ? 'var(--companion)' : 'var(--accent)', fontWeight: 700, fontSize: '0.75rem' }}>✓</span> {feat}
                       </li>
                     ))}
                   </ul>
                   <a
                     href={`${siteConfig.whatsapp}?text=${encodeURIComponent(`Halo, saya tertarik dengan paket ${pkg.name} untuk Sistem Inventory. Bisa info lebih lanjut?`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="t-btn mt-6 w-full justify-center"
-                    style={isFeatured ? { background: 'var(--companion)', color: 'var(--ti0)', borderColor: 'var(--companion)' } : { borderColor: 'oklch(18% 0.030 258 / 0.16)' }}
+                    target="_blank" rel="noopener noreferrer"
+                    className="t-btn mt-5 w-full justify-center"
+                    style={f ? { background: 'var(--companion)', color: 'var(--ti0)', borderColor: 'var(--companion)' } : { borderColor: 'oklch(18% 0.030 258 / 0.15)' }}
                   >
-                    <MessageCircle className="size-4" aria-hidden />
+                    <MessageCircle className="size-3.5" aria-hidden />
                     Pilih {pkg.name}
                   </a>
                 </div>
@@ -534,43 +531,43 @@ export default function InventoryPage() {
         </section>
 
         {/* ═══ FAQ ═══ */}
-        <section className="border-t" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', background: 'var(--tp1)' }} id="faq">
-          <div className="mx-auto max-w-3xl px-6 py-14 md:py-20">
+        <section className="border-t" style={{ borderColor: 'oklch(18% 0.030 258 / 0.06)', background: 'var(--tp1)' }} id="faq">
+          <div className="mx-auto max-w-3xl px-4 sm:px-6 py-12 sm:py-16 md:py-20">
             <div className="text-center">
               <span className="t-eyebrow">◇ faq</span>
-              <h2 className="mt-3 mx-auto" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>
+              <h2 className="mt-2 mx-auto" style={{ fontSize: 'clamp(1.125rem, 2.5vw, 1.625rem)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.2 }}>
                 Pertanyaan Seputar <em style={{ fontFamily: 'var(--font-instrument, Georgia, serif)', fontStyle: 'italic', fontWeight: 400, color: 'var(--accent)' }}>Sistem Inventory</em>
               </h2>
-              <p className="mt-4 mx-auto max-w-lg leading-relaxed" style={{ color: 'var(--ti1)' }}>
-                Jawaban lengkap untuk pertanyaan yang sering diajukan tentang layanan sistem inventory di OOS SHOP.
+              <p className="mt-3 mx-auto max-w-md text-[0.875rem] leading-relaxed" style={{ color: 'var(--ti1)' }}>
+                Jawaban untuk pertanyaan yang sering diajukan tentang layanan ini.
               </p>
             </div>
-            <div className="mt-10 flex flex-col gap-3">
+            <div className="mt-8 flex flex-col gap-2">
               {service.faq.map((item) => (
-                <details key={item.question} className="group rounded-2xl border p-5" style={{ borderColor: 'oklch(18% 0.030 258 / 0.14)', background: 'var(--tp)' }} {...{ open: undefined }}>
-                  <summary className="flex cursor-pointer items-center justify-between gap-3 font-medium [&::-webkit-details-marker]:hidden">
-                    <span className="text-sm md:text-base">{item.question}</span>
-                    <ChevronRight className="size-4 shrink-0 transition-transform duration-200 group-open:rotate-90" style={{ color: 'var(--ti2)' }} aria-hidden />
+                <details key={item.question} className="group rounded-xl border px-4 py-3.5 sm:px-5 sm:py-4" style={{ borderColor: 'oklch(18% 0.030 258 / 0.10)', background: 'var(--tp)' }}>
+                  <summary className="flex cursor-pointer items-center justify-between gap-3 text-sm font-medium [&::-webkit-details-marker]:hidden">
+                    <span>{item.question}</span>
+                    <ChevronRight className="size-3.5 shrink-0 transition-transform duration-200 group-open:rotate-90" style={{ color: 'var(--ti2)' }} aria-hidden />
                   </summary>
-                  <p className="mt-3 text-sm leading-relaxed md:text-base" style={{ color: 'var(--ti1)' }}>{item.answer}</p>
+                  <p className="mt-2 text-[0.8125rem] leading-relaxed" style={{ color: 'var(--ti1)' }}>{item.answer}</p>
                 </details>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ═══ Related Services ═══ */}
-        <section className="mx-auto max-w-6xl px-6 py-14 md:py-16">
+        {/* ═══ Related ═══ */}
+        <section className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-14">
           <span className="t-eyebrow">◇ terkait</span>
-          <h2 className="mt-3 text-xl font-bold tracking-tight md:text-2xl">Layanan Lainnya</h2>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <h2 className="mt-2 text-lg font-bold tracking-tight sm:text-xl">Layanan Lainnya</h2>
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
             {service.relatedServices.map((relSlug) => {
               const rel = services[relSlug]
               if (!rel) return null
               return (
-                <Link key={relSlug} href={`/layanan/${relSlug}`} className="group rounded-xl border p-5 transition-colors" style={{ borderColor: 'oklch(18% 0.030 258 / 0.14)', background: 'var(--tp)' }}>
+                <Link key={relSlug} href={`/layanan/${relSlug}`} className="group rounded-xl border p-4 transition-all duration-200 hover:border-[oklch(18%_0.030_258/0.2)]" style={{ borderColor: 'oklch(18% 0.030 258 / 0.10)', background: 'var(--tp)' }}>
                   <h3 className="text-sm font-semibold transition-colors group-hover:text-primary">{rel.menuLabel}</h3>
-                  <p className="mt-1 text-xs leading-relaxed" style={{ color: 'var(--ti1)' }}>{rel.menuDescription}</p>
+                  <p className="mt-1 text-[0.75rem] leading-relaxed" style={{ color: 'var(--ti1)' }}>{rel.menuDescription}</p>
                 </Link>
               )
             })}
@@ -578,41 +575,37 @@ export default function InventoryPage() {
         </section>
 
         {/* ═══ CTA ═══ */}
-        <section className="mx-auto max-w-6xl px-6 py-14 md:py-20">
-          <div className="relative overflow-hidden rounded-xl p-8 text-center md:p-12" style={{ background: 'var(--ti0)', color: 'var(--tp)', isolation: 'isolate' }}>
-            {/* Gradient overlay */}
+        <section className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16 md:py-20">
+          <div className="relative overflow-hidden rounded-xl px-6 py-10 text-center sm:px-10 sm:py-12 md:px-14 md:py-14" style={{ background: 'var(--ti0)', color: 'var(--tp)', isolation: 'isolate' }}>
             <div className="pointer-events-none absolute inset-0" style={{
-              background: 'radial-gradient(600px 200px at 20% 110%, oklch(54% 0.220 268 / 0.6), transparent 70%), radial-gradient(500px 220px at 90% -10%, oklch(82% 0.180 130 / 0.5), transparent 70%)',
+              background: 'radial-gradient(500px 180px at 20% 110%, oklch(54% 0.220 268 / 0.5), transparent 70%), radial-gradient(400px 200px at 90% -10%, oklch(82% 0.180 130 / 0.4), transparent 70%)',
               zIndex: -1,
             }} />
-            {/* Grid pattern */}
             <div className="pointer-events-none absolute inset-0" style={{
-              backgroundImage: 'linear-gradient(to right, oklch(100% 0 0 / 0.05) 1px, transparent 1px), linear-gradient(to bottom, oklch(100% 0 0 / 0.05) 1px, transparent 1px)',
-              backgroundSize: '48px 48px',
-              zIndex: -1,
+              backgroundImage: 'linear-gradient(to right, oklch(100% 0 0 / 0.04) 1px, transparent 1px), linear-gradient(to bottom, oklch(100% 0 0 / 0.04) 1px, transparent 1px)',
+              backgroundSize: '40px 40px', zIndex: -1,
             }} />
 
-            <h2 className="mx-auto font-bold" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', letterSpacing: '-0.03em', lineHeight: 1.1, maxWidth: '20ch' }}>
+            <h2 className="mx-auto font-bold" style={{ fontSize: 'clamp(1.375rem, 3.5vw, 2.25rem)', letterSpacing: '-0.03em', lineHeight: 1.15, maxWidth: '22ch' }}>
               Siap Membangun <em style={{ fontFamily: 'var(--font-instrument, Georgia, serif)', fontWeight: 400, fontStyle: 'italic', color: 'var(--companion)' }}>Sistem Inventory</em>?
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-pretty" style={{ color: 'oklch(98% 0 0 / 0.75)', fontSize: '1.125rem' }}>
+            <p className="mx-auto mt-3 max-w-lg text-pretty" style={{ color: 'oklch(98% 0 0 / 0.7)', fontSize: 'clamp(0.875rem, 1.5vw, 1rem)' }}>
               Konsultasikan kebutuhan Anda secara gratis. Kami bantu rancang solusi terbaik sesuai tujuan dan anggaran bisnis Anda.
             </p>
-            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <div className="mt-6 flex flex-col sm:flex-row justify-center gap-2.5 sm:gap-3">
               <a href={waHref} target="_blank" rel="noopener noreferrer" className="t-btn" style={{ background: 'var(--tp)', color: 'var(--ti0)', borderColor: 'var(--tp)' }}>
                 <MessageCircle className="size-4" aria-hidden />
                 Konsultasi Gratis
               </a>
-              <Link href="/#layanan" className="t-btn" style={{ color: 'var(--tp)', borderColor: 'oklch(100% 0 0 / 0.18)' }}>
+              <Link href="/#layanan" className="t-btn" style={{ color: 'var(--tp)', borderColor: 'oklch(100% 0 0 / 0.15)' }}>
                 Lihat Layanan Lain
               </Link>
             </div>
           </div>
         </section>
 
-        {/* ═══ Last Updated ═══ */}
-        <div className="mx-auto max-w-6xl px-6 pb-8 text-right">
-          <time dateTime={service.updatedAt} className="font-mono text-xs" style={{ color: 'var(--ti2)' }}>
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 pb-6 text-right">
+          <time dateTime={service.updatedAt} className="font-mono text-[0.625rem]" style={{ color: 'var(--ti3)' }}>
             Terakhir diperbarui: {new Date(service.updatedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
           </time>
         </div>
