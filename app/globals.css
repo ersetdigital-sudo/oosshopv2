@@ -25,6 +25,7 @@
   --color-foreground: var(--foreground);
   --color-background: var(--background);
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-serif: var(--font-instrument), Georgia, serif;
   --font-mono: var(--font-geist-mono), monospace;
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -147,4 +148,73 @@
 .ProseMirror li {
  margin-top: 0.25rem;
  margin-bottom: 0.25rem;
+}
+
+/* ─── Tally-inspired service page components ─── */
+
+.eyebrow {
+ display: inline-block;
+ font-family: var(--font-mono);
+ font-size: 0.7rem;
+ font-weight: 500;
+ letter-spacing: 0.08em;
+ text-transform: uppercase;
+ color: var(--color-muted-foreground);
+}
+
+.section-head {
+ display: flex;
+ flex-direction: column;
+ gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+ .section-head {
+   flex-direction: row;
+   align-items: flex-start;
+   justify-content: space-between;
+   gap: 3rem;
+ }
+ .section-head > :first-child {
+   flex-shrink: 0;
+   max-width: 24rem;
+ }
+ .section-head > :last-child {
+   max-width: 28rem;
+ }
+}
+
+.section-title {
+ font-size: 1.5rem;
+ font-weight: 700;
+ letter-spacing: -0.02em;
+ line-height: 1.2;
+ margin-top: 0.75rem;
+}
+
+@media (min-width: 768px) {
+ .section-title {
+   font-size: 1.875rem;
+ }
+}
+
+.section-desc {
+ font-size: 0.9375rem;
+ line-height: 1.7;
+ color: var(--color-muted-foreground);
+ margin-top: 0.75rem;
+}
+
+.card {
+ display: flex;
+ flex-direction: column;
+ border-radius: 1rem;
+ border: 1px solid var(--color-border);
+ background: var(--color-card);
+ padding: 1.25rem;
+ transition: border-color 0.2s;
+}
+
+.card:hover {
+ border-color: color-mix(in srgb, var(--color-foreground) 15%, transparent);
 }

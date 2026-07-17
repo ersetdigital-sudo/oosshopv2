@@ -1,12 +1,13 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { Geist } from 'next/font/google'
+import { Geist, Instrument_Serif } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
 import { CartProvider } from '@/lib/cart-context'
 import { CartDrawer } from '@/components/cart-drawer'
 import './globals.css'
 
 const geistSans = Geist({ subsets: ['latin'], variable: '--font-geist-sans' })
+const instrumentSerif = Instrument_Serif({ subsets: ['latin'], weight: '400', style: ['normal', 'italic'], variable: '--font-instrument' })
 
 export const metadata: Metadata = {
   title: 'Jasa Instal Plugin WordPress Premium Original & Bergaransi | OOS SHOP',
@@ -63,7 +64,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="id" suppressHydrationWarning className={`bg-background ${geistSans.variable}`}>
+    <html lang="id" suppressHydrationWarning className={`bg-background ${geistSans.variable} ${instrumentSerif.variable}`}>
       <body className="font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <CartProvider>
