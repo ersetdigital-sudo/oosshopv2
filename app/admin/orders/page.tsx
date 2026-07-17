@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Trash2 } from 'lucide-react'
+import { Trash2, Eye, EyeOff, Copy, Check, X } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 type Order = {
@@ -9,6 +9,8 @@ type Order = {
   customer_name: string
   customer_phone: string
   customer_domain: string | null
+  customer_username: string | null
+  customer_password: string | null
   items: { id?: string; name: string; qty?: number; price: number }[]
   total_price: number
   status: 'pending' | 'processing' | 'done' | 'cancelled'
@@ -45,6 +47,9 @@ export default function AdminOrdersPage() {
   const [filter, setFilter] = useState('')
   const [search, setSearch] = useState('')
   const [updatingId, setUpdatingId] = useState<string | null>(null)
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
+  const [showPassword, setShowPassword] = useState(false)
+  const [copiedField, setCopiedField] = useState<string | null>(null)
 
   useEffect(() => {
     fetchOrders()
@@ -115,6 +120,12 @@ export default function AdminOrdersPage() {
     if (!confirm('Yakin ingin HAPUS PERMANEN orderan ini?')) return
     await supabase.from('orders').delete().eq('id', orderId)
     fetchOrders()
+  }
+
+  async function copyToClipboard(text: string, field: string) {
+    await navigator.clipboard.writeText(text)
+    setCopiedField(field)
+    setTimeout(() => setCopiedField(null), 2000)
   }
 
   const filtered = orders.filter((o) => {
@@ -227,6 +238,12 @@ export default function AdminOrdersPage() {
                   </button>
                 ))}
                 <button
+                  onClick={() => setSelectedOrder(order)}
+                  className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+                >
+                  Detail
+                </button>
+                <button
                   onClick={() => deleteOrder(order.id)}
                   className="ml-auto rounded-lg p-2 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                 >
@@ -235,6 +252,115 @@ export default function AdminOrdersPage() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Order Detail Modal */}
+      {selectedOrder && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => { setSelectedOrder(null); setShowPassword(false) }}>
+          <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-start justify-between">
+              <div>
+                <h3 className="text-lg font-bold">{selectedOrder.invoice_number}</h3>
+                <p className="text-sm text-muted-foreground">{formatDate(selectedOrder.created_at)}</p>
+              </div>
+              <button
+                onClick={() => { setSelectedOrder(null); setShowPassword(false) }}
+                className="rounded-lg p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
+              >
+                <X className="size-5" />
+              </button>
+            </div>
+
+            <div className="mt-4 space-y-3">
+              {/* Customer Info */}
+              <div className="rounded-lg border border-border p-3">
+                <p className="text-xs font-medium text-muted-foreground">Data Customer</p>
+                <p className="mt-1 font-medium">{selectedOrder.customer_name}</p>
+                <p className="text-sm text-muted-foreground">{selectedOrder.customer_phone}</p>
+              </div>
+
+              {/* WP Credentials */}
+              {(selectedOrder.customer_domain || selectedOrder.customer_username || selectedOrder.customer_password) && (
+                <div className="rounded-lg border border-primary/20 bg-primary/5 p-3">
+                  <p className="text-xs font-medium text-primary">Akses WordPress</p>
+                  <div className="mt-2 space-y-2">
+                    {selectedOrder.customer_domain && (
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="min-w-0">
+                          <p className="text-xs text-muted-foreground">Domain</p>
+                          <p className="truncate text-sm font-medium">{selectedOrder.customer_domain}</p>
+                        </div>
+                        <button
+                          onClick={() => copyToClipboard(selectedOrder.customer_domain!, 'domain')}
+                          className="shrink-0 rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
+                        >
+                          {copiedField === 'domain' ? <Check className="size-4 text-green-500" /> : <Copy className="size-4" />}
+                        </button>
+                      </div>
+                    )}
+                    {selectedOrder.customer_username && (
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="min-w-0">
+                          <p className="text-xs text-muted-foreground">Username</p>
+                          <p className="truncate text-sm font-medium">{selectedOrder.customer_username}</p>
+                        </div>
+                        <button
+                          onClick={() => copyToClipboard(selectedOrder.customer_username!, 'username')}
+                          className="shrink-0 rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
+                        >
+                          {copiedField === 'username' ? <Check className="size-4 text-green-500" /> : <Copy className="size-4" />}
+                        </button>
+                      </div>
+                    )}
+                    {selectedOrder.customer_password && (
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="min-w-0">
+                          <p className="text-xs text-muted-foreground">Password</p>
+                          <p className="truncate text-sm font-medium">
+                            {showPassword ? selectedOrder.customer_password : '••••••••'}
+                          </p>
+                        </div>
+                        <div className="flex shrink-0 gap-1">
+                          <button
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
+                          >
+                            {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                          </button>
+                          <button
+                            onClick={() => copyToClipboard(selectedOrder.customer_password!, 'password')}
+                            className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
+                          >
+                            {copiedField === 'password' ? <Check className="size-4 text-green-500" /> : <Copy className="size-4" />}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Order Items */}
+              <div className="rounded-lg border border-border p-3">
+                <p className="text-xs font-medium text-muted-foreground">Item Pesanan</p>
+                <div className="mt-2 space-y-1">
+                  {(selectedOrder.items || []).map((item, i) => (
+                    <div key={i} className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">
+                        {item.name} {item.qty ? `x${item.qty}` : ''}
+                      </span>
+                      <span>{formatPrice(item.price)}</span>
+                    </div>
+                  ))}
+                  <div className="flex justify-between border-t border-border pt-2 font-semibold">
+                    <span>Total</span>
+                    <span>{formatPrice(selectedOrder.total_price)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
