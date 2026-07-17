@@ -156,7 +156,7 @@ export default function InventoryPage() {
         .tally-page .t-btn-ghost:hover { background: var(--tp2); border-color: oklch(18% 0.030 258 / 0.22); }
         .tally-page .t-card {
           background: var(--tp); border: var(--rule-soft);
-          border-radius: 20px; padding: 2rem;
+          border-radius: 12px; padding: 1.25rem;
           transition: transform 240ms cubic-bezier(0.22,0.61,0.36,1), box-shadow 240ms;
         }
         .tally-page .t-card:hover { box-shadow: 0 20px 60px -30px oklch(18% 0.030 258 / 0.28); }
@@ -166,19 +166,19 @@ export default function InventoryPage() {
           display: inline-flex; align-items: center; gap: 0.5rem;
         }
         .tally-page .t-section-title {
-          font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700;
-          letter-spacing: -0.025em; line-height: 1.1; margin: 0.5rem 0 0;
+          font-size: clamp(1.25rem, 2.5vw, 1.75rem); font-weight: 700;
+          letter-spacing: -0.025em; line-height: 1.15; margin: 0.5rem 0 0;
         }
         .tally-page .t-section-title em {
           font-family: var(--font-instrument, Georgia, serif);
           font-style: italic; font-weight: 400; color: var(--accent);
         }
         .tally-page .t-section-desc {
-          font-size: 1.125rem; color: var(--ti1); max-width: 50ch; line-height: 1.6;
+          font-size: 0.9375rem; color: var(--ti1); max-width: 50ch; line-height: 1.6;
         }
         .tally-page .t-section-head {
           display: grid; grid-template-columns: 1fr 1fr;
-          gap: 3rem; align-items: end; margin-bottom: 3rem;
+          gap: 2rem; align-items: end; margin-bottom: 2rem;
         }
         @media (max-width: 768px) {
           .tally-page .t-section-head { grid-template-columns: 1fr; gap: 1rem; }
@@ -187,7 +187,7 @@ export default function InventoryPage() {
 
       <main className="tally-page">
         {/* ═══ Hero ═══ */}
-        <section className="relative overflow-hidden border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', paddingTop: '6rem', paddingBottom: '5rem' }}>
+        <section className="relative overflow-hidden border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', paddingTop: '4rem', paddingBottom: '3rem' }}>
           {/* Grid pattern */}
           <div className="pointer-events-none absolute inset-0" style={{
             backgroundImage: 'linear-gradient(to right, oklch(18% 0.030 258 / 0.06) 1px, transparent 1px), linear-gradient(to bottom, oklch(18% 0.030 258 / 0.06) 1px, transparent 1px)',
@@ -212,11 +212,11 @@ export default function InventoryPage() {
               <div className="max-w-2xl">
                 <span className="t-eyebrow">◇ {service.hero.badge}</span>
 
-                <h1 className="mt-5 text-balance font-bold tracking-tight" style={{ fontSize: 'clamp(2rem, 10vw, 5rem)', lineHeight: 0.96, letterSpacing: '-0.03em', maxWidth: '16ch' }}>
+                <h1 className="mt-5 text-balance font-bold tracking-tight" style={{ fontSize: 'clamp(1.75rem, 8vw, 3.5rem)', lineHeight: 1.05, letterSpacing: '-0.03em', maxWidth: '18ch' }}>
                   Jasa Pembuatan Sistem Inventory &amp; Manajemen <em style={{ fontFamily: 'var(--font-instrument, Georgia, serif)', fontStyle: 'italic', fontWeight: 400, color: 'var(--accent)' }}>Stok</em>
                 </h1>
 
-                <p className="mt-6 max-w-lg text-pretty" style={{ fontSize: '1.125rem', color: 'var(--ti1)', lineHeight: 1.5 }}>
+                <p className="mt-4 max-w-lg text-pretty" style={{ fontSize: '1rem', color: 'var(--ti1)', lineHeight: 1.6 }}>
                   {service.hero.subheading}
                 </p>
 
@@ -294,8 +294,8 @@ export default function InventoryPage() {
         </section>
 
         {/* ═══ Apa Itu ═══ */}
-        <section className="mx-auto max-w-3xl px-6 py-16 md:py-24" id="apa-itu">
-          <div style={{ background: 'var(--tp)', border: 'var(--rule-soft)', borderRadius: 20, padding: '2rem' }}>
+        <section className="mx-auto max-w-3xl px-6 py-12 md:py-16" id="apa-itu">
+          <div style={{ background: 'var(--tp)', border: 'var(--rule-soft)', borderRadius: 12, padding: '1.5rem' }}>
             <span className="t-eyebrow">◇ penjelasan</span>
             <h2 className="mt-3" style={{ fontSize: '1.375rem', fontWeight: 600, letterSpacing: '-0.02em' }}>{service.whatIs.title}</h2>
             <div className="mt-4 space-y-4 text-pretty" style={{ color: 'var(--ti1)', lineHeight: 1.7 }}>
@@ -317,7 +317,7 @@ export default function InventoryPage() {
 
         {/* ═══ Kenapa Memilih Kami ═══ */}
         <section className="border-t border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', background: 'var(--tp1)' }} id="kenapa-kami">
-          <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+          <div className="mx-auto max-w-6xl px-6 py-14 md:py-20">
             <div className="t-section-head">
               <div>
                 <span className="t-eyebrow">◇ keunggulan</span>
@@ -325,7 +325,7 @@ export default function InventoryPage() {
               </div>
               <p className="t-section-desc">Pendekatan kami yang membedakan dari penyedia jasa lain.</p>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {service.whyChooseUs.map((item) => (
                 <div key={item.title} className="t-card">
                   <span style={{ display: 'flex', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 12, background: 'var(--tp2)', color: 'var(--ti1)' }}>
@@ -340,7 +340,7 @@ export default function InventoryPage() {
         </section>
 
         {/* ═══ Fitur ═══ */}
-        <section className="mx-auto max-w-6xl px-6 py-20 md:py-28" id="fitur">
+        <section className="mx-auto max-w-6xl px-6 py-14 md:py-20" id="fitur">
           <div className="t-section-head">
             <div>
               <span className="t-eyebrow">◇ fitur</span>
@@ -348,9 +348,9 @@ export default function InventoryPage() {
             </div>
             <p className="t-section-desc">Semua yang Anda butuhkan untuk hasil profesional dan maksimal.</p>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
             {service.features.map((feature) => (
-              <div key={feature} className="flex items-center gap-3 rounded-xl border p-4 transition-colors" style={{ borderColor: 'oklch(18% 0.030 258 / 0.14)', background: 'var(--tp)' }}>
+              <div key={feature} className="flex items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-colors" style={{ borderColor: 'oklch(18% 0.030 258 / 0.10)', background: 'var(--tp)' }}>
                 <CheckCircle2 className="size-4 shrink-0" style={{ color: 'var(--accent)' }} aria-hidden />
                 <span className="text-sm font-medium">{feature}</span>
               </div>
@@ -360,7 +360,7 @@ export default function InventoryPage() {
 
         {/* ═══ Keunggulan / Benefits ═══ */}
         <section className="border-t border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', background: 'var(--tp1)' }} id="keunggulan">
-          <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+          <div className="mx-auto max-w-6xl px-6 py-14 md:py-20">
             <div className="t-section-head">
               <div>
                 <span className="t-eyebrow">◇ manfaat</span>
@@ -368,7 +368,7 @@ export default function InventoryPage() {
               </div>
               <p className="t-section-desc">Dibangun dengan standar profesional agar hasil tidak hanya tampil bagus, tetapi juga bekerja untuk pertumbuhan bisnis Anda.</p>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {service.benefits.map((benefit) => (
                 <div key={benefit.title} className="t-card">
                   <span style={{ display: 'flex', width: 40, height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 12, background: 'var(--tp2)', color: 'var(--ti1)' }}>
@@ -383,8 +383,8 @@ export default function InventoryPage() {
         </section>
 
         {/* ═══ Cocok Untuk + Proses ═══ */}
-        <section className="mx-auto max-w-6xl px-6 py-20 md:py-28" id="cocok-untuk">
-          <div className="grid gap-16 lg:grid-cols-2">
+        <section className="mx-auto max-w-6xl px-6 py-14 md:py-20" id="cocok-untuk">
+          <div className="grid gap-12 lg:grid-cols-2">
             <div>
               <span className="t-eyebrow">◇ cocok untuk</span>
               <h2 className="mt-3 text-balance font-bold tracking-tight" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', letterSpacing: '-0.025em', lineHeight: 1.1 }}>
@@ -429,30 +429,30 @@ export default function InventoryPage() {
 
         {/* ═══ Stats ═══ */}
         <section className="border-t border-b" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', background: 'var(--tp1)' }}>
-          <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+          <div className="mx-auto max-w-6xl px-6 py-14 md:py-20">
             <div className="t-section-head">
               <div>
                 <span className="t-eyebrow">◇ bukti</span>
                 <h2 className="t-section-title">Dipercaya 1.200+ Pemilik Website di <em>Indonesia</em></h2>
               </div>
-              <p className="t-section-desc">Kami telah membantu ribuan bisnis, UMKM, dan instansi memiliki website profesional yang menghasilkan.</p>
+              <p className="t-section-desc">Kami telah membantu ribuan bisnis, UMKM, dan instansi memiliki website profesional.</p>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {[
-                { value: '1.200+', label: 'Website Dikerjakan', note: 'Sejak 2020, setiap project ditangani tim berpengalaman.' },
-                { value: '4.9/5', label: 'Rating Kepuasan', note: 'Dari 500+ review verified pelanggan.' },
-                { value: '30 Hari', label: 'Garansi Support', note: 'Gratis revisi & support teknis.' },
-                { value: '5–14 Hari', label: 'Waktu Pengerjaan', note: 'Selalu ada estimasi di awal.' },
+                { value: '1.200+', label: 'Website dikerjakan', note: 'Sejak 2020, setiap project ditangani tim berpengalaman.' },
+                { value: '4.9/5', label: 'Rating kepuasan', note: 'Dari 500+ review verified pelanggan.' },
+                { value: '30 hari', label: 'Garansi support', note: 'Gratis revisi & support teknis.' },
+                { value: '5–14 hari', label: 'Waktu pengerjaan', note: 'Selalu ada estimasi di awal.' },
               ].map((stat, i) => (
-                <div key={stat.label} className="rounded-2xl border p-8" style={{
-                  borderColor: 'oklch(18% 0.030 258 / 0.14)',
+                <div key={stat.label} className="rounded-xl border p-5" style={{
+                  borderColor: 'oklch(18% 0.030 258 / 0.10)',
                   background: i === 0 ? 'linear-gradient(160deg, var(--accent-tint), var(--tp) 60%)' :
-                    i === 1 ? 'linear-gradient(160deg, oklch(82% 0.180 130 / 0.35), var(--tp) 60%)' :
+                    i === 1 ? 'linear-gradient(160deg, oklch(82% 0.180 130 / 0.2), var(--tp) 60%)' :
                     'var(--tp)',
                 }}>
-                  <p className="font-bold" style={{ fontSize: 'clamp(2.8rem, 6vw, 4.5rem)', letterSpacing: '-0.04em', lineHeight: 1 }}>{stat.value}</p>
-                  <p className="mt-4 font-mono text-xs uppercase" style={{ letterSpacing: '0.12em', color: 'var(--ti1)' }}>{stat.label}</p>
-                  <p className="mt-2 text-sm" style={{ color: 'var(--ti1)', maxWidth: '28ch' }}>{stat.note}</p>
+                  <p className="font-bold" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', letterSpacing: '-0.03em', lineHeight: 1.1 }}>{stat.value}</p>
+                  <p className="mt-2 text-sm font-medium" style={{ color: 'var(--ti1)' }}>{stat.label}</p>
+                  <p className="mt-1 text-xs" style={{ color: 'var(--ti2)', maxWidth: '28ch' }}>{stat.note}</p>
                 </div>
               ))}
             </div>
@@ -460,8 +460,8 @@ export default function InventoryPage() {
         </section>
 
         {/* ═══ Pricing ═══ */}
-        <section className="mx-auto max-w-6xl px-6 py-20 md:py-28" id="harga">
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+        <section className="mx-auto max-w-6xl px-6 py-14 md:py-20" id="harga">
+          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <span className="t-eyebrow">◇ harga</span>
             <h2 className="mt-3 mx-auto" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1, maxWidth: '20ch' }}>
               Pilih Paket Sesuai <em style={{ fontFamily: 'var(--font-instrument, Georgia, serif)', fontStyle: 'italic', fontWeight: 400, color: 'var(--accent)' }}>Kebutuhan</em>
@@ -490,7 +490,7 @@ export default function InventoryPage() {
             {packages.map((pkg) => {
               const isFeatured = pkg.popular
               return (
-                <div key={pkg.name} className="relative flex flex-col rounded-2xl border p-6" style={{
+                <div key={pkg.name} className="relative flex flex-col rounded-xl border p-5" style={{
                   borderColor: isFeatured ? 'var(--ti0)' : 'oklch(18% 0.030 258 / 0.14)',
                   background: isFeatured ? 'var(--ti0)' : 'var(--tp)',
                   color: isFeatured ? 'var(--tp)' : 'inherit',
@@ -535,7 +535,7 @@ export default function InventoryPage() {
 
         {/* ═══ FAQ ═══ */}
         <section className="border-t" style={{ borderColor: 'oklch(18% 0.030 258 / 0.08)', background: 'var(--tp1)' }} id="faq">
-          <div className="mx-auto max-w-3xl px-6 py-20 md:py-28">
+          <div className="mx-auto max-w-3xl px-6 py-14 md:py-20">
             <div className="text-center">
               <span className="t-eyebrow">◇ faq</span>
               <h2 className="mt-3 mx-auto" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.1 }}>
@@ -560,7 +560,7 @@ export default function InventoryPage() {
         </section>
 
         {/* ═══ Related Services ═══ */}
-        <section className="mx-auto max-w-6xl px-6 py-20 md:py-24">
+        <section className="mx-auto max-w-6xl px-6 py-14 md:py-16">
           <span className="t-eyebrow">◇ terkait</span>
           <h2 className="mt-3 text-xl font-bold tracking-tight md:text-2xl">Layanan Lainnya</h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -578,8 +578,8 @@ export default function InventoryPage() {
         </section>
 
         {/* ═══ CTA ═══ */}
-        <section className="mx-auto max-w-6xl px-6 py-20 md:py-28">
-          <div className="relative overflow-hidden rounded-2xl p-12 text-center md:p-16" style={{ background: 'var(--ti0)', color: 'var(--tp)', isolation: 'isolate' }}>
+        <section className="mx-auto max-w-6xl px-6 py-14 md:py-20">
+          <div className="relative overflow-hidden rounded-xl p-8 text-center md:p-12" style={{ background: 'var(--ti0)', color: 'var(--tp)', isolation: 'isolate' }}>
             {/* Gradient overlay */}
             <div className="pointer-events-none absolute inset-0" style={{
               background: 'radial-gradient(600px 200px at 20% 110%, oklch(54% 0.220 268 / 0.6), transparent 70%), radial-gradient(500px 220px at 90% -10%, oklch(82% 0.180 130 / 0.5), transparent 70%)',
@@ -592,7 +592,7 @@ export default function InventoryPage() {
               zIndex: -1,
             }} />
 
-            <h2 className="mx-auto font-bold" style={{ fontSize: 'clamp(2.4rem, 6vw, 5rem)', letterSpacing: '-0.035em', lineHeight: 1, maxWidth: '16ch' }}>
+            <h2 className="mx-auto font-bold" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', letterSpacing: '-0.03em', lineHeight: 1.1, maxWidth: '20ch' }}>
               Siap Membangun <em style={{ fontFamily: 'var(--font-instrument, Georgia, serif)', fontWeight: 400, fontStyle: 'italic', color: 'var(--companion)' }}>Sistem Inventory</em>?
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-pretty" style={{ color: 'oklch(98% 0 0 / 0.75)', fontSize: '1.125rem' }}>
