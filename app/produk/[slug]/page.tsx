@@ -125,7 +125,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      type: 'product',
+      type: 'website',
       locale: 'id_ID',
       siteName: 'OOS SHOP',
       url: `${siteConfig.url}/produk/${product.slug || slug}`,

@@ -41,6 +41,7 @@ export default function EditArtikelPage() {
     status: 'draft',
     category_id: '',
     article_type_id: '',
+    product_id: '',
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)

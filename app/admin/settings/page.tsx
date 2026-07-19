@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
 export default function AdminSettingsPage() {
-  const [banks, setBanks] = useState([])
+  const [banks, setBanks] = useState<any[]>([])
   const [showForm, setShowForm] = useState(false)
-  const [editingBank, setEditingBank] = useState(null)
+  const [editingBank, setEditingBank] = useState<any>(null)
   const [formData, setFormData] = useState({ bank_name: '', account_name: '', account_number: '', type: 'bank' })
   const [submitting, setSubmitting] = useState(false)
   // Fonnte settings
@@ -108,7 +108,7 @@ export default function AdminSettingsPage() {
     setBanks(data || [])
   }
 
-  function openForm(bank = null) {
+  function openForm(bank: any = null) {
     if (bank) {
       setEditingBank(bank)
       setFormData({ bank_name: bank.bank_name, account_name: bank.account_name, account_number: bank.account_number, type: bank.type || 'bank' })
@@ -121,7 +121,7 @@ export default function AdminSettingsPage() {
     setShowForm(true)
   }
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setSubmitting(true)
     if (editingBank) {
@@ -134,13 +134,13 @@ export default function AdminSettingsPage() {
     fetchBanks()
   }
 
-  async function handleDelete(id) {
+  async function handleDelete(id: string) {
     if (!confirm('Yakin ingin menghapus rekening ini?')) return
     await supabase.from('bank_accounts').delete().eq('id', id)
     fetchBanks()
   }
 
-  async function toggleActive(id, currentActive) {
+  async function toggleActive(id: string, currentActive: boolean) {
     await supabase.from('bank_accounts').update({ is_active: !currentActive }).eq('id', id)
     fetchBanks()
   }
@@ -677,7 +677,7 @@ export default function AdminSettingsPage() {
                   <label className="text-dark-300 text-xs font-medium mb-2 block">{f.label}</label>
                   <input
                     type="url"
-                    value={social[f.key]}
+                    value={social[f.key as keyof typeof social]}
                     onChange={e => setSocial({ ...social, [f.key]: e.target.value })}
                     placeholder={f.placeholder}
                     className="w-full px-4 py-3 bg-dark-800/70 border border-dark-700 rounded-xl text-foreground text-sm placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"

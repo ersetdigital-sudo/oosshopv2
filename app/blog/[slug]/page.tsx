@@ -162,7 +162,7 @@ export default async function BlogPostPage({
 
   // Merge FAQ into the same @graph if available
   if (faqJsonLd) {
-    articleJsonLd['@graph'].push(faqJsonLd)
+    ;(articleJsonLd['@graph'] as Record<string, unknown>[]).push(faqJsonLd)
   }
 
   const articleJsonLdScript = JSON.stringify(articleJsonLd)
