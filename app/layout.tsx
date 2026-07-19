@@ -51,6 +51,11 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
   },
   manifest: '/site.webmanifest',
+  verification: {
+    other: {
+      'p:domain_verify': 'bab3095bf471d149bc6432ab8cc7ee02',
+    },
+  },
 }
 
 export const viewport: Viewport = {
